@@ -1,0 +1,9 @@
+[Bb]in
+[Oo]bj
+*.suo
+*.user
+*.db
+*.dll
+*.exe
+.vs/
+.vscode/
