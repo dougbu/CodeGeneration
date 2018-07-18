@@ -11,9 +11,39 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+
+    <!-- ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" Path="/swagger/v1/swagger.json" Generator="AutoRestSharp" /-->
+    <ServiceFileReference Include="https://localhost:5001/swagger/v1/swagger.json" Generator="AnotherSharp" />
+    <ServiceFileReference Include="https://localhost:5001/swagger/v1/swagger.json" Generator="NSwagSharp" />
+    <ServiceFileReference Include="../TrialNSwag/swagger.json" Generator="NSwagSharp" ClassName="TrialNSwag" Options="/GenerateExceptionClasses:false" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TrialNSwag\TrialNSwag.csproj" />
-  </ItemGroup>
+  <Target Name="NSwagGenerateClient" BeforeTargets="BeforeCompile" Condition="'@(ServiceFileReference)' != ''">
+    <PropertyGroup>
+      <NSwagGenerateClient_Namespace Condition="'$(NSwagGenerateClient_Namespace)' == ''">$(RootNamespace)</NSwagGenerateClient_Namespace>
+      <NSwagGenerateClient_OutputDirectory Condition="'$(NSwagGenerateClient_OutputDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(NSwagOutputDirectory)'))</NSwagGenerateClient_OutputDirectory>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_Temporary Remove="@(_Temporary)" />
+      <_Temporary Condition="'%(ServiceFileReference.Generator)' == 'NSwagSharp'" Include="@(ServiceFileReference)">
+        <ClassName Condition="'%(ServiceFileReference.ClassName)' == ''">%(ServiceFileReference.Filename)Client</ClassName>
+        <Options Condition="'%(ServiceFileReference.Options)' == '' AND '$(NSwagGenerateClient_DefaultOptions)' != ''">$(NSwagGenerateClient_DefaultOptions)</Options>
+      </_Temporary>
+      <_Temporary Update="@(_Temporary)">
+        <OutputPath Condition="'%(_Temporary.OutputPath)' == ''">%(_Temporary.ClassName).cs</OutputPath>
+      </_Temporary>
+    </ItemGroup>
+
+    <Exec
+      Command="$(NSwagExe_Core21) swagger2csclient /namespace:$(NSwagGenerateClient_Namespace) /className:@(_Temporary -> '%(ClassName)') /input:%(Identity) /output:%(OutputPath) %(_Temporary.Options)"
+      Condition="'@(_Temporary)' != ''"
+      IgnoreExitCode="$([System.IO.File]::Exists('%(OutputPath)'))"/>
+
+    <ItemGroup>
+      <Compile Remove="@(_Temporary -> '%(OutputPath)')" />
+      <Compile Include="@(_Temporary -> '%(OutputPath)')" />
+      <_Temporary Remove="@(_Temporary)" />
+    </ItemGroup>
+  </Target>
 </Project>
