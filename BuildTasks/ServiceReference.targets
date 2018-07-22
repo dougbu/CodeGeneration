@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project>
+  <Target Name="_CheckServiceReferences">
+    <Error Condition="'%(CodeGenerator)' == ''" Text="ServiceProjectReference items '@(ServiceProjectReference)' lack CodeGenerator metadata." />
+    <Error Condition="'%(CodeGenerator)' == ''" Text="ServiceUriReference items '@(ServiceUriReference)' lack CodeGenerator metadata." />
+    <Error Condition="'%(CodeGenerator)' == ''" Text="ServiceFileReference items '@(ServiceFileReference)' lack CodeGenerator metadata." />
+  </Target>
+
+  <Target Name="ServiceProjectReferenceGenerator" Condition="'@(ServiceProjectReference)' != ''" />
+
+  <Target Name="_ServiceUriReferenceGenerator_GetMetadata">
+    <ItemGroup>
+      <_Temporary Remove="@(_Temporary)" />
+    </ItemGroup>
+
+    <BuildTasks.GetFilenameFromUri Uris="@(ServiceUriReference)">
+      <Output TaskParameter="Filenames" ItemName="_Temporary" />
+    </BuildTasks.GetFilenameFromUri>
+
+    <ItemGroup>
+      <_Temporary Update="@(_Temporary)">
+        <DocumentPath Condition="'%(_Temporary.DocumentPath)' == ''">$(ServiceUriReferenceDirectory)%(LocalFilename)</DocumentPath>
+      </_Temporary>
+    </ItemGroup>
+</Target>
+
+  <Target Name="_ServiceUriReferenceGenerator_Core" Condition="'@(_Temporary)' != ''">
+    <BuildTasks.DownloadFile Uri="%(_Temporary.Identity)" DestinationPath="%(DocumentPath)" Overwrite="$(ServiceUriReferenceCheckIfNewer)" />
+
+    <ItemGroup>
+      <ServiceFileReference Include="@(_Temporary -> '%(DocumentPath)')" SourceUrl="%(_Temporary.Identity)" />
+      <_Temporary Remove="@(_Temporary)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="ServiceUriReferenceGenerator" DependsOnTargets="$(ServiceUriReferenceGeneratorDependsOn)" />
+
+  <Target Name="_ServiceFileReferenceGenerator_Core"
+    Condition="'@(ServiceFileReference)' != ''"
+    DependsOnTargets="@(ServiceFileReference -> '%(CodeGenerator)CodeGenerator')" />
+
+  <Target Name="ServiceFileReferenceGenerator" BeforeTargets="BeforeCompile" DependsOnTargets="$(ServiceFileReferenceGeneratorDependsOn)" />
+</Project>

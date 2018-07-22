@@ -1,84 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <Import Project="../BuildTasks/ServiceReference.props" />
+  <Import Project="../BuildTasks/NSwagServiceReference.props" />
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../BuildTasks/BuildTasks.csproj" ReferenceOutputAssembly="false" />
+
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.1.0" />
-    <PackageReference Include="NSwag.MSBuild" Version="11.17.18">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
 
     <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" Path="/swagger/v1/swagger.json" CodeGenerator="NSwagCSharp" />
-    <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" OpenApiDocumentGenerator="NSwagTool" CodeGenerator="NSwagCSharp" />
-    <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" ServiceName="NSwag.Service" Method="GetOpenApiDocumentString" CodeGenerator="NSwagCSharp" />
-    <ServiceUriReference Include="https://localhost:5001/swagger/v1/swagger.json" CodeGenerator="NSwagCSharp" />
+    <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" DocumentGenerator="NSwagTool" CodeGenerator="NSwagCSharp" />
+    <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj"
+      ServiceName="NSwag.Service"
+      Method="GetOpenApiDocumentString"
+      CodeGenerator="NSwagCSharp" />
+    <ServiceUriReference Include="https://localhost:5001/swagger/v1/swagger.json"
+      ClassName="TrialNSwag"
+      CodeGenerator="NSwagCSharp"
+      Options="/GenerateExceptionClasses:false" />
+    <!-- ServiceUriReference Include="https://localhost:5002/swagger/v2/swagger.json" / -->
     <!-- ServiceUriReference Include="https://localhost:5002/swagger/v2/swagger.json" CodeGenerator="AnotherCSharp" / -->
-    <ServiceFileReference Include="../TrialNSwag/swagger.json" CodeGenerator="NSwagCSharp" ClassName="TrialNSwag" Options="/GenerateExceptionClasses:false" />
+    <ServiceFileReference Include="../TrialNSwag/swagger.json" CodeGenerator="NSwagCSharp" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <ServiceFileReferenceDirectory
-      Condition="'$(ServiceFileReferenceDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(ServiceFileReferenceDirectory)'))</ServiceFileReferenceDirectory>
-    <ServiceUriReferenceDirectory
-      Condition="'$(ServiceUriReferenceDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(ServiceUriReferenceDirectory)'))</ServiceUriReferenceDirectory>
-  </PropertyGroup>
-
-  <Target Name="ServiceProjectReference_Generator" Condition="'@(ServiceProjectReference)' != ''" />
-
-  <Target Name="ServiceUrlReference_Generator" Condition="'@(ServiceUrlReference)' != ''">
-    <ItemGroup>
-      <ServiceFileReference Include="@(ServiceUrlReference)" />
-    </ItemGroup>
-  </Target>
-
-  <Target Name="_ServiceFileReference_GeneratorCore"
-    Condition="'@(ServiceFileReference)' != ''"
-    DependsOnTargets="@(ServiceFileReference -> '%(CodeGenerator)_CodeGenerator')" />
-
-  <Target Name="ServiceFileReference_Generator"
-    BeforeTargets="BeforeCompile"
-    DependsOnTargets="ServiceProjectReference_Generator;ServiceUriReference_Generator;_ServiceFileReference_GeneratorCore" />
-
-  <Target Name="_NSwagCSharp_CodeGeneratorGetMetadata">
-    <PropertyGroup>
-      <NSwagGenerateClient_Namespace
-        Condition="'$(NSwagGenerateClient_Namespace)' == ''">$(RootNamespace)</NSwagGenerateClient_Namespace>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <_Temporary Remove="@(_Temporary)" />
-      <_Temporary Include="@(ServiceFileReference -&gt; WithMetadataValue('CodeGenerator', 'NSwagCSharp'))">
-        <ClassName Condition="'%(ServiceFileReference.ClassName)' == ''">%(ServiceFileReference.Filename)Client</ClassName>
-        <Options
-          Condition="'%(ServiceFileReference.Options)' == '' AND '$(NSwagGenerateClient_DefaultOptions)' != ''">$(NSwagGenerateClient_DefaultOptions)</Options>
-      </_Temporary>
-      <_Temporary Update="@(_Temporary)">
-        <OutputPath Condition="'%(_Temporary.OutputPath)' == ''">$(ServiceFileReferenceDirectory)%(_Temporary.ClassName).cs</OutputPath>
-      </_Temporary>
-    </ItemGroup>
-</Target>
-
-  <Target Name="_NSwagCSharp_CodeGeneratorCore" Condition="'@(_Temporary)' != ''" Inputs="@(_Temporary)" Outputs="@(_Temporary -> '%(OutputPath)')">
-    <PropertyGroup>
-      <_Command>$(NSwagExe_Core21) swagger2csclient /namespace:$(NSwagGenerateClient_Namespace)</_Command>
-    </PropertyGroup>
-
-    <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(OutputPath)'))"
-      Command="$(_Command) /className:@(_Temporary -> '%(ClassName)') /input:%(Identity) /output:%(OutputPath) %(_Temporary.Options)" />
-
-    <PropertyGroup>
-      <_Command />
-    </PropertyGroup>
-    <ItemGroup>
-      <Compile Remove="@(_Temporary -> '%(OutputPath)')" />
-      <Compile Include="@(_Temporary -> '%(OutputPath)')" />
-      <_Temporary Remove="@(_Temporary)" />
-    </ItemGroup>
-  </Target>
-
-  <Target Name="NSwagCSharp_CodeGenerator" DependsOnTargets="_NSwagCSharp_CodeGeneratorGetMetadata;_NSwagCSharp_CodeGeneratorCore" />
+  <Import Project="../BuildTasks/ServiceReference.targets" />
+  <Import Project="../BuildTasks/NSwagServiceReference.targets" />
 </Project>

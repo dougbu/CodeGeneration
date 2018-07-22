@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project>
+  <ItemGroup>
+    <PackageReference Include="NSwag.MSBuild" Version="11.17.21">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <NSwagCSharpCodeGeneratorNamespace Condition="'$(NSwagCSharpCodeGeneratorNamespace)' == ''">$(RootNamespace)</NSwagCSharpCodeGeneratorNamespace>
+
+    <NSwagCSharpCodeGeneratorDependsOn>
+      _NSwagCSharpCodeGenerator_GetMetadata;
+      _NSwagCSharpCodeGenerator_Core;
+      _NSwagCSharpCodeGenerator_SetMetadata
+    </NSwagCSharpCodeGeneratorDependsOn>
+  </PropertyGroup>
+</Project>

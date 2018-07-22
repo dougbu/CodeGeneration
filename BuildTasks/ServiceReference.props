@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project>
+  <UsingTask TaskName="BuildTasks.GetFilenameFromUri"
+    AssemblyFile="$(MSBuildThisFileDirectory)/bin/$(Configuration)/$(TargetFramework)/BuildTasks.dll" />
+  <UsingTask TaskName="BuildTasks.DownloadFile"
+    AssemblyFile="$(MSBuildThisFileDirectory)/bin/$(Configuration)/$(TargetFramework)/BuildTasks.dll" />
+
+  <PropertyGroup>
+    <ServiceUriReferenceDirectory
+      Condition="'$(ServiceUriReferenceDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(ServiceUriReferenceDirectory)'))</ServiceUriReferenceDirectory>
+    <ServiceFileReferenceDirectory
+      Condition="'$(ServiceFileReferenceDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(ServiceFileReferenceDirectory)'))</ServiceFileReferenceDirectory>
+
+    <ServiceUriReferenceGeneratorDependsOn>
+      _ServiceUriReferenceGenerator_GetMetadata;
+      _ServiceUriReferenceGenerator_Core
+    </ServiceUriReferenceGeneratorDependsOn>
+    <ServiceFileReferenceGeneratorDependsOn>
+      _CheckServiceReferences;
+      ServiceProjectReferenceGenerator;
+      ServiceUriReferenceGenerator;
+      _ServiceFileReferenceGenerator_Core
+    </ServiceFileReferenceGeneratorDependsOn>
+  </PropertyGroup>
+</Project>
