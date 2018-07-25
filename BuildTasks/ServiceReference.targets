@@ -1,12 +1,98 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Project>
   <Target Name="_CheckServiceReferences">
-    <Error Condition="'%(CodeGenerator)' == ''" Text="ServiceProjectReference items '@(ServiceProjectReference)' lack CodeGenerator metadata." />
-    <Error Condition="'%(CodeGenerator)' == ''" Text="ServiceUriReference items '@(ServiceUriReference)' lack CodeGenerator metadata." />
-    <Error Condition="'%(CodeGenerator)' == ''" Text="ServiceFileReference items '@(ServiceFileReference)' lack CodeGenerator metadata." />
+    <Error Condition="'@(ServiceProjectReference)' != '' AND '%(CodeGenerator)' == ''" Text="ServiceProjectReference items '@(ServiceProjectReference)' lack CodeGenerator metadata." />
+    <Error Condition="'@(ServiceUriReference)' != '' AND '%(CodeGenerator)' == ''" Text="ServiceUriReference items '@(ServiceUriReference)' lack CodeGenerator metadata." />
+    <Error Condition="'@(ServiceFileReference)' != '' AND '%(CodeGenerator)' == ''" Text="ServiceFileReference items '@(ServiceFileReference)' lack CodeGenerator metadata." />
   </Target>
 
-  <Target Name="ServiceProjectReferenceGenerator" Condition="'@(ServiceProjectReference)' != ''" />
+  // ServiceProjectReference support
+
+  <!-- Inputs and outputs cause MsBuild to batch this target but include it in every build. -->
+  <Target Name="_ServiceProjectReferenceGenerator_GetPreferredTargetFramework" Inputs="%(ServiceProjectReference.Identity)" Outputs="&lt;not-a-file !&gt;">
+    <PropertyGroup>
+      <Identity>%(ServiceProjectReference.Identity)</Identity>
+    </PropertyGroup>
+    <ItemGroup>
+      <_Possibilities Remove="@(_Possibilities)" />
+    </ItemGroup>
+
+    <MSBuild Projects="$(Identity)"
+      RebaseOutputs="true"
+      RemoveProperties="TargetFramework;TargetFrameworks;RuntimeIdentifier"
+      Targets="GetTargetFrameworks"
+      UseResultsCache="true">
+      <Output TaskParameter="TargetOutputs" ItemName="_Possibilities" />
+    </MSBuild>
+
+    <!-- Please excuse the mess necessary to extract information from _Possibilities and use it in ServiceProjectReference. -->
+    <PropertyGroup>
+      <Index>$([System.String]::Copy('%(_Possibilities.TargetFrameworks)').IndexOf(';'))</Index>
+      <PreferredTargetFramework Condition="'$(Index)' == '-1'">%(_Possibilities.TargetFrameworks)</PreferredTargetFramework>
+      <PreferredTargetFramework Condition="'$(Index)' != '-1'">$([System.String]::Copy('%(_Possibilities.TargetFrameworks)').SubString(0, $(Index)))</PreferredTargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ServiceProjectReference Update="@(ServiceProjectReference)" Condition="'%(ServiceProjectReference.Identity)' == '$(Identity)'">
+        <DocumentGenerator Condition="'%(ServiceProjectReference.DocumentGenerator)' == ''">NSwag</DocumentGenerator>
+        <DocumentPath Condition="'%(ServiceProjectReference.DocumentPath)' == ''">$(ServiceProjectReferenceDirectory)%(Filename).json</DocumentPath>
+        <PreferredTargetFramework Condition="'%(ServiceProjectReference.PreferredTargetFramework)' == ''">$(PreferredTargetFramework)</PreferredTargetFramework>
+      </ServiceProjectReference>
+    </ItemGroup>
+
+    <PropertyGroup>
+      <Identity />
+      <Index />
+      <PreferredTargetFramework />
+    </PropertyGroup>
+    <ItemGroup>
+      <_Possibilities Remove="@(_Possibilities)" />
+    </ItemGroup>
+  </Target>
+
+  <!-- Inputs and outputs cause MsBuild to batch this target but include it in every build. -->
+  <Target Name="_ServiceProjectReferenceGenerator_GetTargetPath" Inputs="%(ServiceProjectReference.Identity)" Outputs="&lt;not-a-file !&gt;">
+    <PropertyGroup>
+      <Identity>%(ServiceProjectReference.Identity)</Identity>
+    </PropertyGroup>
+    <ItemGroup>
+      <_Possibilities Remove="@(_Possibilities)" />
+    </ItemGroup>
+
+    <MSBuild Projects="$(Identity)"
+      Properties="TargetFramework=%(ServiceProjectReference.PreferredTargetFramework)"
+      RebaseOutputs="true"
+      RemoveProperties="TargetFrameworks;RuntimeIdentifier"
+      Targets="GetTargetPath"
+      UseResultsCache="true">
+      <Output TaskParameter="TargetOutputs" ItemName="_Possibilities" />
+    </MSBuild>
+
+    <!-- Please excuse the mess necessary to extract information from _Possibilities and use it in ServiceProjectReference. -->
+    <PropertyGroup>
+      <ProjectTargetPath>%(_Possibilities.FullPath)</ProjectTargetPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ServiceProjectReference Update="@(ServiceProjectReference)" Condition="'%(ServiceProjectReference.Identity)' == '$(Identity)'">
+        <ProjectTargetPath Condition="'%(ServiceProjectReference.ProjectTargetPath)' == ''">$(ProjectTargetPath)</ProjectTargetPath>
+      </ServiceProjectReference>
+    </ItemGroup>
+
+    <PropertyGroup>
+      <Identity />
+      <ProjectTargetPath />
+    </PropertyGroup>
+    <ItemGroup>
+      <_Possibilities Remove="@(_Possibilities)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_ServiceProjectReferenceGenerator_Core" Condition="'@(ServiceProjectReference)' != ''" DependsOnTargets="@(ServiceProjectReference -> '%(DocumentGenerator)DocumentGenerator')" />
+
+  <Target Name="ServiceProjectReferenceGenerator" Condition="'@(ServiceProjectReference)' != ''" DependsOnTargets="$(ServiceProjectReferenceGeneratorDependsOn)" />
+
+  // ServiceUriReference support
 
   <Target Name="_ServiceUriReferenceGenerator_GetMetadata">
     <ItemGroup>
@@ -34,6 +120,8 @@
   </Target>
 
   <Target Name="ServiceUriReferenceGenerator" DependsOnTargets="$(ServiceUriReferenceGeneratorDependsOn)" />
+
+  // ServiceFileReference support
 
   <Target Name="_ServiceFileReferenceGenerator_Core"
     Condition="'@(ServiceFileReference)' != ''"

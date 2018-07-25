@@ -1,5 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Project>
+  // ServiceProjectReference support
+
+  <Target Name="_NSwagDocumentGenerator_GetMetadata">
+    <ItemGroup>
+      <_NSwagTemporary Remove="@(_NSwagTemporary)" />
+      <_NSwagTemporary Include="@(ServiceProjectReference -> WithMetadataValue('DocumentGenerator', 'NSwag'))" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_NSwagDocumentGenerator_Core" Inputs="%(_NSwagTemporary.ProjectTargetPath)" Outputs="%(_NSwagTemporary.DocumentPath)">
+    <!-- aspnetcore2swagger -->
+    <PropertyGroup>
+      <_Command>$(NSwagExe_Core21) aspnetcore2swagger</_Command>
+    </PropertyGroup>
+
+    <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(_NSwagTemporary.DocumentPath)'))"
+      Command="$(_Command) /Project:%(Identity) /output:%(DocumentPath) /TargetFramework:%(PreferredTargetFramework)" />
+
+    <PropertyGroup>
+      <_Command />
+    </PropertyGroup>
+  </Target>
+
+  <!--
+    Separate from _NSwagDocumentGenerator_Core to ensure ServiceFileReference items are complete even if
+    ServiceProjectReference items are not built in any batch.
+  -->
+  <Target Name="_NSwagDocumentGenerator_SetMetadata" Condition="'@(_NSwagTemporary)' != ''">
+    <ItemGroup>
+      <ServiceFileReference Remove="@(_NSwagTemporary -> '%(DocumentPath)')" />
+      <ServiceFileReference Include="@(_NSwagTemporary -> '%(DocumentPath)')" SourceProject="%(_NSwagTemporary.Identity)" />
+      <_NSwagTemporary Remove="@(_NSwagTemporary)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="NSwagDocumentGenerator" DependsOnTargets="$(NSwagDocumentGeneratorDependsOn)" />
+
+  // ServiceFileReference support for C#
+
   <Target Name="_NSwagCSharpCodeGenerator_GetMetadata">
     <ItemGroup>
       <_NSwagTemporary Remove="@(_NSwagTemporary)" />

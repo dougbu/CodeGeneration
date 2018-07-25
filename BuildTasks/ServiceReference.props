@@ -6,11 +6,19 @@
     AssemblyFile="$(MSBuildThisFileDirectory)/bin/$(Configuration)/$(TargetFramework)/BuildTasks.dll" />
 
   <PropertyGroup>
+    <ServiceProjectReferenceDirectory
+      Condition="'$(ServiceProjectReferenceDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(ServiceProjectReferenceDirectory)'))</ServiceProjectReferenceDirectory>
+    <ServiceUriReferenceCheckIfNewer Condition="'$(ServiceUriReferenceCheckIfNewer)' == ''">true</ServiceUriReferenceCheckIfNewer>
     <ServiceUriReferenceDirectory
       Condition="'$(ServiceUriReferenceDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(ServiceUriReferenceDirectory)'))</ServiceUriReferenceDirectory>
     <ServiceFileReferenceDirectory
       Condition="'$(ServiceFileReferenceDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(ServiceFileReferenceDirectory)'))</ServiceFileReferenceDirectory>
 
+    <ServiceProjectReferenceGeneratorDependsOn>
+      _ServiceProjectReferenceGenerator_GetPreferredTargetFramework;
+      _ServiceProjectReferenceGenerator_GetTargetPath;
+      _ServiceProjectReferenceGenerator_Core
+    </ServiceProjectReferenceGeneratorDependsOn>
     <ServiceUriReferenceGeneratorDependsOn>
       _ServiceUriReferenceGenerator_GetMetadata;
       _ServiceUriReferenceGenerator_Core

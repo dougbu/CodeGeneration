@@ -10,6 +10,11 @@
   <PropertyGroup>
     <NSwagCSharpCodeGeneratorNamespace Condition="'$(NSwagCSharpCodeGeneratorNamespace)' == ''">$(RootNamespace)</NSwagCSharpCodeGeneratorNamespace>
 
+    <NSwagDocumentGeneratorDependsOn>
+      _NSwagDocumentGenerator_GetMetadata;
+      _NSwagDocumentGenerator_Core;
+      _NSwagDocumentGenerator_SetMetadata
+    </NSwagDocumentGeneratorDependsOn>
     <NSwagCSharpCodeGeneratorDependsOn>
       _NSwagCSharpCodeGenerator_GetMetadata;
       _NSwagCSharpCodeGenerator_Core;
