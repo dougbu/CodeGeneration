@@ -17,6 +17,7 @@
     <ServiceProjectReferenceGeneratorDependsOn>
       _ServiceProjectReferenceGenerator_GetPreferredTargetFramework;
       _ServiceProjectReferenceGenerator_GetTargetPath;
+      _ServiceProjectReferenceGenerator_Build;
       _ServiceProjectReferenceGenerator_Core
     </ServiceProjectReferenceGeneratorDependsOn>
     <ServiceUriReferenceGeneratorDependsOn>

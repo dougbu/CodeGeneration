@@ -12,7 +12,7 @@
   <Target Name="_NSwagDocumentGenerator_Core" Inputs="%(_NSwagTemporary.ProjectTargetPath)" Outputs="%(_NSwagTemporary.DocumentPath)">
     <!-- aspnetcore2swagger -->
     <PropertyGroup>
-      <_Command>$(NSwagExe_Core21) aspnetcore2swagger</_Command>
+      <_Command>$(NSwagExe_Core21) aspnetcore2swagger /NoBuild:true</_Command>
     </PropertyGroup>
 
     <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(_NSwagTemporary.DocumentPath)'))"

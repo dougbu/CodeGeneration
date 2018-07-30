@@ -88,6 +88,17 @@
     </ItemGroup>
   </Target>
 
+  <Target Name="_ServiceProjectReferenceGenerator_Build"
+    Condition="'$(BuildProjectReferences)' != 'true'"
+    Inputs="@(ServiceProjectReference)"
+    Outputs="@(ServiceProjectReference -> '%(ProjectTargetPath)')">
+    <MSBuild Projects="$(Identity)"
+      BuildInParallel="$(BuildInParallel)"
+      Properties="TargetFramework=%(ServiceProjectReference.PreferredTargetFramework)"
+      RemoveProperties="TargetFrameworks;RuntimeIdentifier"
+      Targets="Build" />
+  </Target>
+
   <Target Name="_ServiceProjectReferenceGenerator_Core" Condition="'@(ServiceProjectReference)' != ''" DependsOnTargets="@(ServiceProjectReference -> '%(DocumentGenerator)DocumentGenerator')" />
 
   <Target Name="ServiceProjectReferenceGenerator" Condition="'@(ServiceProjectReference)' != ''" DependsOnTargets="$(ServiceProjectReferenceGeneratorDependsOn)" />
