@@ -32,15 +32,26 @@
       ServiceName="NSwag.Service"
       Method="GetOpenApiDocumentString"
       Options="/GenerateExceptionClasses:false" />
+    <ServiceProjectReference
+      Include="../TrialNSwag/TrialNSwag.csproj"
+      CodeGenerator="NSwagTypeScript"
+      DocumentPath="TrialNSwag4.json"
+      ServiceName="NSwag.Service"
+      Method="GetOpenApiDocumentString" />
 
     <ServiceUriReference Include="https://localhost:5001/swagger/v1/swagger.json"
       ClassName="LocalhostSwagger"
       CodeGenerator="NSwagCSharp"
       Options="/GenerateExceptionClasses:false" />
+    <ServiceUriReference Include="https://localhost:5001/swagger/v1/swagger.json"
+      ClassName="LocalhostSwagger"
+      CodeGenerator="NSwagTypeScript" />
+
+    <ServiceFileReference Include="../TrialNSwag/swagger.json" CodeGenerator="NSwagCSharp" />
+    <ServiceFileReference Include="../TrialNSwag/swagger.json" CodeGenerator="NSwagTypeScript" />
 
     <!-- ServiceUriReference Include="https://localhost:5002/swagger/v2/swagger.json" / -->
     <!-- ServiceFileReference Include="../TrialNSwag/swagger.json" CodeGenerator="AnotherCSharp" / -->
-    <ServiceFileReference Include="../TrialNSwag/swagger.json" CodeGenerator="NSwagCSharp" />
   </ItemGroup>
 
   <Import Project="../BuildTasks/ServiceReference.targets" />

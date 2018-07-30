@@ -6,7 +6,7 @@
     <Error Condition="'@(ServiceFileReference)' != '' AND '%(CodeGenerator)' == ''" Text="ServiceFileReference items '@(ServiceFileReference)' lack CodeGenerator metadata." />
   </Target>
 
-  // ServiceProjectReference support
+  <!-- ServiceProjectReference support -->
 
   <!-- Inputs and outputs cause MsBuild to batch this target but include it in every build. -->
   <Target Name="_ServiceProjectReferenceGenerator_GetPreferredTargetFramework" Inputs="%(ServiceProjectReference.Identity)" Outputs="&lt;not-a-file !&gt;">
@@ -92,7 +92,7 @@
 
   <Target Name="ServiceProjectReferenceGenerator" Condition="'@(ServiceProjectReference)' != ''" DependsOnTargets="$(ServiceProjectReferenceGeneratorDependsOn)" />
 
-  // ServiceUriReference support
+  <!-- ServiceUriReference support -->
 
   <Target Name="_ServiceUriReferenceGenerator_GetMetadata">
     <ItemGroup>
@@ -122,7 +122,7 @@
 
   <Target Name="ServiceUriReferenceGenerator" DependsOnTargets="$(ServiceUriReferenceGeneratorDependsOn)" />
 
-  // ServiceFileReference support
+  <!-- ServiceFileReference support -->
 
   <Target Name="_ServiceFileReferenceGenerator_Core"
     Condition="'@(ServiceFileReference)' != ''"

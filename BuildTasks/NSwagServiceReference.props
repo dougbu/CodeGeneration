@@ -9,6 +9,7 @@
 
   <PropertyGroup>
     <NSwagCSharpCodeGeneratorNamespace Condition="'$(NSwagCSharpCodeGeneratorNamespace)' == ''">$(RootNamespace)</NSwagCSharpCodeGeneratorNamespace>
+    <NSwagTypeScriptCodeGeneratorNamespace Condition="'$(NSwagTypeScriptCodeGeneratorNamespace)' == ''">$(RootNamespace)</NSwagTypeScriptCodeGeneratorNamespace>
 
     <NSwagDocumentGeneratorDependsOn>
       _NSwagDocumentGenerator_GetMetadata;
@@ -20,5 +21,10 @@
       _NSwagCSharpCodeGenerator_Core;
       _NSwagCSharpCodeGenerator_SetMetadata
     </NSwagCSharpCodeGeneratorDependsOn>
+    <NSwagTypeScriptCodeGeneratorDependsOn>
+      _NSwagTypeScriptCodeGenerator_GetMetadata;
+      _NSwagTypeScriptCodeGenerator_Core;
+      _NSwagTypeScriptCodeGenerator_SetMetadata
+    </NSwagTypeScriptCodeGeneratorDependsOn>
   </PropertyGroup>
 </Project>
