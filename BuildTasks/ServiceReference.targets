@@ -114,6 +114,7 @@
     <BuildTasks.DownloadFile Uri="%(_Temporary.Identity)" DestinationPath="%(DocumentPath)" Overwrite="$(ServiceUriReferenceCheckIfNewer)" />
 
     <ItemGroup>
+      <ServiceFileReference Remove="@(_Temporary -> '%(DocumentPath)')" />
       <ServiceFileReference Include="@(_Temporary -> '%(DocumentPath)')" SourceUrl="%(_Temporary.Identity)" />
       <_Temporary Remove="@(_Temporary)" />
     </ItemGroup>
