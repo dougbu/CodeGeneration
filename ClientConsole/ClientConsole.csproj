@@ -11,7 +11,7 @@
     <ProjectReference Include="../BuildTasks/BuildTasks.csproj" ReferenceOutputAssembly="false" />
 
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.1.1" />
 
     <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" CodeGenerator="NSwagCSharp" DocumentPath="TrialNSwag1.json" Path="/swagger/v1/swagger.json" Options="/GenerateExceptionClasses:false" />
     <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" CodeGenerator="NSwagCSharp" DocumentPath="TrialNSwag2.json" DocumentGenerator="NSwag" Options="/GenerateExceptionClasses:false" />
