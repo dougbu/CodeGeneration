@@ -20,7 +20,7 @@
 
     <ServiceUriReference Include="https://localhost:5001/swagger/v1/swagger.json" ClassName="LocalhostSwagger" CodeGenerator="NSwagCSharp" Options="/GenerateExceptionClasses:false" />
     <ServiceUriReference Include="https://localhost:5001/swagger/v1/swagger.json" ClassName="LocalhostSwagger" CodeGenerator="NSwagTypeScript" />
-    <!--ServiceUriReference Include="http://localhost:60476/swagger/swashbuckle/swagger.json" CodeGenerator="NSwagTypeScript" / -->
+    <ServiceUriReference Include="http://localhost:60476/swagger/swashbuckle/swagger.json" CodeGenerator="NSwagTypeScript" />
 
     <ServiceFileReference Include="../TrialNSwag/swagger.json" CodeGenerator="NSwagCSharp" />
     <ServiceFileReference Include="../TrialNSwag/swagger.json" CodeGenerator="NSwagTypeScript" />

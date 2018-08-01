@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Project>
   <ItemGroup>
-    <PackageReference Include="NSwag.MSBuild" Version="11.17.21">
+    <PackageReference Include="NSwag.MSBuild" Version="11.18.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
