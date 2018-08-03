@@ -1,50 +1,45 @@
 ﻿<Project>
-
   <Sdk Name="Microsoft.NET.Sdk" />
   <!-- Sdk Name="Microsoft.DotNet.GlobalTools.Sdk" / -->
 
   <PropertyGroup>
+    <AssemblyName>dotnet-getdocument</AssemblyName>
     <Description>GetDocument Command-line Tool outside man</Description>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <EnableApiCheck>false</EnableApiCheck>
+    <GenerateToolShims>true</GenerateToolShims>
+    <IncludeSource>false</IncludeSource>
+    <NuspecFile>$(MSBuildProjectName).nuspec</NuspecFile>
     <OutputType>Exe</OutputType>
     <PackAsTool>true</PackAsTool>
-    <GenerateToolShims>true</GenerateToolShims>
+    <PackageTags>GetDocument;command line;command-line;tool</PackageTags>
     <RootNamespace>GetDocument</RootNamespace>
-    <IncludeSource>false</IncludeSource>
-    <EnableApiCheck>false</EnableApiCheck>
-    <NuspecFile>$(MSBuildProjectName).nuspec</NuspecFile>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\ef\CommandLineUtils\*.cs" />
-    <Compile Include="..\ef\Commands\CommandBase.cs" />
-    <Compile Include="..\ef\Commands\ContextCommandBase.cs" />
-    <Compile Include="..\ef\Commands\DatabaseCommand.cs" />
-    <Compile Include="..\ef\Commands\DbContextCommand.cs" />
-    <Compile Include="..\ef\Commands\EFCommandBase.cs" />
-    <Compile Include="..\ef\Commands\HelpCommandBase.cs" />
-    <Compile Include="..\ef\Commands\MigrationsCommand.cs" />
-    <Compile Include="..\ef\Commands\RootCommand.cs" />
-    <Compile Include="..\ef\AnsiConsole.cs" />
-    <Compile Include="..\ef\AnsiConstants.cs" />
-    <Compile Include="..\ef\AnsiTextWriter.cs" />
-    <Compile Include="..\ef\CommandException.cs" />
-    <Compile Include="..\ef\Json.cs" />
-    <Compile Include="..\ef\Reporter.cs" />
-    <Compile Include="..\ef\Commands\**\*.Configure.cs" />
-    <Compile Include="..\ef\CodeAnnotations.cs" />
+    <Compile Include="../GetDocumentInsider/AnsiConsole.cs" />
+    <Compile Include="../GetDocumentInsider/AnsiConstants.cs" />
+    <Compile Include="../GetDocumentInsider/AnsiTextWriter.cs" />
+    <Compile Include="../GetDocumentInsider/CodeAnnotations.cs" />
+    <Compile Include="../GetDocumentInsider/CommandException.cs" />
+    <Compile Include="../GetDocumentInsider/CommandLineUtils/*.cs" LinkBase="CommandLineUtils" />
+    <Compile Include="../GetDocumentInsider/Commands/CommandBase.cs" Link="Commands/CommandBase.cs" />
+    <Compile Include="../GetDocumentInsider/Commands/HelpCommandBase.cs" Link="Commands/HelpCommandBase.cs" />
+    <Compile Include="../GetDocumentInsider/Commands/RootCommand.cs" Link="Commands/RootCommand.cs" />
+    <Compile Include="../GetDocumentInsider/Reporter.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ef\ef.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="../GetDocumentInsider/GetDocumentInsider.csproj" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=net461" />
+    <ProjectReference Include="../GetDocumentInsider/GetDocumentInsider.csproj" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netcoreapp2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\EntityFrameworkCore.targets" />
+    <EmbeddedResource Include="ServiceProjectReferenceMetadata.targets" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonPackageVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,12 +63,12 @@
 
   <ItemGroup>
     <!-- Additional files to be code signed -->
-    <SignedPackageFile Include="tools/netcoreapp2.2/any/tools/netcoreapp2.0/any/ef.dll" Certificate="$(AssemblySigningCertName)" />
-    <SignedPackageFile Include="tools/netcoreapp2.2/any/tools/net461/any/ef.exe" Certificate="$(AssemblySigningCertName)" />
-    <SignedPackageFile Include="tools/netcoreapp2.2/any/tools/net461/win-x86/ef.exe" Certificate="$(AssemblySigningCertName)" />
+    <SignedPackageFile Include="tools/netcoreapp2.1/any/tools/net461/any/GetDocument.Insider.exe" Certificate="$(AssemblySigningCertName)" />
+    <SignedPackageFile Include="tools/netcoreapp2.1/any/tools/net461/win-x86/GetDocument.Insider.exe" Certificate="$(AssemblySigningCertName)" />
+    <SignedPackageFile Include="tools/netcoreapp2.1/any/tools/netcoreapp2.0/any/GetDocument.Insider.dll" Certificate="$(AssemblySigningCertName)" />
 
     <!-- Third-party assemblies should be signed with the 3PartyDual certificate -->
-    <SignedPackageFile Include="tools/netcoreapp2.2/any/Newtonsoft.Json.dll" Certificate="3PartyDual" />
+    <SignedPackageFile Include="tools/netcoreapp2.1/any/Newtonsoft.Json.dll" Certificate="3PartyDual" />
   </ItemGroup>
 
   <Target Name="PopulateNuspec" BeforeTargets="GenerateNuspec" DependsOnTargets="Build">
@@ -83,33 +78,31 @@
       <IncludeSymbols>true</IncludeSymbols>
 
       <NuspecProperties>
-        id=$(PackageId);
-        version=$(PackageVersion);
-        authors=$(Authors);
-        description=$(Description);
-        tags=$(PackageTags.Replace(';', ' '));
-        licenseUrl=$(PackageLicenseUrl);
-        projectUrl=$(PackageProjectUrl);
-        iconUrl=$(PackageIconUrl);
-        repositoryUrl=$(RepositoryUrl);
-        repositoryCommit=$(RepositoryCommit);
-        copyright=$(Copyright);
-        packageType=$(PackageType);
         AssemblyName=$(AssemblyName);
-        targetFramework=$(TargetFramework);
-
+        authors=$(Authors);
+        copyright=$(Copyright);
+        description=$(Description);
+        iconUrl=$(PackageIconUrl);
+        id=$(PackageId);
+        licenseUrl=$(PackageLicenseUrl);
+        Output=$(PublishDir)**/*;
+        OutputBinary=../GetDocumentInsider/bin/$(Configuration)/netcoreapp2.0/GetDocument.Insider.dll;
+        OutputExe=../GetDocumentInsider/bin/$(Configuration)/net461/GetDocument.Insider.exe;
+        OutputExeSymbol=../GetDocumentInsider/bin/$(Configuration)/net461/GetDocument.Insider.pdb;
+        OutputRuntimeConfig=../GetDocumentInsider/bin/$(Configuration)/netcoreapp2.0/GetDocument.Insider.runtimeconfig.json;
+        OutputShims=$(IntermediateOutputPath)shims/**/*;
+        OutputSymbol=../GetDocumentInsider/bin/$(Configuration)/netcoreapp2.0/GetDocument.Insider.pdb;
+        OutputX86Exe=../GetDocumentInsider/bin/x86/$(Configuration)/net461/GetDocument.Insider.exe;
+        OutputX86ExeSymbol=../GetDocumentInsider/bin/x86/$(Configuration)/net461/GetDocument.Insider.pdb;
+        packageType=$(PackageType);
+        projectUrl=$(PackageProjectUrl);
+        repositoryCommit=$(RepositoryCommit);
+        repositoryUrl=$(RepositoryUrl);
         SettingsFile=$(_ToolsSettingsFilePath);
-        Output=$(PublishDir)**\*;
-        OutputShims=$(IntermediateOutputPath)shims\**\*;
-        OutputBinary=..\ef\bin\$(Configuration)\netcoreapp2.0\ef.dll;
-        OutputRuntimeConfig=..\ef\bin\$(Configuration)\netcoreapp2.0\ef.runtimeconfig.json;
-        OutputSymbol=..\ef\bin\$(Configuration)\netcoreapp2.0\ef.pdb;
-        OutputExe=..\ef\bin\$(Configuration)\net461\ef.exe;
-        OutputExeSymbol=..\ef\bin\$(Configuration)\net461\ef.pdb;
-        OutputX86Exe=..\ef\bin\x86\$(Configuration)\net461\ef.exe;
-        OutputX86ExeSymbol=..\ef\bin\x86\$(Configuration)\net461\ef.pdb;
+        tags=$(PackageTags.Replace(';', ' '));
+        targetFramework=$(TargetFramework);
+        version=$(PackageVersion);
       </NuspecProperties>
     </PropertyGroup>
   </Target>
-
 </Project>

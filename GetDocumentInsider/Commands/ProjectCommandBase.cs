@@ -8,7 +8,7 @@ using Microsoft.DotNet.Cli.CommandLine;
 
 namespace GetDocument.Commands
 {
-    internal abstract class ProjectCommandBase : EFCommandBase
+    internal abstract class ProjectCommandBase : HelpCommandBase
     {
         private CommandOption _assembly;
         private CommandOption _startupAssembly;

@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="WriteServiceProjectReferenceMetadata">
+    <MSBuild Condition="'$(TargetFramework)' == ''"
+      Projects="$(MSBuildProjectFile)"
+      Targets="WriteServiceProjectReferenceMetadata"
+      Properties="TargetFramework=$(TargetFrameworks.Split(';')[0]);ServiceProjectReferenceMetadataFile=$(ServiceProjectReferenceMetadataFile)" />
+
+    <ItemGroup Condition="'$(TargetFramework)' != ''">
+      <ServiceProjectReferenceMetadata Include="AssemblyName: $(AssemblyName)" />
+      <ServiceProjectReferenceMetadata Include="Language: $(Language)" />
+      <ServiceProjectReferenceMetadata Include="OutputPath: $(OutputPath)" />
+      <ServiceProjectReferenceMetadata Include="Platform: $(Platform)" />
+      <ServiceProjectReferenceMetadata Include="PlatformTarget: $(PlatformTarget)" />
+      <ServiceProjectReferenceMetadata Include="ProjectAssetsFile: $(ProjectAssetsFile)" />
+      <ServiceProjectReferenceMetadata Include="ProjectDepsFilePath: $(ProjectDepsFilePath)" />
+      <ServiceProjectReferenceMetadata Include="ProjectDir: $(ProjectDir)" />
+      <ServiceProjectReferenceMetadata Include="ProjectRuntimeConfigFilePath: $(ProjectRuntimeConfigFilePath)" />
+      <ServiceProjectReferenceMetadata Include="RootNamespace: $(RootNamespace)" />
+      <ServiceProjectReferenceMetadata Include="RuntimeFrameworkVersion: $(RuntimeFrameworkVersion)" />
+      <ServiceProjectReferenceMetadata Include="TargetFileName: $(TargetFileName)" />
+      <ServiceProjectReferenceMetadata Include="TargetFramework: $(TargetFramework)" />
+      <ServiceProjectReferenceMetadata Include="TargetFrameworkMoniker: $(TargetFrameworkMoniker)" />
+    </ItemGroup>
+
+    <WriteLinesToFile Condition="'$(TargetFramework)' != ''" File="$(ServiceProjectReferenceMetadataFile)" Lines="@(ServiceProjectReferenceMetadata)" />
+    <ItemGroup Condition="'$(TargetFramework)' != ''">
+      <ServiceProjectReferenceMetadata />
+    </ItemGroup>
+  </Target>
+</Project>

@@ -123,53 +123,11 @@
   <data name="ConfigurationDescription" xml:space="preserve">
     <value>The configuration to use.</value>
   </data>
-  <data name="ConnectionDescription" xml:space="preserve">
-    <value>The connection string to the database.</value>
+  <data name="CommandFullName" xml:space="preserve">
+    <value>GetDocument Command-line Tool</value>
   </data>
-  <data name="ContextDescription" xml:space="preserve">
-    <value>The DbContext to use.</value>
-  </data>
-  <data name="ContextNameDescription" xml:space="preserve">
-    <value>The name of the DbContext.</value>
-  </data>
-  <data name="DataAnnotationsDescription" xml:space="preserve">
-    <value>Use attributes to configure the model (where possible). If omitted, only the fluent API is used.</value>
-  </data>
-  <data name="DatabaseDescription" xml:space="preserve">
-    <value>Commands to manage the database.</value>
-  </data>
-  <data name="DatabaseDropDescription" xml:space="preserve">
-    <value>Drops the database.</value>
-  </data>
-  <data name="DatabaseDropDryRunDescription" xml:space="preserve">
-    <value>Show which database would be dropped, but don't drop it.</value>
-  </data>
-  <data name="DatabaseDropForceDescription" xml:space="preserve">
-    <value>Don't confirm.</value>
-  </data>
-  <data name="DatabaseUpdateDescription" xml:space="preserve">
-    <value>Updates the database to a specified migration.</value>
-  </data>
-  <data name="DbContextDescription" xml:space="preserve">
-    <value>Commands to manage DbContext types.</value>
-  </data>
-  <data name="DbContextInfoDescription" xml:space="preserve">
-    <value>Gets information about a DbContext type.</value>
-  </data>
-  <data name="DbContextListDescription" xml:space="preserve">
-    <value>Lists available DbContext types.</value>
-  </data>
-  <data name="DbContextScaffoldDescription" xml:space="preserve">
-    <value>Scaffolds a DbContext and entity types for a database.</value>
-  </data>
-  <data name="DbContextScaffoldForceDescription" xml:space="preserve">
-    <value>Overwrite existing files.</value>
-  </data>
-  <data name="DotnetEfFullName" xml:space="preserve">
-    <value>Entity Framework Core .NET Command-line Tools</value>
-  </data>
-  <data name="EFFullName" xml:space="preserve">
-    <value>Entity Framework Core Command-line Tools</value>
+  <data name="FullName" xml:space="preserve">
+    <value>GetDocument Command-line Tool</value>
   </data>
   <data name="FrameworkDescription" xml:space="preserve">
     <value>The target framework.</value>
@@ -177,44 +135,8 @@
   <data name="GetMetadataFailed" xml:space="preserve">
     <value>Unable to retrieve project metadata. Ensure it's an MSBuild-based .NET Core project. If you're using custom BaseIntermediateOutputPath or MSBuildProjectExtensionsPath values, Use the --msbuildprojectextensionspath option.</value>
   </data>
-  <data name="IdempotentDescription" xml:space="preserve">
-    <value>Generate a script that can be used on a database at any migration.</value>
-  </data>
   <data name="JsonDescription" xml:space="preserve">
     <value>Show JSON output.</value>
-  </data>
-  <data name="MigrationDescription" xml:space="preserve">
-    <value>The target migration. If '0', all migrations will be reverted. Defaults to the last migration.</value>
-  </data>
-  <data name="MigrationFromDescription" xml:space="preserve">
-    <value>The starting migration. Defaults to '0' (the initial database).</value>
-  </data>
-  <data name="MigrationNameDescription" xml:space="preserve">
-    <value>The name of the migration.</value>
-  </data>
-  <data name="MigrationsAddDescription" xml:space="preserve">
-    <value>Adds a new migration.</value>
-  </data>
-  <data name="MigrationsDescription" xml:space="preserve">
-    <value>Commands to manage migrations.</value>
-  </data>
-  <data name="MigrationsListDescription" xml:space="preserve">
-    <value>Lists available migrations.</value>
-  </data>
-  <data name="MigrationsOutputDirDescription" xml:space="preserve">
-    <value>The directory (and sub-namespace) to use. Paths are relative to the project directory. Defaults to "Migrations".</value>
-  </data>
-  <data name="MigrationsRemoveDescription" xml:space="preserve">
-    <value>Removes the last migration.</value>
-  </data>
-  <data name="MigrationsRemoveForceDescription" xml:space="preserve">
-    <value>Revert the migration if it has been applied to the database.</value>
-  </data>
-  <data name="MigrationsScriptDescription" xml:space="preserve">
-    <value>Generates a SQL script from migrations.</value>
-  </data>
-  <data name="MigrationToDescription" xml:space="preserve">
-    <value>The ending migration. Defaults to the last migration.</value>
   </data>
   <data name="MultipleProjects" xml:space="preserve">
     <value>More than one project was found in the current working directory. Use the --project option.</value>
@@ -226,10 +148,10 @@
     <value>More than one project was found in the current working directory. Use the --startup-project option.</value>
   </data>
   <data name="NETCoreApp1StartupProject" xml:space="preserve">
-    <value>Startup project '{startupProject}' targets framework '.NETCoreApp' version '{targetFrameworkVersion}'. This version of the Entity Framework Core .NET Command-line Tools only supports version 2.0 or higher. For information on using older versions of the tools, see https://go.microsoft.com/fwlink/?linkid=871254</value>
+    <value>Startup project '{startupProject}' targets framework '.NETCoreApp' version '{targetFrameworkVersion}'. This version of the GetDocument Command-line Tool only supports version 2.0 or higher. For information on using older versions of the tools, see https://go.microsoft.com/fwlink/?linkid=871254</value>
   </data>
   <data name="NETStandardStartupProject" xml:space="preserve">
-    <value>Startup project '{startupProject}' targets framework '.NETStandard'. There is no runtime associated with this framework, and projects targeting it cannot be executed directly. To use the Entity Framework Core .NET Command-line Tools with this project, add an executable project targeting .NET Core or .NET Framework that references this project, and set it as the startup project using --startup-project; or, update this project to cross-target .NET Core or .NET Framework.</value>
+    <value>Startup project '{startupProject}' targets framework '.NETStandard'. There is no runtime associated with this framework, and projects targeting it cannot be executed directly. To use the GetDocument Command-line Tool with this project, add an executable project targeting .NET Core or .NET Framework that references this project, and set it as the startup project using --startup-project; or, update this project to cross-target .NET Core or .NET Framework.</value>
   </data>
   <data name="NoColorDescription" xml:space="preserve">
     <value>Don't colorize output.</value>
@@ -258,26 +180,14 @@
   <data name="ProjectExtensionsDescription" xml:space="preserve">
     <value>The MSBuild project extensions path. Defaults to "obj".</value>
   </data>
-  <data name="ProviderDescription" xml:space="preserve">
-    <value>The provider to use. (E.g. Microsoft.EntityFrameworkCore.SqlServer)</value>
-  </data>
   <data name="RuntimeDescription" xml:space="preserve">
     <value>The runtime to use.</value>
-  </data>
-  <data name="SchemasDescription" xml:space="preserve">
-    <value>The schemas of tables to generate entity types for.</value>
   </data>
   <data name="StartupProjectDescription" xml:space="preserve">
     <value>The startup project to use.</value>
   </data>
-  <data name="TablesDescription" xml:space="preserve">
-    <value>The tables to generate entity types for.</value>
-  </data>
   <data name="UnsupportedFramework" xml:space="preserve">
-    <value>Startup project '{startupProject}' targets framework '{targetFramework}'. The Entity Framework Core .NET Command-line Tools don't support this framework.</value>
-  </data>
-  <data name="UseDatabaseNamesDescription" xml:space="preserve">
-    <value>Use table and column names directly from the database.</value>
+    <value>Startup project '{startupProject}' targets framework '{targetFramework}'. The GetDocument Command-line Tool don't support this framework.</value>
   </data>
   <data name="UsingProject" xml:space="preserve">
     <value>Using project '{project}'.</value>
@@ -293,9 +203,6 @@
   </data>
   <data name="NoBuildDescription" xml:space="preserve">
     <value>Don't build the project. Only use this when the build is up-to-date.</value>
-  </data>
-  <data name="ContextDirDescription" xml:space="preserve">
-    <value>The directory to put DbContext file in. Paths are relative to the project directory.</value>
   </data>
   <data name="WorkingDirDescription" xml:space="preserve">
     <value>The working directory of the tool invoking this command.</value>

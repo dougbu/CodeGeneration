@@ -18,15 +18,15 @@ namespace GetDocument.Commands
 
             command.OnExecute(
                 () =>
-                    {
-                        Reporter.IsVerbose = verbose.HasValue();
-                        Reporter.NoColor = noColor.HasValue();
-                        Reporter.PrefixOutput = prefixOutput.HasValue();
+                {
+                    Reporter.IsVerbose = verbose.HasValue();
+                    Reporter.NoColor = noColor.HasValue();
+                    Reporter.PrefixOutput = prefixOutput.HasValue();
 
-                        Validate();
+                    Validate();
 
-                        return Execute();
-                    });
+                    return Execute();
+                });
         }
 
         protected virtual void Validate()

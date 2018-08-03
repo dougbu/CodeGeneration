@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!--
-    Microsoft ResX Schema
-
+  <!-- 
+    Microsoft ResX Schema 
+    
     Version 2.0
-
-    The primary goals of this format is to allow a simple XML format
-    that is mostly human readable. The generation and parsing of the
-    various data types are done through the TypeConverter classes
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
     associated with the data types.
-
+    
     Example:
-
+    
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-
-    There are any number of "resheader" rows that contain simple
+                
+    There are any number of "resheader" rows that contain simple 
     name/value pairs.
-
-    Each data row contains a name, and value. The row also contains a
-    type or mimetype. Type corresponds to a .NET class that support
-    text/value conversion through the TypeConverter architecture.
-    Classes that don't support this are serialized and stored with the
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
     mimetype set.
-
-    The mimetype is used for serialized objects, and tells the
-    ResXResourceReader how to depersist the object. This is currently not
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
     extensible. For a given mimetype the value must be set accordingly:
-
-    Note - application/x-microsoft.net.object.binary.base64 is the format
-    that the ResXResourceWriter will generate, however the reader can
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
     read any of the formats listed below.
-
+    
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with
+    value   : The object must be serialized with 
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-
+    
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with
+    value   : The object must be serialized with 
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array
+    value   : The object must be serialized into a byte array 
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -120,107 +120,14 @@
   <data name="AssemblyDescription" xml:space="preserve">
     <value>The assembly to use.</value>
   </data>
-  <data name="ConnectionDescription" xml:space="preserve">
-    <value>The connection string to the database.</value>
-  </data>
-  <data name="ContextDescription" xml:space="preserve">
-    <value>The DbContext to use.</value>
-  </data>
-  <data name="ContextNameDescription" xml:space="preserve">
-    <value>The name of the DbContext.</value>
-  </data>
-  <data name="DataAnnotationsDescription" xml:space="preserve">
-    <value>Use attributes to configure the model (where possible). If omitted, only the fluent API is used.</value>
-  </data>
-  <data name="DatabaseDescription" xml:space="preserve">
-    <value>Commands to manage the database.</value>
-  </data>
-  <data name="DatabaseDropDescription" xml:space="preserve">
-    <value>Drops the database.</value>
-  </data>
-  <data name="DatabaseDropDryRun" xml:space="preserve">
-    <value>This would drop the database '{database}' on server '{dataSource}'.</value>
-  </data>
-  <data name="DatabaseDropDryRunDescription" xml:space="preserve">
-    <value>Show which database would be dropped, but don't drop it.</value>
-  </data>
-  <data name="DatabaseDropForceDescription" xml:space="preserve">
-    <value>Don't confirm.</value>
-  </data>
-  <data name="DatabaseDropPrompt" xml:space="preserve">
-    <value>Are you sure you want to drop the database '{database}' on server '{dataSource}'? (y/N)</value>
-  </data>
-  <data name="DatabaseName" xml:space="preserve">
-    <value>Database name: {database}</value>
-  </data>
-  <data name="DatabaseUpdateDescription" xml:space="preserve">
-    <value>Updates the database to a specified migration.</value>
-  </data>
   <data name="DataDirDescription" xml:space="preserve">
     <value>The data directory.</value>
   </data>
-  <data name="DataSource" xml:space="preserve">
-    <value>Data source: {dataSource}</value>
-  </data>
-  <data name="DbContextDescription" xml:space="preserve">
-    <value>Commands to manage DbContext types.</value>
-  </data>
-  <data name="DbContextInfoDescription" xml:space="preserve">
-    <value>Gets information about a DbContext type.</value>
-  </data>
-  <data name="DbContextListDescription" xml:space="preserve">
-    <value>Lists available DbContext types.</value>
-  </data>
-  <data name="DbContextScaffoldDescription" xml:space="preserve">
-    <value>Scaffolds a DbContext and entity types for a database.</value>
-  </data>
-  <data name="DbContextScaffoldForceDescription" xml:space="preserve">
-    <value>Overwrite existing files.</value>
-  </data>
-  <data name="EFFullName" xml:space="preserve">
-    <value>Entity Framework Core Command-line Tools</value>
-  </data>
-  <data name="IdempotentDescription" xml:space="preserve">
-    <value>Generate a script that can be used on a database at any migration.</value>
+  <data name="FullName" xml:space="preserve">
+    <value>GetDocument Command-line Tool inside man</value>
   </data>
   <data name="JsonDescription" xml:space="preserve">
     <value>Show JSON output.</value>
-  </data>
-  <data name="MigrationDescription" xml:space="preserve">
-    <value>The target migration. If '0', all migrations will be reverted. Defaults to the last migration.</value>
-  </data>
-  <data name="MigrationFromDescription" xml:space="preserve">
-    <value>The starting migration. Defaults to '0' (the initial database).</value>
-  </data>
-  <data name="MigrationNameDescription" xml:space="preserve">
-    <value>The name of the migration.</value>
-  </data>
-  <data name="MigrationsAddCompleted" xml:space="preserve">
-    <value>Done. To undo this action, use 'ef migrations remove'</value>
-  </data>
-  <data name="MigrationsAddDescription" xml:space="preserve">
-    <value>Adds a new migration.</value>
-  </data>
-  <data name="MigrationsDescription" xml:space="preserve">
-    <value>Commands to manage migrations.</value>
-  </data>
-  <data name="MigrationsListDescription" xml:space="preserve">
-    <value>Lists available migrations.</value>
-  </data>
-  <data name="MigrationsOutputDirDescription" xml:space="preserve">
-    <value>The directory (and sub-namespace) to use. Paths are relative to the project directory. Defaults to "Migrations".</value>
-  </data>
-  <data name="MigrationsRemoveDescription" xml:space="preserve">
-    <value>Removes the last migration.</value>
-  </data>
-  <data name="MigrationsRemoveForceDescription" xml:space="preserve">
-    <value>Revert the migration if it has been applied to the database.</value>
-  </data>
-  <data name="MigrationsScriptDescription" xml:space="preserve">
-    <value>Generates a SQL script from migrations.</value>
-  </data>
-  <data name="MigrationToDescription" xml:space="preserve">
-    <value>The ending migration. Defaults to the last migration.</value>
   </data>
   <data name="MissingArgument" xml:space="preserve">
     <value>Missing required argument '{arg}'.</value>
@@ -230,12 +137,6 @@
   </data>
   <data name="NoColorDescription" xml:space="preserve">
     <value>Don't colorize output.</value>
-  </data>
-  <data name="NoDbContext" xml:space="preserve">
-    <value>No DbContext was found.</value>
-  </data>
-  <data name="NoMigrations" xml:space="preserve">
-    <value>No migrations were found.</value>
   </data>
   <data name="OutputDescription" xml:space="preserve">
     <value>The file to write the result to.</value>
@@ -249,20 +150,11 @@
   <data name="ProjectDirDescription" xml:space="preserve">
     <value>The project directory. Defaults to the current directory.</value>
   </data>
-  <data name="ProviderDescription" xml:space="preserve">
-    <value>The provider to use. (E.g. GetDocument.SqlServer)</value>
-  </data>
   <data name="RootNamespaceDescription" xml:space="preserve">
     <value>The root namespace. Defaults to the target assembly name.</value>
   </data>
-  <data name="SchemasDescription" xml:space="preserve">
-    <value>The schemas of tables to generate entity types for.</value>
-  </data>
   <data name="StartupAssemblyDescription" xml:space="preserve">
     <value>The startup assembly to use. Defaults to the target assembly.</value>
-  </data>
-  <data name="TablesDescription" xml:space="preserve">
-    <value>The tables to generate entity types for.</value>
   </data>
   <data name="UsingApplicationBase" xml:space="preserve">
     <value>Using application base '{appBase}'.</value>
@@ -291,14 +183,11 @@
   <data name="WritingFile" xml:space="preserve">
     <value>Writing '{file}'...</value>
   </data>
-  <data name="UseDatabaseNamesDescription" xml:space="preserve">
-    <value>Use table and column names directly from the database.</value>
-  </data>
   <data name="UsingWorkingDirectory" xml:space="preserve">
     <value>Using working directory '{workingDirectory}'.</value>
   </data>
   <data name="DesignNotFound" xml:space="preserve">
-    <value>Your startup project '{startupProject}' doesn't reference GetDocument.Design. This package is required for the Entity Framework Core Tools to work. Ensure your startup project is correct, install the package, and try again.</value>
+    <value>Your startup project '{startupProject}' doesn't reference Microsoft.AspNetCore.TestHost. This package is required for the GetDocument Command-Line Tool to work. Ensure your startup project is correct, install the package, and try again.</value>
   </data>
   <data name="ProviderName" xml:space="preserve">
     <value>Provider name: {provider}</value>
@@ -308,9 +197,6 @@
   </data>
   <data name="LanguageDescription" xml:space="preserve">
     <value>The language. Defaults to 'C#'.</value>
-  </data>
-  <data name="ContextDirDescription" xml:space="preserve">
-    <value>The directory to put DbContext file in. Paths are relative to the project directory.</value>
   </data>
   <data name="WorkingDirDescription" xml:space="preserve">
     <value>The working directory of the tool invoking this command.</value>

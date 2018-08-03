@@ -3,20 +3,23 @@
 
 using System.Reflection;
 
-namespace GetDocument.Internal
+namespace GetDocument
 {
     /// <summary>
-    ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
+    ///     This API supports the GetDocument infrastructure and is not intended to be used
     ///     directly from your code. This API may change or be removed in future releases.
     /// </summary>
     public static class ProductInfo
     {
         /// <summary>
-        ///     This API supports the Entity Framework Core infrastructure and is not intended to be used
+        ///     This API supports the GetDocument infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public static string GetVersion()
-            => typeof(ProductInfo).GetTypeInfo().Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            => typeof(ProductInfo)
+                .GetTypeInfo()
+                .Assembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                .InformationalVersion;
     }
 }

@@ -1,0 +1,49 @@
+﻿<Project>
+  <PropertyGroup>
+    <GenerateRepositoryCommitUrlInDescription Condition="'$(GenerateRepositoryCommitUrlInDescription)'==''">true</GenerateRepositoryCommitUrlInDescription>
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);_AppendRepositoryCommitUrlToPackageDescription</GenerateNuspecDependsOn>
+  </PropertyGroup>
+
+  <Target Name="GetBuildNumber">
+    <!-- Create second-based build number for local builds. 635556672000000000 is Jan 1, 2015. -->
+    <PropertyGroup>
+      <_SecondBasedTimeStamp>$([System.DateTime]::UtcNow.Subtract($([System.DateTime]::FromBinary(635556672000000000))).TotalSeconds.ToString("F0"))</_SecondBasedTimeStamp>
+      <_SecondBasedTimeStamp>t$([System.Int64]::Parse($(_SecondBasedTimeStamp)).ToString("x9"))</_SecondBasedTimeStamp>
+    </PropertyGroup>
+    <Message Text="/p:BuildNumber=$(_SecondBasedTimeStamp)" Importance="High" />
+  </Target>
+
+  <Target Name="ResolveCommitHash" Condition="'$(RepositoryCommit)'==''">
+    <ItemGroup>
+      <_Temporary Remove="@(_Temporary)" />
+    </ItemGroup>
+    <PropertyGroup>
+      <RepositoryCommit Condition="'$(APPVEYOR_REPO_COMMIT)' != ''">$(APPVEYOR_REPO_COMMIT)</RepositoryCommit>
+      <RepositoryCommit Condition="'$(TRAVIS_COMMIT)' != ''">$(TRAVIS_COMMIT)</RepositoryCommit>
+      <RepositoryCommit Condition="'$(CommitHash)' != ''">$(CommitHash)</RepositoryCommit>
+    </PropertyGroup>
+
+    <Exec Command="git log -n1 --format=%25%25H" Condition="'$(RepositoryCommit)' == ''" ConsoleToMsBuild="true">
+      <Output ItemName="_Temporary" TaskParameter="ConsoleOutput" />
+    </Exec>
+
+    <PropertyGroup>
+      <RepositoryCommit Condition="'$(RepositoryCommit)' == ''">$([System.String]::Copy('%(_Temporary.Identity)').Split(';')[0])</RepositoryCommit>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_Temporary Remove="@(_Temporary)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_AppendRepositoryCommitUrlToPackageDescriptionCore"
+    Condition="'$(GenerateRepositoryCommitUrlInDescription)' == 'true' AND '$(RepositoryUrl)' !='' AND '$(RepositoryCommit)' != ''">
+    <PropertyGroup>
+      <PackageDescription>$(PackageDescription)
+This package was built from the source at:
+$(RepositoryUrl)/tree/$(RepositoryCommit)</PackageDescription>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="_AppendRepositoryCommitUrlToPackageDescription" DependsOnTargets="ResolveCommitHash;_AppendRepositoryCommitUrlToPackageDescriptionCore" />
+</Project>

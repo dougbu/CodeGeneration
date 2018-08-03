@@ -7,17 +7,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Versioning;
-using Microsoft.DotNet.Cli.CommandLine;
-using GetDocument.Commands;
 using GetDocument.Properties;
+using Microsoft.DotNet.Cli.CommandLine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-using EFCommand = GetDocument.Commands.RootCommand;
-
-namespace GetDocument
+namespace GetDocument.Commands
 {
-    internal class RootCommand : CommandBase
+    internal class InvokeCommand : HelpCommandBase
     {
         private CommandLineApplication _command;
         private CommandOption _project;
@@ -27,12 +24,11 @@ namespace GetDocument
         private CommandOption _runtime;
         private CommandOption _msbuildprojectextensionspath;
         private CommandOption _noBuild;
-        private CommandOption _help;
         private IList<string> _args;
 
         public override void Configure(CommandLineApplication command)
         {
-            command.FullName = Resources.DotnetEfFullName;
+            command.FullName = Resources.CommandFullName;
 
             var options = new ProjectOptions();
             options.Configure(command);
@@ -46,8 +42,6 @@ namespace GetDocument
             _noBuild = options.NoBuild;
 
             command.VersionOption("--version", GetVersion);
-            _help = command.Option("-h|--help", description: null);
-
             _args = command.RemainingArguments;
 
             base.Configure(command);
@@ -57,12 +51,6 @@ namespace GetDocument
 
         protected override int Execute()
         {
-            var commands = _args.TakeWhile(a => a[0] != '-').ToList();
-            if (_help.HasValue() || ShouldHelp(commands))
-            {
-                return ShowHelp(_help.HasValue(), commands);
-            }
-
             var projectFile = FindProjects(
                 _project.Value(),
                 Resources.NoProject,
@@ -70,7 +58,7 @@ namespace GetDocument
             Reporter.WriteVerbose(Resources.UsingProject(projectFile));
 
             var starupProjectFile = FindProjects(
-                _startupProject.Value(),
+                _startupProject.Value() ?? _project.Value(),
                 Resources.NoStartupProject,
                 Resources.MultipleStartupProjects);
             Reporter.WriteVerbose(Resources.UsingStartupProject(starupProjectFile));
@@ -115,7 +103,7 @@ namespace GetDocument
                     startupProject.PlatformTarget == "x86"
                         ? "win-x86"
                         : "any",
-                    "ef.exe");
+                    "GetDocument.Insider.exe");
             }
             else if (targetFramework.Identifier == ".NETCoreApp")
             {
@@ -134,7 +122,7 @@ namespace GetDocument
                 {
                     using (var reader = new JsonTextReader(File.OpenText(projectAssetsFile)))
                     {
-                        var projectAssets = JObject.ReadFrom(reader);
+                        var projectAssets = JToken.ReadFrom(reader);
                         var packageFolders = projectAssets["packageFolders"].Children<JProperty>().Select(p => p.Name);
 
                         foreach (var packageFolder in packageFolders)
@@ -156,7 +144,7 @@ namespace GetDocument
                     args.Add(startupProject.RuntimeFrameworkVersion);
                 }
 
-                args.Add(Path.Combine(toolsPath, "netcoreapp2.0", "any", "ef.dll"));
+                args.Add(Path.Combine(toolsPath, "netcoreapp2.0", "any", "GetDocument.Insider.dll"));
             }
             else if (targetFramework.Identifier == ".NETStandard")
             {
@@ -220,9 +208,11 @@ namespace GetDocument
                 return path;
             }
 
-            var projectFiles = Directory.EnumerateFiles(path, "*.*proj", SearchOption.TopDirectoryOnly)
-                    .Where(f => !string.Equals(Path.GetExtension(f), ".xproj", StringComparison.OrdinalIgnoreCase))
-                    .Take(2).ToList();
+            var projectFiles = Directory
+                .EnumerateFiles(path, "*.*proj", SearchOption.TopDirectoryOnly)
+                .Where(f => !string.Equals(Path.GetExtension(f), ".xproj", StringComparison.OrdinalIgnoreCase))
+                .Take(2)
+                .ToList();
             if (projectFiles.Count == 0)
             {
                 throw new CommandException(
@@ -242,34 +232,10 @@ namespace GetDocument
         }
 
         private static string GetVersion()
-            => typeof(RootCommand).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            => typeof(InvokeCommand)
+                .GetTypeInfo()
+                .Assembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
                 .InformationalVersion;
-
-        private static bool ShouldHelp(IReadOnlyList<string> commands)
-            => commands.Count == 0
-                || (commands.Count == 1
-                    && (commands[0] == "database"
-                        || commands[0] == "dbcontext"
-                        || commands[0] == "migrations"));
-
-        private int ShowHelp(bool help, IEnumerable<string> commands)
-        {
-            var app = new CommandLineApplication
-            {
-                Name = _command.Name
-            };
-
-            new EFCommand().Configure(app);
-
-            app.FullName = _command.FullName;
-
-            var args = new List<string>(commands);
-            if (help)
-            {
-                args.Add("--help");
-            }
-
-            return app.Execute(args.ToArray());
-        }
     }
 }

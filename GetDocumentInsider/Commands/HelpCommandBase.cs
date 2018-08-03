@@ -5,22 +5,16 @@ using Microsoft.DotNet.Cli.CommandLine;
 
 namespace GetDocument.Commands
 {
-    internal class HelpCommandBase : EFCommandBase
+    internal class HelpCommandBase : CommandBase
     {
         private CommandLineApplication _command;
 
         public override void Configure(CommandLineApplication command)
         {
             _command = command;
+            command.HelpOption("-h|--help");
 
             base.Configure(command);
-        }
-
-        protected override int Execute()
-        {
-            _command.ShowHelp();
-
-            return base.Execute();
         }
     }
 }

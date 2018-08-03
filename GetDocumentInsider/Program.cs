@@ -17,9 +17,9 @@ namespace GetDocument
                 Console.OutputEncoding = Encoding.UTF8;
             }
 
-            var app = new CommandLineApplication
+            var app = new CommandLineApplication(throwOnUnexpectedArg: false)
             {
-                Name = "ef"
+                Name = "GetDocument.Insider"
             };
 
             new RootCommand().Configure(app);

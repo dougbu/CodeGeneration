@@ -57,23 +57,22 @@ namespace GetDocument
 
             Directory.CreateDirectory(buildExtensionsDir);
 
-            var efTargetsPath = Path.Combine(
-                buildExtensionsDir,
-                Path.GetFileName(file) + ".EntityFrameworkCore.targets");
-            using (var input = typeof(Resources).GetTypeInfo().Assembly.GetManifestResourceStream(
-                "GetDocument.Resources.EntityFrameworkCore.targets"))
-            using (var output = File.OpenWrite(efTargetsPath))
+            var targetsPath = Path.Combine(buildExtensionsDir, Path.GetFileName(file) + ".ServiceProjectReferenceMetadata.targets");
+            using (var input = typeof(Resources).GetTypeInfo().Assembly.GetManifestResourceStream("GetDocument.ServiceProjectReferenceMetadata.targets"))
             {
-                // NB: Copy always in case it changes
-                Reporter.WriteVerbose(Resources.WritingFile(efTargetsPath));
-                input.CopyTo(output);
+                using (var output = File.OpenWrite(targetsPath))
+                {
+                    // NB: Copy always in case it changes
+                    Reporter.WriteVerbose(Resources.WritingFile(targetsPath));
+                    input.CopyTo(output);
+                }
             }
 
             IDictionary<string, string> metadata;
             var metadataFile = Path.GetTempFileName();
             try
             {
-                var propertyArg = "/property:EFProjectMetadataFile=" + metadataFile;
+                var propertyArg = "/property:ServiceProjectReferenceMetadataFile=" + metadataFile;
                 if (framework != null)
                 {
                     propertyArg += ";TargetFramework=" + framework;
@@ -90,7 +89,7 @@ namespace GetDocument
                 var args = new List<string>
                 {
                     "msbuild",
-                    "/target:GetEFProjectMetadata",
+                    "/target:WriteServiceProjectReferenceMetadata",
                     propertyArg,
                     "/verbosity:quiet",
                     "/nologo"

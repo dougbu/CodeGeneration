@@ -8,7 +8,6 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using GetDocument.Design;
-using GetDocument.Internal;
 using GetDocument.Properties;
 
 namespace GetDocument
@@ -37,7 +36,7 @@ namespace GetDocument
                 info.ConfigurationFile = configurationFile;
             }
 
-            _domain = AppDomain.CreateDomain("EntityFrameworkCore.DesignDomain", null, info);
+            _domain = AppDomain.CreateDomain("GetDocument.Insider.DesignDomain", null, info);
 
             if (dataDirectory != null)
             {

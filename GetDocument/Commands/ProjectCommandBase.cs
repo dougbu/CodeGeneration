@@ -5,7 +5,7 @@ using Microsoft.DotNet.Cli.CommandLine;
 
 namespace GetDocument.Commands
 {
-    internal class ProjectCommandBase : EFCommandBase
+    internal class ProjectCommandBase : CommandBase
     {
         public override void Configure(CommandLineApplication command)
         {
