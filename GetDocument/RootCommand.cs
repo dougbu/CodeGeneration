@@ -8,14 +8,14 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Versioning;
 using Microsoft.DotNet.Cli.CommandLine;
-using Microsoft.EntityFrameworkCore.Tools.Commands;
-using Microsoft.EntityFrameworkCore.Tools.Properties;
+using GetDocument.Commands;
+using GetDocument.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-using EFCommand = Microsoft.EntityFrameworkCore.Tools.Commands.RootCommand;
+using EFCommand = GetDocument.Commands.RootCommand;
 
-namespace Microsoft.EntityFrameworkCore.Tools
+namespace GetDocument
 {
     internal class RootCommand : CommandBase
     {

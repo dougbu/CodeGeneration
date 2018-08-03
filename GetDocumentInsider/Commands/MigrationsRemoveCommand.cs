@@ -3,7 +3,7 @@
 
 using System.Collections;
 
-namespace GetDocument.Insider.Commands
+namespace GetDocument.Commands
 {
     // ReSharper disable once ArrangeTypeModifiers
     partial class MigrationsRemoveCommand

@@ -4,9 +4,9 @@
 using System;
 using System.Text;
 using Microsoft.DotNet.Cli.CommandLine;
-using GetDocument.Insider.Commands;
+using GetDocument.Commands;
 
-namespace GetDocument.Insider
+namespace GetDocument
 {
     internal static class Program
     {
@@ -34,7 +34,7 @@ namespace GetDocument.Insider
                 if (ex is CommandException
                     || ex is CommandParsingException
                     || (wrappedException != null
-                        && wrappedException.Type == "GetDocument.Insider.Design.OperationException"))
+                        && wrappedException.Type == "GetDocument.Design.OperationException"))
                 {
                     Reporter.WriteVerbose(ex.ToString());
                 }

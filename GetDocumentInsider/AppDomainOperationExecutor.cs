@@ -7,11 +7,11 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Reflection;
-using GetDocument.Insider.Design;
-using GetDocument.Insider.Internal;
-using GetDocument.Insider.Properties;
+using GetDocument.Design;
+using GetDocument.Internal;
+using GetDocument.Properties;
 
-namespace GetDocument.Insider
+namespace GetDocument
 {
     internal class AppDomainOperationExecutor : OperationExecutorBase
     {

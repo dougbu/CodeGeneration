@@ -6,16 +6,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using GetDocument.Insider.Internal;
+using GetDocument.Internal;
 
-namespace GetDocument.Insider
+namespace GetDocument
 {
     internal class ReflectionOperationExecutor : OperationExecutorBase
     {
         private readonly object _executor;
         private readonly Assembly _commandsAssembly;
-        private const string ReportHandlerTypeName = "GetDocument.Insider.Design.OperationReportHandler";
-        private const string ResultHandlerTypeName = "GetDocument.Insider.Design.OperationResultHandler";
+        private const string ReportHandlerTypeName = "GetDocument.Design.OperationReportHandler";
+        private const string ResultHandlerTypeName = "GetDocument.Design.OperationResultHandler";
         private readonly Type _resultHandlerType;
 
         public ReflectionOperationExecutor(

@@ -4,9 +4,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using GetDocument.Insider.Properties;
+using GetDocument.Properties;
 
-namespace GetDocument.Insider.Commands
+namespace GetDocument.Commands
 {
     // ReSharper disable once ArrangeTypeModifiers
     partial class DbContextListCommand

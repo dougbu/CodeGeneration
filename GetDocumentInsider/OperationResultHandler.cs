@@ -3,7 +3,7 @@
 
 using System;
 
-namespace GetDocument.Insider.Design
+namespace GetDocument.Design
 {
     /// <summary>
     ///     Used with <see cref="OperationExecutor" /> to handle operation results.

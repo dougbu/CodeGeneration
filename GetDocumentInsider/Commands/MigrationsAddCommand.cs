@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.Collections;
-using GetDocument.Insider.Properties;
+using GetDocument.Properties;
 
-namespace GetDocument.Insider.Commands
+namespace GetDocument.Commands
 {
     // ReSharper disable once ArrangeTypeModifiers
     partial class MigrationsAddCommand

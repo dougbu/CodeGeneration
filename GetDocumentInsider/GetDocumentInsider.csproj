@@ -5,7 +5,7 @@
     <Description>GetDocument Command-line Tool inside man</Description>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
-    <RootNamespace>GetDocument.Insider</RootNamespace>
+    <RootNamespace>GetDocument</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">

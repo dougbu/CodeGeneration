@@ -3,7 +3,7 @@
 
 using JetBrains.Annotations;
 
-namespace GetDocument.Insider.Design
+namespace GetDocument.Design
 {
     /// <summary>
     ///     Used to handle reported design-time activity.

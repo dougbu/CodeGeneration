@@ -3,7 +3,7 @@
 
 using Microsoft.DotNet.Cli.CommandLine;
 
-namespace GetDocument.Insider.Commands
+namespace GetDocument.Commands
 {
     internal class HelpCommandBase : EFCommandBase
     {

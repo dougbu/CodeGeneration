@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace GetDocument.Insider
+namespace GetDocument
 {
     internal interface IOperationExecutor : IDisposable
     {

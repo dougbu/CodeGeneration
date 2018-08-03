@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Resources;
 using JetBrains.Annotations;
 
-namespace GetDocument.Insider.Properties
+namespace GetDocument.Properties
 {
     /// <summary>
     ///		This API supports the Entity Framework Core infrastructure and is not intended to be used
@@ -13,7 +13,7 @@ namespace GetDocument.Insider.Properties
     internal static class Resources
     {
         private static readonly ResourceManager _resourceManager
-            = new ResourceManager("GetDocument.Insider.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
+            = new ResourceManager("GetDocument.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
 
         /// <summary>
         ///     The assembly to use.
@@ -292,7 +292,7 @@ namespace GetDocument.Insider.Properties
             => GetString("ProjectDirDescription");
 
         /// <summary>
-        ///     The provider to use. (E.g. GetDocument.Insider.SqlServer)
+        ///     The provider to use. (E.g. GetDocument.SqlServer)
         /// </summary>
         public static string ProviderDescription
             => GetString("ProviderDescription");
@@ -406,7 +406,7 @@ namespace GetDocument.Insider.Properties
                 workingDirectory);
 
         /// <summary>
-        ///     Your startup project '{startupProject}' doesn't reference GetDocument.Insider.Design. This package is required for the Entity Framework Core Tools to work. Ensure your startup project is correct, install the package, and try again.
+        ///     Your startup project '{startupProject}' doesn't reference GetDocument.Design. This package is required for the Entity Framework Core Tools to work. Ensure your startup project is correct, install the package, and try again.
         /// </summary>
         public static string DesignNotFound([CanBeNull] object startupProject)
             => string.Format(

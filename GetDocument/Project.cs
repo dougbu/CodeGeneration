@@ -6,9 +6,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore.Tools.Properties;
+using GetDocument.Properties;
 
-namespace Microsoft.EntityFrameworkCore.Tools
+namespace GetDocument
 {
     internal class Project
     {
@@ -61,7 +61,7 @@ namespace Microsoft.EntityFrameworkCore.Tools
                 buildExtensionsDir,
                 Path.GetFileName(file) + ".EntityFrameworkCore.targets");
             using (var input = typeof(Resources).GetTypeInfo().Assembly.GetManifestResourceStream(
-                "Microsoft.EntityFrameworkCore.Tools.Resources.EntityFrameworkCore.targets"))
+                "GetDocument.Resources.EntityFrameworkCore.targets"))
             using (var output = File.OpenWrite(efTargetsPath))
             {
                 // NB: Copy always in case it changes

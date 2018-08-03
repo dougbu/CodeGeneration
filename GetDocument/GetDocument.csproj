@@ -1,11 +1,11 @@
 ﻿<Project>
 
   <Sdk Name="Microsoft.NET.Sdk" />
-  <Sdk Name="Microsoft.DotNet.GlobalTools.Sdk" />
+  <!-- Sdk Name="Microsoft.DotNet.GlobalTools.Sdk" / -->
 
   <PropertyGroup>
     <Description>GetDocument Command-line Tool outside man</Description>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <OutputType>Exe</OutputType>
     <PackAsTool>true</PackAsTool>
     <GenerateToolShims>true</GenerateToolShims>

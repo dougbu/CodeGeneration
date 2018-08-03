@@ -4,7 +4,7 @@
 using System;
 using Microsoft.DotNet.Cli.CommandLine;
 
-namespace Microsoft.EntityFrameworkCore.Tools
+namespace GetDocument
 {
     internal static class Program
     {
@@ -12,7 +12,7 @@ namespace Microsoft.EntityFrameworkCore.Tools
         {
             var app = new CommandLineApplication(throwOnUnexpectedArg: false)
             {
-                Name = "dotnet ef"
+                Name = "GetDocument"
             };
 
             new RootCommand().Configure(app);

@@ -3,9 +3,9 @@
 
 using System;
 using System.Linq;
-using static GetDocument.Insider.AnsiConstants;
+using static GetDocument.AnsiConstants;
 
-namespace GetDocument.Insider
+namespace GetDocument
 {
     internal static class Reporter
     {

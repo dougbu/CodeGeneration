@@ -3,7 +3,7 @@
 
 using System.Reflection;
 
-namespace GetDocument.Insider.Internal
+namespace GetDocument.Internal
 {
     /// <summary>
     ///     This API supports the Entity Framework Core infrastructure and is not intended to be used

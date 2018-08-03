@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace Microsoft.EntityFrameworkCore.Tools
+namespace GetDocument
 {
     internal static class Exe
     {

@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace GetDocument.Insider
+namespace GetDocument
 {
     internal class AnsiTextWriter
     {

@@ -1,10 +1,10 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using GetDocument.Insider.Properties;
+using GetDocument.Properties;
 using Microsoft.DotNet.Cli.CommandLine;
 
-namespace GetDocument.Insider.Commands
+namespace GetDocument.Commands
 {
     internal partial class DbContextInfoCommand : ContextCommandBase
     {

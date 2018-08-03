@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Resources;
 using JetBrains.Annotations;
 
-namespace Microsoft.EntityFrameworkCore.Tools.Properties
+namespace GetDocument.Properties
 {
     /// <summary>
     ///		This API supports the Entity Framework Core infrastructure and is not intended to be used
@@ -14,7 +14,7 @@ namespace Microsoft.EntityFrameworkCore.Tools.Properties
     internal static class Resources
     {
         private static readonly ResourceManager _resourceManager
-            = new ResourceManager("Microsoft.EntityFrameworkCore.Tools.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
+            = new ResourceManager("GetDocument.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
 
         /// <summary>
         ///     Build failed.

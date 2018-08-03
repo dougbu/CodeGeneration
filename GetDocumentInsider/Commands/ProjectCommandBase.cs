@@ -3,10 +3,10 @@
 
 using System.IO;
 using System.Reflection;
-using GetDocument.Insider.Properties;
+using GetDocument.Properties;
 using Microsoft.DotNet.Cli.CommandLine;
 
-namespace GetDocument.Insider.Commands
+namespace GetDocument.Commands
 {
     internal abstract class ProjectCommandBase : EFCommandBase
     {

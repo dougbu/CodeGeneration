@@ -3,7 +3,7 @@
 
 using System;
 
-namespace GetDocument.Insider
+namespace GetDocument
 {
     internal class CommandException : Exception
     {

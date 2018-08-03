@@ -3,11 +3,11 @@
 
 using System;
 using System.Reflection;
-using GetDocument.Insider.Properties;
+using GetDocument.Properties;
 using Microsoft.DotNet.Cli.CommandLine;
-using static GetDocument.Insider.AnsiConstants;
+using static GetDocument.AnsiConstants;
 
-namespace GetDocument.Insider.Commands
+namespace GetDocument.Commands
 {
     internal class RootCommand : HelpCommandBase
     {

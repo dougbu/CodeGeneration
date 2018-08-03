@@ -250,7 +250,7 @@
     <value>The project directory. Defaults to the current directory.</value>
   </data>
   <data name="ProviderDescription" xml:space="preserve">
-    <value>The provider to use. (E.g. GetDocument.Insider.SqlServer)</value>
+    <value>The provider to use. (E.g. GetDocument.SqlServer)</value>
   </data>
   <data name="RootNamespaceDescription" xml:space="preserve">
     <value>The root namespace. Defaults to the target assembly name.</value>
@@ -298,7 +298,7 @@
     <value>Using working directory '{workingDirectory}'.</value>
   </data>
   <data name="DesignNotFound" xml:space="preserve">
-    <value>Your startup project '{startupProject}' doesn't reference GetDocument.Insider.Design. This package is required for the Entity Framework Core Tools to work. Ensure your startup project is correct, install the package, and try again.</value>
+    <value>Your startup project '{startupProject}' doesn't reference GetDocument.Design. This package is required for the Entity Framework Core Tools to work. Ensure your startup project is correct, install the package, and try again.</value>
   </data>
   <data name="ProviderName" xml:space="preserve">
     <value>Provider name: {provider}</value>

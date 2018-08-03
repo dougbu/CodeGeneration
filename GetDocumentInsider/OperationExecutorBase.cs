@@ -4,14 +4,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using GetDocument.Insider.Properties;
+using GetDocument.Properties;
 
-namespace GetDocument.Insider
+namespace GetDocument
 {
     internal abstract class OperationExecutorBase : IOperationExecutor
     {
-        public const string DesignAssemblyName = "GetDocument.Insider.Design";
-        protected const string ExecutorTypeName = "GetDocument.Insider.Design.OperationExecutor";
+        public const string DesignAssemblyName = "GetDocument.Design";
+        protected const string ExecutorTypeName = "GetDocument.Design.OperationExecutor";
 
         private static readonly IDictionary _emptyArguments = new Dictionary<string, object>(0);
         public string AppBasePath { get; }
