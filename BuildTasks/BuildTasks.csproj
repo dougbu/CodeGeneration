@@ -1,11 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <!-- Execute PackTaskDependencies fairly late. -->
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);PackTaskDependencies</GenerateNuspecDependsOn>
+
+    <!-- Do not complain about lack of lib folder. -->
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+
+    <Description>MSBuild tasks and targets for code generation</Description>
+    <EnableApiCheck>false</EnableApiCheck>
+    <NuspecFile>$(MSBuildProjectName).nuspec</NuspecFile>
+    <PackageTags>Build Tasks;msbuild;DownloadFile;GetFilenameFromUri;code generation</PackageTags>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.7.179" />
     <PackageReference Condition="'$(TargetFramework)' == 'net461'" Include="System.Net.Http" Version="4.3.3" />
   </ItemGroup>
+
+  <Target Name="PackTaskDependencies">
+    <PropertyGroup>
+      <NuspecProperties>
+        id=$(PackageId);
+        authors=$(Authors);
+        configuration=$(Configuration);
+        copyright=$(Copyright);
+        description=$(PackageDescription);
+        iconUrl=$(PackageIconUrl);
+        licenseUrl=$(PackageLicenseUrl);
+        owners=$(Company);
+        projectUrl=$(PackageProjectUrl);
+        repositoryCommit=$(RepositoryCommit);
+        repositoryUrl=$(RepositoryUrl);
+        tags=$(PackageTags.Replace(';', ' '));
+        version=$(PackageVersion);
+      </NuspecProperties>
+    </PropertyGroup>
+  </Target>
 </Project>

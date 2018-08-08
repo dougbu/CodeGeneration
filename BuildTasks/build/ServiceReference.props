@@ -3,7 +3,7 @@
   <PropertyGroup>
     <_BuildTasksAssemblyTarget Condition="'$(MSBuildRuntimeType)' != 'Core'">net461</_BuildTasksAssemblyTarget>
     <_BuildTasksAssemblyTarget Condition="'$(MSBuildRuntimeType)' == 'Core'">netstandard2.0</_BuildTasksAssemblyTarget>
-    <_BuildTasksAssemblyPath>$(MSBuildThisFileDirectory)/bin/$(Configuration)/$(_BuildTasksAssemblyTarget)/BuildTasks.dll</_BuildTasksAssemblyPath>
+    <_BuildTasksAssemblyPath>$(MSBuildThisFileDirectory)/../tasks/$(_BuildTasksAssemblyTarget)/BuildTasks.dll</_BuildTasksAssemblyPath>
   </PropertyGroup>
   <UsingTask TaskName="BuildTasks.GetFilenameFromUri" AssemblyFile="$(_BuildTasksAssemblyPath)" />
   <UsingTask TaskName="BuildTasks.DownloadFile" AssemblyFile="$(_BuildTasksAssemblyPath)" />

@@ -1,7 +1,6 @@
 ﻿<Project>
   <PropertyGroup>
     <GenerateRepositoryCommitUrlInDescription Condition="'$(GenerateRepositoryCommitUrlInDescription)'==''">true</GenerateRepositoryCommitUrlInDescription>
-    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);_AppendRepositoryCommitUrlToPackageDescription</GenerateNuspecDependsOn>
   </PropertyGroup>
 
   <Target Name="GetBuildNumber">

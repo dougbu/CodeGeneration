@@ -2,8 +2,9 @@
   <PropertyGroup>
     <Authors>Microsoft</Authors>
     <BuildNumber Condition="'$(BuildNumber)' == ''">t000</BuildNumber>
-    <Company>Microsoft Corporation.</Company>
+    <Company>Microsoft Corporation</Company>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);_AppendRepositoryCommitUrlToPackageDescription</GenerateNuspecDependsOn>
     <PackageIconUrl>https://go.microsoft.com/fwlink/?LinkID=288859</PackageIconUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/aspnet/Home/2.0.0/LICENSE.txt</PackageLicenseUrl>
     <PackageProjectUrl>https://asp.net</PackageProjectUrl>
