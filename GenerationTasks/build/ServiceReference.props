@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Project>
   <PropertyGroup>
-    <_BuildTasksAssemblyTarget Condition="'$(MSBuildRuntimeType)' != 'Core'">net461</_BuildTasksAssemblyTarget>
-    <_BuildTasksAssemblyTarget Condition="'$(MSBuildRuntimeType)' == 'Core'">netstandard2.0</_BuildTasksAssemblyTarget>
-    <_BuildTasksAssemblyPath>$(MSBuildThisFileDirectory)/../tasks/$(_BuildTasksAssemblyTarget)/BuildTasks.dll</_BuildTasksAssemblyPath>
+    <_GenerationTasksAssemblyTarget Condition="'$(MSBuildRuntimeType)' != 'Core'">net461</_GenerationTasksAssemblyTarget>
+    <_GenerationTasksAssemblyTarget Condition="'$(MSBuildRuntimeType)' == 'Core'">netstandard2.0</_GenerationTasksAssemblyTarget>
+    <_GenerationTasksAssemblyPath>$(MSBuildThisFileDirectory)/../tasks/$(_GenerationTasksAssemblyTarget)/GenerationTasks.dll</_GenerationTasksAssemblyPath>
   </PropertyGroup>
-  <UsingTask TaskName="BuildTasks.GetFilenameFromUri" AssemblyFile="$(_BuildTasksAssemblyPath)" />
-  <UsingTask TaskName="BuildTasks.DownloadFile" AssemblyFile="$(_BuildTasksAssemblyPath)" />
+  <UsingTask TaskName="GenerationTasks.GetFilenameFromUri" AssemblyFile="$(_GenerationTasksAssemblyPath)" />
+  <UsingTask TaskName="GenerationTasks.DownloadFile" AssemblyFile="$(_GenerationTasksAssemblyPath)" />
 
   <PropertyGroup>
     <ServiceProjectReferenceDirectory

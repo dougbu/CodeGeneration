@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrialNSwag", "TrialNSwag\Tr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientConsole", "ClientConsole\ClientConsole.csproj", "{DD2390CC-3BF0-48C7-A397-D4FA76F3864B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildTasks", "BuildTasks\BuildTasks.csproj", "{DDE9D8E4-9A62-4C08-A53E-CB19F2A75BFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerationTasks", "GenerationTasks\GenerationTasks.csproj", "{DDE9D8E4-9A62-4C08-A53E-CB19F2A75BFA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrialSwashbuckle", "TrialSwashbuckle\TrialSwashbuckle.csproj", "{E8D59576-8F33-415E-AF31-89DEB11B6812}"
 EndProject

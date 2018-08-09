@@ -110,9 +110,9 @@
       <_Temporary Remove="@(_Temporary)" />
     </ItemGroup>
 
-    <BuildTasks.GetFilenameFromUri Uris="@(ServiceUriReference)">
+    <GenerationTasks.GetFilenameFromUri Uris="@(ServiceUriReference)">
       <Output TaskParameter="Filenames" ItemName="_Temporary" />
-    </BuildTasks.GetFilenameFromUri>
+    </GenerationTasks.GetFilenameFromUri>
 
     <ItemGroup>
       <_Temporary Update="@(_Temporary)">
@@ -122,7 +122,7 @@
 </Target>
 
   <Target Name="_ServiceUriReferenceGenerator_Core" Condition="'@(_Temporary)' != ''">
-    <BuildTasks.DownloadFile Uri="%(_Temporary.Identity)" DestinationPath="%(DocumentPath)" Overwrite="$(ServiceUriReferenceCheckIfNewer)" />
+    <GenerationTasks.DownloadFile Uri="%(_Temporary.Identity)" DestinationPath="%(DocumentPath)" Overwrite="$(ServiceUriReferenceCheckIfNewer)" />
 
     <ItemGroup>
       <ServiceFileReference Remove="@(_Temporary -> '%(DocumentPath)')" />

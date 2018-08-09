@@ -10,6 +10,7 @@
     <EnableApiCheck>false</EnableApiCheck>
     <NuspecFile>$(MSBuildProjectName).nuspec</NuspecFile>
     <PackageTags>Build Tasks;msbuild;DownloadFile;GetFilenameFromUri;code generation</PackageTags>
+    <RootNamespace>GenerationTasks</RootNamespace>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
   </PropertyGroup>
 

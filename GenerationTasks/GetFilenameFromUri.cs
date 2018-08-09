@@ -4,7 +4,7 @@ using System.IO;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-namespace BuildTasks
+namespace GenerationTasks
 {
     /// <summary>
     /// Converts a URI into a valid Unix or Windows filename.
