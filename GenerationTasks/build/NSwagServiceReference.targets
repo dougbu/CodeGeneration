@@ -82,6 +82,11 @@
 
   <!-- ServiceFileReference support for TypeScript -->
 
+  <PropertyGroup>
+    <NSwagCSharpCodeGeneratorNamespace Condition="'$(NSwagCSharpCodeGeneratorNamespace)' == ''">$(RootNamespace)</NSwagCSharpCodeGeneratorNamespace>
+    <NSwagTypeScriptCodeGeneratorNamespace Condition="'$(NSwagTypeScriptCodeGeneratorNamespace)' == ''">$(RootNamespace)</NSwagTypeScriptCodeGeneratorNamespace>
+  </PropertyGroup>
+
   <Target Name="_NSwagTypeScriptCodeGenerator_GetMetadata">
     <ItemGroup>
       <_NSwagTemporary Remove="@(_NSwagTemporary)" />

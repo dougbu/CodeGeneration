@@ -5,14 +5,19 @@
     <authors>$authors$</authors>
     <copyright>$copyright$</copyright>
     <description>$description$</description>
+    <developmentDependency>true</developmentDependency>
     <iconUrl>$iconUrl$</iconUrl>
     <licenseUrl>$licenseUrl$</licenseUrl>
+    <minClientVersion>2.8</minClientVersion>
     <owners>$owners$</owners>
     <projectUrl>$projectUrl$</projectUrl>
     <repository type="git" url="$repositoryUrl$" commit="$repositoryCommit$" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>$tags$</tags>
     <version>$version$</version>
+    <dependencies>
+      <dependency id="NSwag.MSBuild" version="11.18.0" include="runtime,build,native,contentfiles,analyzers" />
+    </dependencies>
   </metadata>
 
   <files>

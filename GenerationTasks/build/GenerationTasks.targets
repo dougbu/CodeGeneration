@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Project>
+  <Import Project="NSwagServiceReference.targets" />
   <Target Name="_CheckServiceReferences">
     <Error Condition="'@(ServiceProjectReference)' != '' AND '%(CodeGenerator)' == ''" Text="ServiceProjectReference items '@(ServiceProjectReference)' lack CodeGenerator metadata." />
     <Error Condition="'@(ServiceUriReference)' != '' AND '%(CodeGenerator)' == ''" Text="ServiceUriReference items '@(ServiceUriReference)' lack CodeGenerator metadata." />
@@ -89,10 +90,10 @@
   </Target>
 
   <Target Name="_ServiceProjectReferenceGenerator_Build"
-    Condition="'$(BuildProjectReferences)' != 'true'"
+    Condition="'$(BuildProjectReferences)' == 'true'"
     Inputs="@(ServiceProjectReference)"
     Outputs="@(ServiceProjectReference -> '%(ProjectTargetPath)')">
-    <MSBuild Projects="$(Identity)"
+    <MSBuild Projects="%(Identity)"
       BuildInParallel="$(BuildInParallel)"
       Properties="TargetFramework=%(ServiceProjectReference.PreferredTargetFramework)"
       RemoveProperties="TargetFrameworks;RuntimeIdentifier"
