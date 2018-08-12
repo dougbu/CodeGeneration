@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>GetDocument.Insider</AssemblyName>
     <Description>GetDocument Command-line Tool inside man</Description>
@@ -11,6 +10,10 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,9 +34,4 @@
       <DependentUpon>Resources.Designer.tt</DependentUpon>
     </Compile>
   </ItemGroup>
-
-  <Target Name="BuildX86" AfterTargets="Build" Condition=" '$(TargetFramework)' == 'net461' And '$(Platform)' != 'x86' ">
-    <MSBuild Projects="$(MSBuildProjectFullPath)" Properties="TargetFramework=$(TargetFramework);Platform=x86;Configuration=$(Configuration);BuildNumber=$(BuildNumber)" Targets="Build" />
-  </Target>
-
 </Project>

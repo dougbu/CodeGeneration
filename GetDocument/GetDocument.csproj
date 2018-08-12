@@ -3,6 +3,9 @@
   <!-- Sdk Name="Microsoft.DotNet.GlobalTools.Sdk" / -->
 
   <PropertyGroup>
+    <!-- Execute PopulateNuspec fairly late. -->
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);PopulateNuspec</GenerateNuspecDependsOn>
+
     <AssemblyName>dotnet-getdocument</AssemblyName>
     <Description>GetDocument Command-line Tool outside man</Description>
     <EnableApiCheck>false</EnableApiCheck>
@@ -27,11 +30,6 @@
     <Compile Include="../GetDocumentInsider/Commands/HelpCommandBase.cs" Link="Commands/HelpCommandBase.cs" />
     <Compile Include="../GetDocumentInsider/Commands/RootCommand.cs" Link="Commands/RootCommand.cs" />
     <Compile Include="../GetDocumentInsider/Reporter.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="../GetDocumentInsider/GetDocumentInsider.csproj" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=net461" />
-    <ProjectReference Include="../GetDocumentInsider/GetDocumentInsider.csproj" ReferenceOutputAssembly="false" SetTargetFramework="TargetFramework=netcoreapp2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -71,12 +69,22 @@
     <SignedPackageFile Include="tools/netcoreapp2.1/any/Newtonsoft.Json.dll" Certificate="3PartyDual" />
   </ItemGroup>
 
-  <Target Name="PopulateNuspec" BeforeTargets="GenerateNuspec" DependsOnTargets="Build">
+  <Target Name="PopulateNuspec" DependsOnTargets="Build">
+    <ItemGroup>
+      <_Temporary Remove="@(Temporary)" />
+      <_Temporary Include="../GetDocumentInsider/GetDocumentInsider.csproj" Properties="TargetFramework=net461"/>
+      <_Temporary Include="../GetDocumentInsider/GetDocumentInsider.csproj" Properties="TargetFramework=net461;Platform=x86"/>
+      <_Temporary Include="../GetDocumentInsider/GetDocumentInsider.csproj" Properties="TargetFramework=netcoreapp2.0"/>
+    </ItemGroup>
+
+    <MSBuild Projects="../GetDocumentInsider/GetDocumentInsider.csproj" RemoveProperties="RuntimeIdentifier;TargetFramework" Targets="Restore;Build" />
+    <MSBuild Projects="@(_Temporary)" BuildInParallel="$(BuildInParallel)" RemoveProperties="RuntimeIdentifier" Targets="Publish" />
+
+    <ItemGroup>
+      <_Temporary Remove="@(_Temporary)" />
+    </ItemGroup>
 
     <PropertyGroup>
-      <!-- Make sure we create a symbols.nupkg. -->
-      <IncludeSymbols>true</IncludeSymbols>
-
       <NuspecProperties>
         AssemblyName=$(AssemblyName);
         authors=$(Authors);
@@ -84,16 +92,12 @@
         description=$(Description);
         iconUrl=$(PackageIconUrl);
         id=$(PackageId);
+        InsiderNet461Output=..\GetDocumentInsider\bin\$(Configuration)\net461\publish\*;
+        InsiderNet461X86Output=..\GetDocumentInsider\bin\x86\$(Configuration)\net461\publish\*;
+        InsiderNetCoreOutput=..\GetDocumentInsider\bin\$(Configuration)\netcoreapp2.0\publish\*;
         licenseUrl=$(PackageLicenseUrl);
-        Output=$(PublishDir)**/*;
-        OutputBinary=../GetDocumentInsider/bin/$(Configuration)/netcoreapp2.0/GetDocument.Insider.dll;
-        OutputExe=../GetDocumentInsider/bin/$(Configuration)/net461/GetDocument.Insider.exe;
-        OutputExeSymbol=../GetDocumentInsider/bin/$(Configuration)/net461/GetDocument.Insider.pdb;
-        OutputRuntimeConfig=../GetDocumentInsider/bin/$(Configuration)/netcoreapp2.0/GetDocument.Insider.runtimeconfig.json;
-        OutputShims=$(IntermediateOutputPath)shims/**/*;
-        OutputSymbol=../GetDocumentInsider/bin/$(Configuration)/netcoreapp2.0/GetDocument.Insider.pdb;
-        OutputX86Exe=../GetDocumentInsider/bin/x86/$(Configuration)/net461/GetDocument.Insider.exe;
-        OutputX86ExeSymbol=../GetDocumentInsider/bin/x86/$(Configuration)/net461/GetDocument.Insider.pdb;
+        Output=$(PublishDir)**\*;
+        OutputShims=$(IntermediateOutputPath)shims\**\*;
         packageType=$(PackageType);
         projectUrl=$(PackageProjectUrl);
         repositoryCommit=$(RepositoryCommit);
