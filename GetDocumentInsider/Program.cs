@@ -22,7 +22,7 @@ namespace GetDocument
                 Name = "GetDocument.Insider"
             };
 
-            new RootCommand().Configure(app);
+            new GetDocumentCommand().Configure(app);
 
             try
             {

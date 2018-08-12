@@ -17,12 +17,6 @@ namespace GetDocument.Commands
             base.Configure(command);
         }
 
-        protected override int Execute()
-        {
-            Reporter.WriteInformation("Hello World");
-            return base.Execute();
-        }
-
         private static string GetVersion()
             => typeof(RootCommand)
                 .GetTypeInfo()
