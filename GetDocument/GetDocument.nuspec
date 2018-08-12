@@ -15,12 +15,15 @@
       <packageType name="$packageType$" />
     </packageTypes>
     <repository type="git" url="$repositoryUrl$" commit="$repositoryCommit$" />
+    <dependencies>
+      <dependency id="Microsoft.AspNetCore.TestHost" version="2.0.0" />
+    </dependencies>
   </metadata>
 
   <files>
-    <file src="$InsiderNet461Output$" target="tools\$targetFramework$\any\tools\net461\any" />
-    <file src="$InsiderNet461X86Output$" target="tools\$targetFramework$\any\tools\net461\win-x86" />
-    <file src="$InsiderNetCoreOutput$" target="tools\$targetFramework$\any\tools\netcoreapp2.0\any" />
+    <file src="$InsiderNet461Output$" target="tools\$targetFramework$\any\net461" />
+    <file src="$InsiderNet461X86Output$" target="tools\$targetFramework$\any\net461-x86" />
+    <file src="$InsiderNetCoreOutput$" target="tools\$targetFramework$\any\netcoreapp2.0" />
     <file src="$Output$" target="tools\$targetFramework$\any" />
     <!-- file src="$OutputShims$" target="tools\$targetFramework$\any\shims" / -->
     <file src="$SettingsFile$" target="tools\$targetFramework$\any" />

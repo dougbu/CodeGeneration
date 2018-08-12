@@ -67,9 +67,7 @@ namespace GetDocument.Commands
                 project.Build();
             }
 
-            var toolsPath = Path.Combine(
-                Path.GetDirectoryName(typeof(Program).GetTypeInfo().Assembly.Location),
-                "tools");
+            var thisPath = Path.GetDirectoryName(typeof(InvokeCommand).GetTypeInfo().Assembly.Location);
 
             var targetDir = Path.GetFullPath(Path.Combine(project.ProjectDir, project.OutputPath));
             var targetPath = Path.Combine(targetDir, project.TargetFileName);
@@ -84,9 +82,8 @@ namespace GetDocument.Commands
             {
                 case ".NETFramework":
                     executable = Path.Combine(
-                        toolsPath,
-                        "net461",
-                        project.PlatformTarget == "x86" ? "win-x86" : "any",
+                        thisPath,
+                        project.PlatformTarget == "x86" ? "net461-x86" : "net461",
                         "GetDocument.Insider.exe");
                     break;
 
@@ -102,6 +99,7 @@ namespace GetDocument.Commands
                     args.Add("--depsfile");
                     args.Add(depsFile);
 
+                    var insiderDirectory = Path.Combine(thisPath, "netcoreapp2.0");
                     if (!string.IsNullOrEmpty(projectAssetsFile))
                     {
                         using (var reader = new JsonTextReader(File.OpenText(projectAssetsFile)))
@@ -128,7 +126,7 @@ namespace GetDocument.Commands
                         args.Add(project.RuntimeFrameworkVersion);
                     }
 
-                    args.Add(Path.Combine(toolsPath, "netcoreapp2.0", "any", "GetDocument.Insider.dll"));
+                    args.Add(Path.Combine(insiderDirectory, "GetDocument.Insider.dll"));
                     break;
 
                 case ".NETStandard":
