@@ -28,7 +28,7 @@
     <Compile Include="../GetDocumentInsider/CommandLineUtils/*.cs" LinkBase="CommandLineUtils" />
     <Compile Include="../GetDocumentInsider/Commands/CommandBase.cs" Link="Commands/CommandBase.cs" />
     <Compile Include="../GetDocumentInsider/Commands/HelpCommandBase.cs" Link="Commands/HelpCommandBase.cs" />
-    <Compile Include="../GetDocumentInsider/Commands/RootCommand.cs" Link="Commands/RootCommand.cs" />
+    <Compile Include="../GetDocumentInsider/ProductInfo.cs" />
     <Compile Include="../GetDocumentInsider/Reporter.cs" />
   </ItemGroup>
 
@@ -72,12 +72,12 @@
   <Target Name="PopulateNuspec" DependsOnTargets="Build">
     <ItemGroup>
       <_Temporary Remove="@(Temporary)" />
-      <_Temporary Include="../GetDocumentInsider/GetDocumentInsider.csproj" Properties="TargetFramework=net461"/>
-      <_Temporary Include="../GetDocumentInsider/GetDocumentInsider.csproj" Properties="TargetFramework=net461;Platform=x86"/>
-      <_Temporary Include="../GetDocumentInsider/GetDocumentInsider.csproj" Properties="TargetFramework=netcoreapp2.0"/>
+      <_Temporary Include="../GetDocumentInsider/GetDocumentInsider.csproj" Properties="TargetFramework=net461" />
+      <_Temporary Include="../GetDocumentInsider/GetDocumentInsider.csproj" Properties="TargetFramework=net461;Platform=x86" />
+      <_Temporary Include="../GetDocumentInsider/GetDocumentInsider.csproj" Properties="TargetFramework=netcoreapp2.0" />
     </ItemGroup>
 
-    <MSBuild Projects="../GetDocumentInsider/GetDocumentInsider.csproj" RemoveProperties="RuntimeIdentifier;TargetFramework" Targets="Restore;Build" />
+    <MSBuild Projects="../GetDocumentInsider/GetDocumentInsider.csproj" RemoveProperties="RuntimeIdentifier;TargetFramework" Targets="Restore" />
     <MSBuild Projects="@(_Temporary)" BuildInParallel="$(BuildInParallel)" RemoveProperties="RuntimeIdentifier" Targets="Publish" />
 
     <ItemGroup>
@@ -86,7 +86,6 @@
 
     <PropertyGroup>
       <NuspecProperties>
-        AssemblyName=$(AssemblyName);
         authors=$(Authors);
         copyright=$(Copyright);
         description=$(Description);

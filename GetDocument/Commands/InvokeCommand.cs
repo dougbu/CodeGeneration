@@ -39,7 +39,7 @@ namespace GetDocument.Commands
             _msbuildprojectextensionspath = options.MSBuildProjectExtensionsPath;
             _noBuild = options.NoBuild;
 
-            command.VersionOption("--version", GetVersion);
+            command.VersionOption("--version", ProductInfo.GetVersion);
             _args = command.RemainingArguments;
 
             base.Configure(command);
@@ -96,10 +96,9 @@ namespace GetDocument.Commands
 
                     executable = "dotnet";
                     args.Add("exec");
-                    args.Add("--depsfile");
+                    args.Add("--depsFile");
                     args.Add(depsFile);
 
-                    var insiderDirectory = Path.Combine(thisPath, "netcoreapp2.0");
                     if (!string.IsNullOrEmpty(projectAssetsFile))
                     {
                         using (var reader = new JsonTextReader(File.OpenText(projectAssetsFile)))
@@ -109,7 +108,7 @@ namespace GetDocument.Commands
 
                             foreach (var packageFolder in packageFolders)
                             {
-                                args.Add("--additionalprobingpath");
+                                args.Add("--additionalProbingPath");
                                 args.Add(packageFolder.TrimEnd(Path.DirectorySeparatorChar));
                             }
                         }
@@ -117,7 +116,7 @@ namespace GetDocument.Commands
 
                     if (File.Exists(runtimeConfig))
                     {
-                        args.Add("--runtimeconfig");
+                        args.Add("--runtimeConfig");
                         args.Add(runtimeConfig);
                     }
                     else if (!string.IsNullOrEmpty(project.RuntimeFrameworkVersion))
@@ -126,7 +125,7 @@ namespace GetDocument.Commands
                         args.Add(project.RuntimeFrameworkVersion);
                     }
 
-                    args.Add(Path.Combine(insiderDirectory, "GetDocument.Insider.dll"));
+                    args.Add(Path.Combine(thisPath, "netcoreapp2.0", "GetDocument.Insider.dll"));
                     break;
 
                 case ".NETStandard":
@@ -209,12 +208,5 @@ namespace GetDocument.Commands
 
             return projectFiles[0];
         }
-
-        private static string GetVersion()
-            => typeof(InvokeCommand)
-                .GetTypeInfo()
-                .Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                .InformationalVersion;
     }
 }

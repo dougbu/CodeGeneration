@@ -35,7 +35,7 @@ namespace GetDocument
                 info.ConfigurationFile = configurationFile;
             }
 
-            _domain = AppDomain.CreateDomain("GetDocument.Insider.DesignDomain", null, info);
+            _domain = AppDomain.CreateDomain("GetDocument.Insider.DesignDomain", securityInfo: null, info: info);
 
             if (dataDirectory != null)
             {
@@ -52,10 +52,10 @@ namespace GetDocument
             _executor = _domain.CreateInstanceAndUnwrap(
                 DesignAssemblyName,
                 ExecutorTypeName,
-                false,
-                BindingFlags.Default,
-                null,
-                new object[]
+                ignoreCase: false,
+                bindingAttr: BindingFlags.Default,
+                binder: null,
+                args: new object[]
                 {
                     reportHandler,
                     new Hashtable
@@ -67,8 +67,8 @@ namespace GetDocument
                         { "toolsVersion", ProductInfo.GetVersion() }
                     }
                 },
-                null,
-                null);
+                culture: null,
+                activationAttributes: null);
         }
 
         protected override object CreateResultHandler()
@@ -78,12 +78,12 @@ namespace GetDocument
             => _domain.CreateInstance(
                 DesignAssemblyName,
                 ExecutorTypeName + "+" + operationName,
-                false,
-                BindingFlags.Default,
-                null,
-                new[] { _executor, resultHandler, arguments },
-                null,
-                null);
+                ignoreCase: false,
+                bindingAttr: BindingFlags.Default,
+                binder: null,
+                args: new[] { _executor, resultHandler, arguments },
+                culture: null,
+                activationAttributes: null);
 
         public override void Dispose()
         {
