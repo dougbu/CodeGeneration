@@ -20,16 +20,15 @@ namespace GetDocument
 
         public AppDomainOperationExecutor(
             string assembly,
-            string startupAssembly,
             string projectDir,
             string dataDirectory,
             string rootNamespace,
             string language)
-            : base(assembly, startupAssembly, projectDir, dataDirectory, rootNamespace, language)
+            : base(assembly, projectDir, dataDirectory, rootNamespace, language)
         {
             var info = new AppDomainSetup { ApplicationBase = AppBasePath };
 
-            var configurationFile = (startupAssembly ?? assembly) + ".config";
+            var configurationFile = assembly + ".config";
             if (File.Exists(configurationFile))
             {
                 Reporter.WriteVerbose(Resources.UsingConfigurationFile(configurationFile));
@@ -62,7 +61,6 @@ namespace GetDocument
                     new Hashtable
                     {
                         { "targetName", AssemblyFileName },
-                        { "startupTargetName", StartupAssemblyFileName },
                         { "projectDir", ProjectDirectory },
                         { "rootNamespace", RootNamespace },
                         { "language", Language },

@@ -41,14 +41,6 @@ namespace GetDocument.Properties
             => GetString("JsonDescription");
 
         /// <summary>
-        ///     Missing required argument '{arg}'.
-        /// </summary>
-        public static string MissingArgument([CanBeNull] object arg)
-            => string.Format(
-                GetString("MissingArgument", nameof(arg)),
-                arg);
-
-        /// <summary>
         ///     Missing required option '--{option}'.
         /// </summary>
         public static string MissingOption([CanBeNull] object option)
@@ -69,12 +61,6 @@ namespace GetDocument.Properties
             => GetString("OutputDescription");
 
         /// <summary>
-        ///     The directory to put files in. Paths are relative to the project directory.
-        /// </summary>
-        public static string OutputDirDescription
-            => GetString("OutputDirDescription");
-
-        /// <summary>
         ///     Prefix output with level.
         /// </summary>
         public static string PrefixDescription
@@ -91,12 +77,6 @@ namespace GetDocument.Properties
         /// </summary>
         public static string RootNamespaceDescription
             => GetString("RootNamespaceDescription");
-
-        /// <summary>
-        ///     The startup assembly to use. Defaults to the target assembly.
-        /// </summary>
-        public static string StartupAssemblyDescription
-            => GetString("StartupAssemblyDescription");
 
         /// <summary>
         ///     Using application base '{appBase}'.
@@ -147,14 +127,6 @@ namespace GetDocument.Properties
                 rootNamespace);
 
         /// <summary>
-        ///     Using startup assembly '{startupAssembly}'.
-        /// </summary>
-        public static string UsingStartupAssembly([CanBeNull] object startupAssembly)
-            => string.Format(
-                GetString("UsingStartupAssembly", nameof(startupAssembly)),
-                startupAssembly);
-
-        /// <summary>
         ///     Show verbose output.
         /// </summary>
         public static string VerboseDescription
@@ -183,22 +155,6 @@ namespace GetDocument.Properties
             => string.Format(
                 GetString("DesignNotFound", nameof(startupProject)),
                 startupProject);
-
-        /// <summary>
-        ///     Provider name: {provider}
-        /// </summary>
-        public static string ProviderName([CanBeNull] object provider)
-            => string.Format(
-                GetString("ProviderName", nameof(provider)),
-                provider);
-
-        /// <summary>
-        ///     Options: {options}
-        /// </summary>
-        public static string Options([CanBeNull] object options)
-            => string.Format(
-                GetString("Options", nameof(options)),
-                options);
 
         /// <summary>
         ///     The language. Defaults to 'C#'.

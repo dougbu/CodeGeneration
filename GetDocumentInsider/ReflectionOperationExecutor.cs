@@ -19,12 +19,11 @@ namespace GetDocument
 
         public ReflectionOperationExecutor(
             string assembly,
-            string startupAssembly,
             string projectDir,
             string dataDirectory,
             string rootNamespace,
             string language)
-            : base(assembly, startupAssembly, projectDir, dataDirectory, rootNamespace, language)
+            : base(assembly, projectDir, dataDirectory, rootNamespace, language)
         {
             AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
 
@@ -44,7 +43,6 @@ namespace GetDocument
                 new Dictionary<string, string>
                 {
                     { "targetName", AssemblyFileName },
-                    { "startupTargetName", StartupAssemblyFileName },
                     { "projectDir", ProjectDirectory },
                     { "rootNamespace", RootNamespace },
                     { "language", Language },

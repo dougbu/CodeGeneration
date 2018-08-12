@@ -29,7 +29,7 @@ namespace GetDocument.Properties
             => GetString("ConfigurationDescription");
 
         /// <summary>
-        ///     GetDocument Command-line Tool
+        ///     dotnet getdocument
         /// </summary>
         public static string CommandFullName
             => GetString("CommandFullName");
@@ -47,16 +47,10 @@ namespace GetDocument.Properties
             => GetString("FrameworkDescription");
 
         /// <summary>
-        ///     Unable to retrieve project metadata. Ensure it's an MSBuild-based .NET Core project. If you're using custom BaseIntermediateOutputPath or MSBuildProjectExtensionsPath values, Use the --msbuildprojectextensionspath option.
+        ///     Unable to retrieve project metadata. Ensure it is a MSBuild-based .NET Core project. If you are using custom BaseIntermediateOutputPath or MSBuildProjectExtensionsPath values, use the --msbuildprojectextensionspath option.
         /// </summary>
         public static string GetMetadataFailed
             => GetString("GetMetadataFailed");
-
-        /// <summary>
-        ///     Show JSON output.
-        /// </summary>
-        public static string JsonDescription
-            => GetString("JsonDescription");
 
         /// <summary>
         ///     More than one project was found in the current working directory. Use the --project option.
@@ -73,29 +67,23 @@ namespace GetDocument.Properties
                 projectDir);
 
         /// <summary>
-        ///     More than one project was found in the current working directory. Use the --startup-project option.
+        ///     Project '{Project}' targets framework '.NETCoreApp' version '{targetFrameworkVersion}'. This version of the GetDocument Command-line Tool only supports version 2.0 or higher.
         /// </summary>
-        public static string MultipleStartupProjects
-            => GetString("MultipleStartupProjects");
-
-        /// <summary>
-        ///     Startup project '{startupProject}' targets framework '.NETCoreApp' version '{targetFrameworkVersion}'. This version of the GetDocument Command-line Tool only supports version 2.0 or higher. For information on using older versions of the tools, see https://go.microsoft.com/fwlink/?linkid=871254
-        /// </summary>
-        public static string NETCoreApp1StartupProject([CanBeNull] object startupProject, [CanBeNull] object targetFrameworkVersion)
+        public static string NETCoreApp1Project([CanBeNull] object Project, [CanBeNull] object targetFrameworkVersion)
             => string.Format(
-                GetString("NETCoreApp1StartupProject", nameof(startupProject), nameof(targetFrameworkVersion)),
-                startupProject, targetFrameworkVersion);
+                GetString("NETCoreApp1Project", nameof(Project), nameof(targetFrameworkVersion)),
+                Project, targetFrameworkVersion);
 
         /// <summary>
-        ///     Startup project '{startupProject}' targets framework '.NETStandard'. There is no runtime associated with this framework, and projects targeting it cannot be executed directly. To use the GetDocument Command-line Tool with this project, add an executable project targeting .NET Core or .NET Framework that references this project, and set it as the startup project using --startup-project; or, update this project to cross-target .NET Core or .NET Framework.
+        ///     Project '{Project}' targets framework '.NETStandard'. There is no runtime associated with this framework, and projects targeting it cannot be executed directly. To use the GetDocument Command-line Tool with this project, add an executable project targeting .NET Core or .NET Framework that references this project and specify it using the --project option; or, update this project to target .NET Core and / or .NET Framework.
         /// </summary>
-        public static string NETStandardStartupProject([CanBeNull] object startupProject)
+        public static string NETStandardProject([CanBeNull] object Project)
             => string.Format(
-                GetString("NETStandardStartupProject", nameof(startupProject)),
-                startupProject);
+                GetString("NETStandardProject", nameof(Project)),
+                Project);
 
         /// <summary>
-        ///     Don't colorize output.
+        ///     Do not colorize output.
         /// </summary>
         public static string NoColorDescription
             => GetString("NoColorDescription");
@@ -113,24 +101,6 @@ namespace GetDocument.Properties
             => string.Format(
                 GetString("NoProjectInDirectory", nameof(projectDir)),
                 projectDir);
-
-        /// <summary>
-        ///     No project was found. Change the current working directory or use the --startup-project option.
-        /// </summary>
-        public static string NoStartupProject
-            => GetString("NoStartupProject");
-
-        /// <summary>
-        ///     The file to write the result to.
-        /// </summary>
-        public static string OutputDescription
-            => GetString("OutputDescription");
-
-        /// <summary>
-        ///     The directory to put files in. Paths are relative to the project directory.
-        /// </summary>
-        public static string OutputDirDescription
-            => GetString("OutputDirDescription");
 
         /// <summary>
         ///     Prefix output with level.
@@ -157,18 +127,12 @@ namespace GetDocument.Properties
             => GetString("RuntimeDescription");
 
         /// <summary>
-        ///     The startup project to use.
+        ///     Project '{Project}' targets framework '{targetFramework}'. The GetDocument Command-line Tool does not support this framework.
         /// </summary>
-        public static string StartupProjectDescription
-            => GetString("StartupProjectDescription");
-
-        /// <summary>
-        ///     Startup project '{startupProject}' targets framework '{targetFramework}'. The GetDocument Command-line Tool don't support this framework.
-        /// </summary>
-        public static string UnsupportedFramework([CanBeNull] object startupProject, [CanBeNull] object targetFramework)
+        public static string UnsupportedFramework([CanBeNull] object Project, [CanBeNull] object targetFramework)
             => string.Format(
-                GetString("UnsupportedFramework", nameof(startupProject), nameof(targetFramework)),
-                startupProject, targetFramework);
+                GetString("UnsupportedFramework", nameof(Project), nameof(targetFramework)),
+                Project, targetFramework);
 
         /// <summary>
         ///     Using project '{project}'.
@@ -177,14 +141,6 @@ namespace GetDocument.Properties
             => string.Format(
                 GetString("UsingProject", nameof(project)),
                 project);
-
-        /// <summary>
-        ///     Using startup project '{startupProject}'.
-        /// </summary>
-        public static string UsingStartupProject([CanBeNull] object startupProject)
-            => string.Format(
-                GetString("UsingStartupProject", nameof(startupProject)),
-                startupProject);
 
         /// <summary>
         ///     Show verbose output.
@@ -201,16 +157,10 @@ namespace GetDocument.Properties
                 file);
 
         /// <summary>
-        ///     Don't build the project. Only use this when the build is up-to-date.
+        ///     Do not build the project. Only use this when the build is up-to-date.
         /// </summary>
         public static string NoBuildDescription
             => GetString("NoBuildDescription");
-
-        /// <summary>
-        ///     The working directory of the tool invoking this command.
-        /// </summary>
-        public static string WorkingDirDescription
-            => GetString("WorkingDirDescription");
 
         private static string GetString(string name, params string[] formatterNames)
         {

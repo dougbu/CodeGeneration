@@ -3,8 +3,8 @@
 
 using System;
 using System.Text;
-using Microsoft.DotNet.Cli.CommandLine;
 using GetDocument.Commands;
+using Microsoft.DotNet.Cli.CommandLine;
 
 namespace GetDocument
 {
@@ -30,10 +30,9 @@ namespace GetDocument
             }
             catch (Exception ex)
             {
-                var wrappedException = ex as WrappedException;
                 if (ex is CommandException
                     || ex is CommandParsingException
-                    || (wrappedException != null
+                    || (ex is WrappedException wrappedException
                         && wrappedException.Type == "GetDocument.Design.OperationException"))
                 {
                     Reporter.WriteVerbose(ex.ToString());

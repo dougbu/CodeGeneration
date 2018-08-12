@@ -58,7 +58,7 @@ namespace GetDocument
             Directory.CreateDirectory(buildExtensionsDir);
 
             var targetsPath = Path.Combine(buildExtensionsDir, Path.GetFileName(file) + ".ServiceProjectReferenceMetadata.targets");
-            using (var input = typeof(Resources).GetTypeInfo().Assembly.GetManifestResourceStream("GetDocument.ServiceProjectReferenceMetadata.targets"))
+            using (var input = typeof(Project).GetTypeInfo().Assembly.GetManifestResourceStream("GetDocument.ServiceProjectReferenceMetadata.targets"))
             {
                 using (var output = File.OpenWrite(targetsPath))
                 {
@@ -115,7 +115,7 @@ namespace GetDocument
             }
 
             var platformTarget = metadata["PlatformTarget"];
-            if (platformTarget.Length == 0)
+            if (string.IsNullOrEmpty(platformTarget))
             {
                 platformTarget = metadata["Platform"];
             }

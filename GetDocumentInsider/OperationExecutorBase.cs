@@ -14,36 +14,29 @@ namespace GetDocument
         protected const string ExecutorTypeName = "GetDocument.Design.OperationExecutor";
 
         private static readonly IDictionary _emptyArguments = new Dictionary<string, object>(0);
-        public string AppBasePath { get; }
 
+        public string AppBasePath { get; }
         protected string AssemblyFileName { get; set; }
-        protected string StartupAssemblyFileName { get; set; }
         protected string ProjectDirectory { get; }
         protected string RootNamespace { get; }
         protected string Language { get; }
 
         protected OperationExecutorBase(
             string assembly,
-            string startupAssembly,
             string projectDir,
             string dataDirectory,
             string rootNamespace,
             string language)
         {
             AssemblyFileName = Path.GetFileNameWithoutExtension(assembly);
-            StartupAssemblyFileName = startupAssembly == null
-                ? AssemblyFileName
-                : Path.GetFileNameWithoutExtension(startupAssembly);
-
             AppBasePath = Path.GetFullPath(
-                Path.Combine(Directory.GetCurrentDirectory(), Path.GetDirectoryName(startupAssembly ?? assembly)));
+                Path.Combine(Directory.GetCurrentDirectory(), Path.GetDirectoryName(assembly)));
 
             RootNamespace = rootNamespace ?? AssemblyFileName;
             ProjectDirectory = projectDir ?? Directory.GetCurrentDirectory();
             Language = language;
 
             Reporter.WriteVerbose(Resources.UsingAssembly(AssemblyFileName));
-            Reporter.WriteVerbose(Resources.UsingStartupAssembly(StartupAssemblyFileName));
             Reporter.WriteVerbose(Resources.UsingApplicationBase(AppBasePath));
             Reporter.WriteVerbose(Resources.UsingWorkingDirectory(Directory.GetCurrentDirectory()));
             Reporter.WriteVerbose(Resources.UsingRootNamespace(RootNamespace));

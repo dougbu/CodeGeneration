@@ -124,7 +124,7 @@
     <value>The configuration to use.</value>
   </data>
   <data name="CommandFullName" xml:space="preserve">
-    <value>GetDocument Command-line Tool</value>
+    <value>dotnet getdocument</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value>GetDocument Command-line Tool</value>
@@ -133,10 +133,7 @@
     <value>The target framework.</value>
   </data>
   <data name="GetMetadataFailed" xml:space="preserve">
-    <value>Unable to retrieve project metadata. Ensure it's an MSBuild-based .NET Core project. If you're using custom BaseIntermediateOutputPath or MSBuildProjectExtensionsPath values, Use the --msbuildprojectextensionspath option.</value>
-  </data>
-  <data name="JsonDescription" xml:space="preserve">
-    <value>Show JSON output.</value>
+    <value>Unable to retrieve project metadata. Ensure it is a MSBuild-based .NET Core project. If you are using custom BaseIntermediateOutputPath or MSBuildProjectExtensionsPath values, use the --msbuildprojectextensionspath option.</value>
   </data>
   <data name="MultipleProjects" xml:space="preserve">
     <value>More than one project was found in the current working directory. Use the --project option.</value>
@@ -144,32 +141,20 @@
   <data name="MultipleProjectsInDirectory" xml:space="preserve">
     <value>More than one project was found in directory '{projectDir}'. Specify one using its file name.</value>
   </data>
-  <data name="MultipleStartupProjects" xml:space="preserve">
-    <value>More than one project was found in the current working directory. Use the --startup-project option.</value>
+  <data name="NETCoreApp1Project" xml:space="preserve">
+    <value>Project '{Project}' targets framework '.NETCoreApp' version '{targetFrameworkVersion}'. This version of the GetDocument Command-line Tool only supports version 2.0 or higher.</value>
   </data>
-  <data name="NETCoreApp1StartupProject" xml:space="preserve">
-    <value>Startup project '{startupProject}' targets framework '.NETCoreApp' version '{targetFrameworkVersion}'. This version of the GetDocument Command-line Tool only supports version 2.0 or higher. For information on using older versions of the tools, see https://go.microsoft.com/fwlink/?linkid=871254</value>
-  </data>
-  <data name="NETStandardStartupProject" xml:space="preserve">
-    <value>Startup project '{startupProject}' targets framework '.NETStandard'. There is no runtime associated with this framework, and projects targeting it cannot be executed directly. To use the GetDocument Command-line Tool with this project, add an executable project targeting .NET Core or .NET Framework that references this project, and set it as the startup project using --startup-project; or, update this project to cross-target .NET Core or .NET Framework.</value>
+  <data name="NETStandardProject" xml:space="preserve">
+    <value>Project '{Project}' targets framework '.NETStandard'. There is no runtime associated with this framework, and projects targeting it cannot be executed directly. To use the GetDocument Command-line Tool with this project, add an executable project targeting .NET Core or .NET Framework that references this project and specify it using the --project option; or, update this project to target .NET Core and / or .NET Framework.</value>
   </data>
   <data name="NoColorDescription" xml:space="preserve">
-    <value>Don't colorize output.</value>
+    <value>Do not colorize output.</value>
   </data>
   <data name="NoProject" xml:space="preserve">
     <value>No project was found. Change the current working directory or use the --project option.</value>
   </data>
   <data name="NoProjectInDirectory" xml:space="preserve">
     <value>No project was found in directory '{projectDir}'.</value>
-  </data>
-  <data name="NoStartupProject" xml:space="preserve">
-    <value>No project was found. Change the current working directory or use the --startup-project option.</value>
-  </data>
-  <data name="OutputDescription" xml:space="preserve">
-    <value>The file to write the result to.</value>
-  </data>
-  <data name="OutputDirDescription" xml:space="preserve">
-    <value>The directory to put files in. Paths are relative to the project directory.</value>
   </data>
   <data name="PrefixDescription" xml:space="preserve">
     <value>Prefix output with level.</value>
@@ -183,17 +168,11 @@
   <data name="RuntimeDescription" xml:space="preserve">
     <value>The runtime to use.</value>
   </data>
-  <data name="StartupProjectDescription" xml:space="preserve">
-    <value>The startup project to use.</value>
-  </data>
   <data name="UnsupportedFramework" xml:space="preserve">
-    <value>Startup project '{startupProject}' targets framework '{targetFramework}'. The GetDocument Command-line Tool don't support this framework.</value>
+    <value>Project '{Project}' targets framework '{targetFramework}'. The GetDocument Command-line Tool does not support this framework.</value>
   </data>
   <data name="UsingProject" xml:space="preserve">
     <value>Using project '{project}'.</value>
-  </data>
-  <data name="UsingStartupProject" xml:space="preserve">
-    <value>Using startup project '{startupProject}'.</value>
   </data>
   <data name="VerboseDescription" xml:space="preserve">
     <value>Show verbose output.</value>
@@ -202,9 +181,6 @@
     <value>Writing '{file}'...</value>
   </data>
   <data name="NoBuildDescription" xml:space="preserve">
-    <value>Don't build the project. Only use this when the build is up-to-date.</value>
-  </data>
-  <data name="WorkingDirDescription" xml:space="preserve">
-    <value>The working directory of the tool invoking this command.</value>
+    <value>Do not build the project. Only use this when the build is up-to-date.</value>
   </data>
 </root>

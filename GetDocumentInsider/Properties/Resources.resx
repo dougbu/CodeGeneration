@@ -129,9 +129,6 @@
   <data name="JsonDescription" xml:space="preserve">
     <value>Show JSON output.</value>
   </data>
-  <data name="MissingArgument" xml:space="preserve">
-    <value>Missing required argument '{arg}'.</value>
-  </data>
   <data name="MissingOption" xml:space="preserve">
     <value>Missing required option '--{option}'.</value>
   </data>
@@ -141,9 +138,6 @@
   <data name="OutputDescription" xml:space="preserve">
     <value>The file to write the result to.</value>
   </data>
-  <data name="OutputDirDescription" xml:space="preserve">
-    <value>The directory to put files in. Paths are relative to the project directory.</value>
-  </data>
   <data name="PrefixDescription" xml:space="preserve">
     <value>Prefix output with level.</value>
   </data>
@@ -152,9 +146,6 @@
   </data>
   <data name="RootNamespaceDescription" xml:space="preserve">
     <value>The root namespace. Defaults to the target assembly name.</value>
-  </data>
-  <data name="StartupAssemblyDescription" xml:space="preserve">
-    <value>The startup assembly to use. Defaults to the target assembly.</value>
   </data>
   <data name="UsingApplicationBase" xml:space="preserve">
     <value>Using application base '{appBase}'.</value>
@@ -174,9 +165,6 @@
   <data name="UsingRootNamespace" xml:space="preserve">
     <value>Using root namespace '{rootNamespace}'.</value>
   </data>
-  <data name="UsingStartupAssembly" xml:space="preserve">
-    <value>Using startup assembly '{startupAssembly}'.</value>
-  </data>
   <data name="VerboseDescription" xml:space="preserve">
     <value>Show verbose output.</value>
   </data>
@@ -188,12 +176,6 @@
   </data>
   <data name="DesignNotFound" xml:space="preserve">
     <value>Your startup project '{startupProject}' doesn't reference Microsoft.AspNetCore.TestHost. This package is required for the GetDocument Command-Line Tool to work. Ensure your startup project is correct, install the package, and try again.</value>
-  </data>
-  <data name="ProviderName" xml:space="preserve">
-    <value>Provider name: {provider}</value>
-  </data>
-  <data name="Options" xml:space="preserve">
-    <value>Options: {options}</value>
   </data>
   <data name="LanguageDescription" xml:space="preserve">
     <value>The language. Defaults to 'C#'.</value>

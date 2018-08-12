@@ -11,7 +11,6 @@ namespace GetDocument.Commands
     internal abstract class ProjectCommandBase : HelpCommandBase
     {
         private CommandOption _assembly;
-        private CommandOption _startupAssembly;
         private CommandOption _dataDir;
         private CommandOption _projectDir;
         private CommandOption _rootNamespace;
@@ -22,7 +21,6 @@ namespace GetDocument.Commands
         public override void Configure(CommandLineApplication command)
         {
             _assembly = command.Option("-a|--assembly <PATH>", Resources.AssemblyDescription);
-            _startupAssembly = command.Option("-s|--startup-assembly <PATH>", Resources.StartupAssemblyDescription);
             _dataDir = command.Option("--data-dir <PATH>", Resources.DataDirDescription);
             _projectDir = command.Option("--project-dir <PATH>", Resources.ProjectDirDescription);
             _rootNamespace = command.Option("--root-namespace <NAMESPACE>", Resources.RootNamespaceDescription);
@@ -49,7 +47,6 @@ namespace GetDocument.Commands
 #if NET461
                 return new AppDomainOperationExecutor(
                     _assembly.Value(),
-                    _startupAssembly.Value(),
                     _projectDir.Value(),
                     _dataDir.Value(),
                     _rootNamespace.Value(),
@@ -57,7 +54,6 @@ namespace GetDocument.Commands
 #elif NETCOREAPP2_0
                 return new ReflectionOperationExecutor(
                     _assembly.Value(),
-                    _startupAssembly.Value(),
                     _projectDir.Value(),
                     _dataDir.Value(),
                     _rootNamespace.Value(),
@@ -70,9 +66,7 @@ namespace GetDocument.Commands
                 when (new AssemblyName(ex.FileName).Name == OperationExecutorBase.DesignAssemblyName)
             {
                 throw new CommandException(
-                    Resources.DesignNotFound(
-                        Path.GetFileNameWithoutExtension(
-                            _startupAssembly.HasValue() ? _startupAssembly.Value() : _assembly.Value())),
+                    Resources.DesignNotFound(Path.GetFileNameWithoutExtension(_assembly.Value())),
                     ex);
             }
         }
