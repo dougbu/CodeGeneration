@@ -1,8 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System.IO;
-using System.Reflection;
 using GetDocument.Properties;
 using Microsoft.DotNet.Cli.CommandLine;
 
@@ -10,21 +8,25 @@ namespace GetDocument.Commands
 {
     internal abstract class ProjectCommandBase : HelpCommandBase
     {
-        private CommandOption _assembly;
-        private CommandOption _dataDir;
-        private CommandOption _projectDir;
-        private CommandOption _rootNamespace;
-        private CommandOption _language;
+        public CommandOption AssemblyPath { get; private set; }
 
-        protected CommandOption WorkingDir { get; private set; }
+        public CommandOption DataDir { get; private set; }
+
+        public CommandOption Language { get; private set; }
+
+        public CommandOption ProjectDir { get; private set; }
+
+        public CommandOption RootNamespace { get; private set; }
+
+        public CommandOption WorkingDir { get; private set; }
 
         public override void Configure(CommandLineApplication command)
         {
-            _assembly = command.Option("-a|--assembly <PATH>", Resources.AssemblyDescription);
-            _dataDir = command.Option("--data-dir <PATH>", Resources.DataDirDescription);
-            _projectDir = command.Option("--project-dir <PATH>", Resources.ProjectDirDescription);
-            _rootNamespace = command.Option("--root-namespace <NAMESPACE>", Resources.RootNamespaceDescription);
-            _language = command.Option("--language <LANGUAGE>", Resources.LanguageDescription);
+            AssemblyPath = command.Option("-a|--assembly <PATH>", Resources.AssemblyDescription);
+            DataDir = command.Option("--data-dir <PATH>", Resources.DataDirDescription);
+            Language = command.Option("--language <LANGUAGE>", Resources.LanguageDescription);
+            ProjectDir = command.Option("--project-dir <PATH>", Resources.ProjectDirDescription);
+            RootNamespace = command.Option("--root-namespace <NAMESPACE>", Resources.RootNamespaceDescription);
             WorkingDir = command.Option("--working-dir <PATH>", Resources.WorkingDirDescription);
 
             base.Configure(command);
@@ -34,40 +36,9 @@ namespace GetDocument.Commands
         {
             base.Validate();
 
-            if (!_assembly.HasValue())
+            if (!AssemblyPath.HasValue())
             {
-                throw new CommandException(Resources.MissingOption(_assembly.LongName));
-            }
-        }
-
-        protected IOperationExecutor CreateExecutor()
-        {
-            try
-            {
-#if NET461
-                return new AppDomainOperationExecutor(
-                    _assembly.Value(),
-                    _projectDir.Value(),
-                    _dataDir.Value(),
-                    _rootNamespace.Value(),
-                    _language.Value());
-#elif NETCOREAPP2_0
-                return new ReflectionOperationExecutor(
-                    _assembly.Value(),
-                    _projectDir.Value(),
-                    _dataDir.Value(),
-                    _rootNamespace.Value(),
-                    _language.Value());
-#else
-#error target frameworks need to be updated.
-#endif
-            }
-            catch (FileNotFoundException ex)
-                when (new AssemblyName(ex.FileName).Name == OperationExecutorBase.DesignAssemblyName)
-            {
-                throw new CommandException(
-                    Resources.DesignNotFound(Path.GetFileNameWithoutExtension(_assembly.Value())),
-                    ex);
+                throw new CommandException(Resources.MissingOption(AssemblyPath.LongName));
             }
         }
     }
