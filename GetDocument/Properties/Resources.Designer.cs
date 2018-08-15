@@ -35,12 +35,6 @@ namespace GetDocument.Properties
             => GetString("CommandFullName");
 
         /// <summary>
-        ///     GetDocument Command-line Tool
-        /// </summary>
-        public static string FullName
-            => GetString("FullName");
-
-        /// <summary>
         ///     The target framework.
         /// </summary>
         public static string FrameworkDescription

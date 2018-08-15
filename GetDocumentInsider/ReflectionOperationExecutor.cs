@@ -17,13 +17,8 @@ namespace GetDocument
         private const string ResultHandlerTypeName = "GetDocument.Design.OperationResultHandler";
         private readonly Type _resultHandlerType;
 
-        public ReflectionOperationExecutor(
-            string assembly,
-            string projectDir,
-            string dataDirectory,
-            string rootNamespace,
-            string language)
-            : base(assembly, projectDir, dataDirectory, rootNamespace, language)
+        public ReflectionOperationExecutor(string assembly)
+            : base(assembly)
         {
             AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
 
@@ -43,10 +38,6 @@ namespace GetDocument
                 new Dictionary<string, string>
                 {
                     { "targetName", AssemblyFileName },
-                    { "projectDir", ProjectDirectory },
-                    { "rootNamespace", RootNamespace },
-                    { "language", Language },
-                    { "toolsVersion", ProductInfo.GetVersion() }
                 });
 
             _resultHandlerType = _commandsAssembly.GetType(ResultHandlerTypeName, throwOnError: true, ignoreCase: false);

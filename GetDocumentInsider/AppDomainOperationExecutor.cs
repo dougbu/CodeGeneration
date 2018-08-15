@@ -18,13 +18,8 @@ namespace GetDocument
         private readonly AppDomain _domain;
         private bool _disposed;
 
-        public AppDomainOperationExecutor(
-            string assembly,
-            string projectDir,
-            string dataDirectory,
-            string rootNamespace,
-            string language)
-            : base(assembly, projectDir, dataDirectory, rootNamespace, language)
+        public AppDomainOperationExecutor(string assembly)
+            : base(assembly)
         {
             var info = new AppDomainSetup { ApplicationBase = AppBasePath };
 
@@ -36,12 +31,6 @@ namespace GetDocument
             }
 
             _domain = AppDomain.CreateDomain("GetDocument.Insider.DesignDomain", securityInfo: null, info: info);
-
-            if (dataDirectory != null)
-            {
-                Reporter.WriteVerbose(Resources.UsingDataDir(dataDirectory));
-                _domain.SetData("DataDirectory", dataDirectory);
-            }
 
             var reportHandler = new OperationReportHandler(
                 Reporter.WriteError,
@@ -61,10 +50,6 @@ namespace GetDocument
                     new Hashtable
                     {
                         { "targetName", AssemblyFileName },
-                        { "projectDir", ProjectDirectory },
-                        { "rootNamespace", RootNamespace },
-                        { "language", Language },
-                        { "toolsVersion", ProductInfo.GetVersion() }
                     }
                 },
                 culture: null,

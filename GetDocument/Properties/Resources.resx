@@ -126,9 +126,6 @@
   <data name="CommandFullName" xml:space="preserve">
     <value>dotnet getdocument</value>
   </data>
-  <data name="FullName" xml:space="preserve">
-    <value>GetDocument Command-line Tool</value>
-  </data>
   <data name="FrameworkDescription" xml:space="preserve">
     <value>The target framework.</value>
   </data>

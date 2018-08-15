@@ -139,12 +139,6 @@ namespace GetDocument.Commands
             args.AddRange(_args);
             args.Add("--assembly");
             args.Add(targetPath);
-            args.Add("--project-dir");
-            args.Add(project.ProjectDir);
-            args.Add("--language");
-            args.Add(project.Language);
-            args.Add("--working-dir");
-            args.Add(Directory.GetCurrentDirectory());
 
             if (Reporter.IsVerbose)
             {
@@ -159,12 +153,6 @@ namespace GetDocument.Commands
             if (Reporter.PrefixOutput)
             {
                 args.Add("--prefix-output");
-            }
-
-            if (!string.IsNullOrEmpty(project.RootNamespace))
-            {
-                args.Add("--root-namespace");
-                args.Add(project.RootNamespace);
             }
 
             return Exe.Run(executable, args, project.ProjectDir);

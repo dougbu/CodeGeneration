@@ -120,12 +120,6 @@
   <data name="AssemblyDescription" xml:space="preserve">
     <value>The assembly to use.</value>
   </data>
-  <data name="DataDirDescription" xml:space="preserve">
-    <value>The data directory.</value>
-  </data>
-  <data name="FullName" xml:space="preserve">
-    <value>GetDocument Command-line Tool inside man</value>
-  </data>
   <data name="JsonDescription" xml:space="preserve">
     <value>Show JSON output.</value>
   </data>
@@ -141,12 +135,6 @@
   <data name="PrefixDescription" xml:space="preserve">
     <value>Prefix output with level.</value>
   </data>
-  <data name="ProjectDirDescription" xml:space="preserve">
-    <value>The project directory. Defaults to the current directory.</value>
-  </data>
-  <data name="RootNamespaceDescription" xml:space="preserve">
-    <value>The root namespace. Defaults to the target assembly name.</value>
-  </data>
   <data name="UsingApplicationBase" xml:space="preserve">
     <value>Using application base '{appBase}'.</value>
   </data>
@@ -156,15 +144,6 @@
   <data name="UsingConfigurationFile" xml:space="preserve">
     <value>Using configuration file '{config}'.</value>
   </data>
-  <data name="UsingDataDir" xml:space="preserve">
-    <value>Using data directory '{dataDir}'.</value>
-  </data>
-  <data name="UsingProjectDir" xml:space="preserve">
-    <value>Using project directory '{projectDir}'.</value>
-  </data>
-  <data name="UsingRootNamespace" xml:space="preserve">
-    <value>Using root namespace '{rootNamespace}'.</value>
-  </data>
   <data name="VerboseDescription" xml:space="preserve">
     <value>Show verbose output.</value>
   </data>
@@ -173,14 +152,5 @@
   </data>
   <data name="UsingWorkingDirectory" xml:space="preserve">
     <value>Using working directory '{workingDirectory}'.</value>
-  </data>
-  <data name="DesignNotFound" xml:space="preserve">
-    <value>Your startup project '{startupProject}' doesn't reference Microsoft.AspNetCore.TestHost. This package is required for the GetDocument Command-Line Tool to work. Ensure your startup project is correct, install the package, and try again.</value>
-  </data>
-  <data name="LanguageDescription" xml:space="preserve">
-    <value>The language. Defaults to 'C#'.</value>
-  </data>
-  <data name="WorkingDirDescription" xml:space="preserve">
-    <value>The working directory of the tool invoking this command.</value>
   </data>
 </root>

@@ -10,24 +10,9 @@ namespace GetDocument.Commands
     {
         public CommandOption AssemblyPath { get; private set; }
 
-        public CommandOption DataDir { get; private set; }
-
-        public CommandOption Language { get; private set; }
-
-        public CommandOption ProjectDir { get; private set; }
-
-        public CommandOption RootNamespace { get; private set; }
-
-        public CommandOption WorkingDir { get; private set; }
-
         public override void Configure(CommandLineApplication command)
         {
             AssemblyPath = command.Option("-a|--assembly <PATH>", Resources.AssemblyDescription);
-            DataDir = command.Option("--data-dir <PATH>", Resources.DataDirDescription);
-            Language = command.Option("--language <LANGUAGE>", Resources.LanguageDescription);
-            ProjectDir = command.Option("--project-dir <PATH>", Resources.ProjectDirDescription);
-            RootNamespace = command.Option("--root-namespace <NAMESPACE>", Resources.RootNamespaceDescription);
-            WorkingDir = command.Option("--working-dir <PATH>", Resources.WorkingDirDescription);
 
             base.Configure(command);
         }

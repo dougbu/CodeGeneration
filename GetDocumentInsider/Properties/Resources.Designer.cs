@@ -23,18 +23,6 @@ namespace GetDocument.Properties
             => GetString("AssemblyDescription");
 
         /// <summary>
-        ///     The data directory.
-        /// </summary>
-        public static string DataDirDescription
-            => GetString("DataDirDescription");
-
-        /// <summary>
-        ///     GetDocument Command-line Tool inside man
-        /// </summary>
-        public static string FullName
-            => GetString("FullName");
-
-        /// <summary>
         ///     Show JSON output.
         /// </summary>
         public static string JsonDescription
@@ -67,18 +55,6 @@ namespace GetDocument.Properties
             => GetString("PrefixDescription");
 
         /// <summary>
-        ///     The project directory. Defaults to the current directory.
-        /// </summary>
-        public static string ProjectDirDescription
-            => GetString("ProjectDirDescription");
-
-        /// <summary>
-        ///     The root namespace. Defaults to the target assembly name.
-        /// </summary>
-        public static string RootNamespaceDescription
-            => GetString("RootNamespaceDescription");
-
-        /// <summary>
         ///     Using application base '{appBase}'.
         /// </summary>
         public static string UsingApplicationBase([CanBeNull] object appBase)
@@ -103,30 +79,6 @@ namespace GetDocument.Properties
                 config);
 
         /// <summary>
-        ///     Using data directory '{dataDir}'.
-        /// </summary>
-        public static string UsingDataDir([CanBeNull] object dataDir)
-            => string.Format(
-                GetString("UsingDataDir", nameof(dataDir)),
-                dataDir);
-
-        /// <summary>
-        ///     Using project directory '{projectDir}'.
-        /// </summary>
-        public static string UsingProjectDir([CanBeNull] object projectDir)
-            => string.Format(
-                GetString("UsingProjectDir", nameof(projectDir)),
-                projectDir);
-
-        /// <summary>
-        ///     Using root namespace '{rootNamespace}'.
-        /// </summary>
-        public static string UsingRootNamespace([CanBeNull] object rootNamespace)
-            => string.Format(
-                GetString("UsingRootNamespace", nameof(rootNamespace)),
-                rootNamespace);
-
-        /// <summary>
         ///     Show verbose output.
         /// </summary>
         public static string VerboseDescription
@@ -147,26 +99,6 @@ namespace GetDocument.Properties
             => string.Format(
                 GetString("UsingWorkingDirectory", nameof(workingDirectory)),
                 workingDirectory);
-
-        /// <summary>
-        ///     Your startup project '{startupProject}' doesn't reference Microsoft.AspNetCore.TestHost. This package is required for the GetDocument Command-Line Tool to work. Ensure your startup project is correct, install the package, and try again.
-        /// </summary>
-        public static string DesignNotFound([CanBeNull] object startupProject)
-            => string.Format(
-                GetString("DesignNotFound", nameof(startupProject)),
-                startupProject);
-
-        /// <summary>
-        ///     The language. Defaults to 'C#'.
-        /// </summary>
-        public static string LanguageDescription
-            => GetString("LanguageDescription");
-
-        /// <summary>
-        ///     The working directory of the tool invoking this command.
-        /// </summary>
-        public static string WorkingDirDescription
-            => GetString("WorkingDirDescription");
 
         private static string GetString(string name, params string[] formatterNames)
         {
