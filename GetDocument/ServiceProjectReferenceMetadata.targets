@@ -14,7 +14,7 @@
       <ServiceProjectReferenceMetadata Include="PlatformTarget: $(PlatformTarget)" />
       <ServiceProjectReferenceMetadata Include="ProjectAssetsFile: $(ProjectAssetsFile)" />
       <ServiceProjectReferenceMetadata Include="ProjectDepsFilePath: $(ProjectDepsFilePath)" />
-      <ServiceProjectReferenceMetadata Include="ProjectDir: $(ProjectDir)" />
+      <ServiceProjectReferenceMetadata Include="ProjectDirectory: $(ProjectDir)" />
       <ServiceProjectReferenceMetadata Include="ProjectRuntimeConfigFilePath: $(ProjectRuntimeConfigFilePath)" />
       <ServiceProjectReferenceMetadata Include="RootNamespace: $(RootNamespace)" />
       <ServiceProjectReferenceMetadata Include="RuntimeFrameworkVersion: $(RuntimeFrameworkVersion)" />

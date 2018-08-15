@@ -53,12 +53,12 @@ namespace GetDocument.Properties
             => GetString("MultipleProjects");
 
         /// <summary>
-        ///     More than one project was found in directory '{projectDir}'. Specify one using its file name.
+        ///     More than one project was found in directory '{projectDirectory}'. Specify one using its file name.
         /// </summary>
-        public static string MultipleProjectsInDirectory([CanBeNull] object projectDir)
+        public static string MultipleProjectsInDirectory([CanBeNull] object projectDirectory)
             => string.Format(
-                GetString("MultipleProjectsInDirectory", nameof(projectDir)),
-                projectDir);
+                GetString("MultipleProjectsInDirectory", nameof(projectDirectory)),
+                projectDirectory);
 
         /// <summary>
         ///     Project '{Project}' targets framework '.NETCoreApp' version '{targetFrameworkVersion}'. This version of the GetDocument Command-line Tool only supports version 2.0 or higher.
@@ -89,12 +89,12 @@ namespace GetDocument.Properties
             => GetString("NoProject");
 
         /// <summary>
-        ///     No project was found in directory '{projectDir}'.
+        ///     No project was found in directory '{projectDirectory}'.
         /// </summary>
-        public static string NoProjectInDirectory([CanBeNull] object projectDir)
+        public static string NoProjectInDirectory([CanBeNull] object projectDirectory)
             => string.Format(
-                GetString("NoProjectInDirectory", nameof(projectDir)),
-                projectDir);
+                GetString("NoProjectInDirectory", nameof(projectDirectory)),
+                projectDirectory);
 
         /// <summary>
         ///     Prefix output with level.
@@ -155,6 +155,18 @@ namespace GetDocument.Properties
         /// </summary>
         public static string NoBuildDescription
             => GetString("NoBuildDescription");
+
+        /// <summary>
+        ///     Project output not found and --no-build was specified. Project must be up-to-date when using the --no-build option.
+        /// </summary>
+        public static string MustBuild
+            => GetString("MustBuild");
+
+        /// <summary>
+        ///     Project output was not found after a succesful build. Confirm `OutputPath` property of the project is correct.
+        /// </summary>
+        public static string ProjectMisconfiguration
+            => GetString("ProjectMisconfiguration");
 
         private static string GetString(string name, params string[] formatterNames)
         {

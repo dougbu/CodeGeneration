@@ -1,30 +1,24 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace GetDocument.Commands
 {
     internal class GetDocumentCommandWorker
     {
-        public static int Process(ProjectCommandBase projectCommand)
+        public static int Process(GetDocumentCommandContext context)
         {
-            var assemblyPath = projectCommand.AssemblyPath.Value();
-            var assemblyFilename = Path.GetFileNameWithoutExtension(assemblyPath);
-            var assemblyDirectory = Path.GetFullPath(Path.GetDirectoryName(assemblyPath));
-            var assemblyName = new AssemblyName(assemblyFilename);
+            var assemblyName = new AssemblyName(context.AssemblyName);
             var assembly = Assembly.Load(assemblyName);
             var entryPointType = assembly.EntryPoint?.DeclaringType;
             if (entryPointType == null)
             {
-                Reporter.WriteError($"Assembly {assemblyPath} does not contain an entry point.");
+                Reporter.WriteError($"Assembly {context.AssemblyPath} does not contain an entry point.");
                 return 2;
             }
 
-            var builder = GetBuilder(entryPointType, assemblyPath, assemblyFilename);
+            var builder = GetBuilder(entryPointType, context.AssemblyPath, context.AssemblyName);
             if (builder == null)
             {
                 return 3;
@@ -38,7 +32,7 @@ namespace GetDocument.Commands
             return 0;
         }
 
-        private static IWebHostBuilder GetBuilder(Type entryPointType, string assemblyPath, string assemblyFilename)
+        private static IWebHostBuilder GetBuilder(Type entryPointType, string assemblyPath, string assemblyName)
         {
             var args = new[] { Array.Empty<string>() };
             var methodInfo = entryPointType.GetMethod("BuildWebHost");
@@ -58,7 +52,7 @@ namespace GetDocument.Commands
                 try
                 {
                     var webHost = (IWebHost)methodInfo.Invoke(obj: null, parameters: args);
-                    return new FakeBuilder(webHost);
+                    return new FakeWebHostBuilder(webHost);
                 }
                 catch (Exception ex)
                 {
@@ -92,47 +86,7 @@ namespace GetDocument.Commands
             }
 
             // Startup
-            return new WebHostBuilder().UseStartup(assemblyFilename);
-        }
-
-        private class FakeBuilder : IWebHostBuilder
-        {
-            private readonly IWebHost _webHost;
-
-            public FakeBuilder(IWebHost webHost)
-            {
-                _webHost = webHost;
-            }
-
-            public IWebHost Build()
-            {
-                return _webHost;
-            }
-
-            public IWebHostBuilder ConfigureAppConfiguration(Action<WebHostBuilderContext, IConfigurationBuilder> configureDelegate)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IWebHostBuilder ConfigureServices(Action<IServiceCollection> configureServices)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IWebHostBuilder ConfigureServices(Action<WebHostBuilderContext, IServiceCollection> configureServices)
-            {
-                throw new NotImplementedException();
-            }
-
-            public string GetSetting(string key)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IWebHostBuilder UseSetting(string key, string value)
-            {
-                throw new NotImplementedException();
-            }
+            return new WebHostBuilder().UseStartup(assemblyName);
         }
     }
 }

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using GetDocument.Properties;
 
 namespace GetDocument
@@ -35,7 +34,7 @@ namespace GetDocument
         public string OutputPath { get; set; }
         public string PlatformTarget { get; set; }
         public string ProjectAssetsFile { get; set; }
-        public string ProjectDir { get; set; }
+        public string ProjectDirectory { get; set; }
         public string RootNamespace { get; set; }
         public string RuntimeFrameworkVersion { get; set; }
         public string TargetFileName { get; set; }
@@ -43,22 +42,26 @@ namespace GetDocument
 
         public static Project FromFile(
             string file,
-            string buildExtensionsDir,
+            string buildExtensionsDirectory,
             string framework = null,
             string configuration = null,
             string runtime = null)
         {
             Debug.Assert(!string.IsNullOrEmpty(file), "file is null or empty.");
 
-            if (buildExtensionsDir == null)
+            if (buildExtensionsDirectory == null)
             {
-                buildExtensionsDir = Path.Combine(Path.GetDirectoryName(file), "obj");
+                buildExtensionsDirectory = Path.Combine(Path.GetDirectoryName(file), "obj");
             }
 
-            Directory.CreateDirectory(buildExtensionsDir);
+            Directory.CreateDirectory(buildExtensionsDirectory);
 
-            var targetsPath = Path.Combine(buildExtensionsDir, Path.GetFileName(file) + ".ServiceProjectReferenceMetadata.targets");
-            using (var input = typeof(Project).GetTypeInfo().Assembly.GetManifestResourceStream("GetDocument.ServiceProjectReferenceMetadata.targets"))
+            var targetsPath = Path.Combine(
+                buildExtensionsDirectory,
+                Path.GetFileName(file) + ".ServiceProjectReferenceMetadata.targets");
+            using (var input = typeof(Project)
+                .Assembly
+                .GetManifestResourceStream("GetDocument.ServiceProjectReferenceMetadata.targets"))
             {
                 using (var output = File.OpenWrite(targetsPath))
                 {
@@ -127,7 +130,7 @@ namespace GetDocument
                 OutputPath = metadata["OutputPath"],
                 PlatformTarget = platformTarget,
                 ProjectAssetsFile = metadata["ProjectAssetsFile"],
-                ProjectDir = metadata["ProjectDir"],
+                ProjectDirectory = metadata["ProjectDirectory"],
                 RootNamespace = metadata["RootNamespace"],
                 RuntimeFrameworkVersion = metadata["RuntimeFrameworkVersion"],
                 TargetFileName = metadata["TargetFileName"],

@@ -136,7 +136,7 @@
     <value>More than one project was found in the current working directory. Use the --project option.</value>
   </data>
   <data name="MultipleProjectsInDirectory" xml:space="preserve">
-    <value>More than one project was found in directory '{projectDir}'. Specify one using its file name.</value>
+    <value>More than one project was found in directory '{projectDirectory}'. Specify one using its file name.</value>
   </data>
   <data name="NETCoreApp1Project" xml:space="preserve">
     <value>Project '{Project}' targets framework '.NETCoreApp' version '{targetFrameworkVersion}'. This version of the GetDocument Command-line Tool only supports version 2.0 or higher.</value>
@@ -151,7 +151,7 @@
     <value>No project was found. Change the current working directory or use the --project option.</value>
   </data>
   <data name="NoProjectInDirectory" xml:space="preserve">
-    <value>No project was found in directory '{projectDir}'.</value>
+    <value>No project was found in directory '{projectDirectory}'.</value>
   </data>
   <data name="PrefixDescription" xml:space="preserve">
     <value>Prefix output with level.</value>
@@ -179,5 +179,11 @@
   </data>
   <data name="NoBuildDescription" xml:space="preserve">
     <value>Do not build the project. Only use this when the build is up-to-date.</value>
+  </data>
+  <data name="MustBuild" xml:space="preserve">
+    <value>Project output not found and --no-build was specified. Project must be up-to-date when using the --no-build option.</value>
+  </data>
+  <data name="ProjectMisconfiguration" xml:space="preserve">
+    <value>Project output was not found after a succesful build. Confirm `OutputPath` property of the project is correct.</value>
   </data>
 </root>

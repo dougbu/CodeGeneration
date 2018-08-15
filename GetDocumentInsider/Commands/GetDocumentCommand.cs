@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -18,49 +17,69 @@ namespace GetDocument.Commands
 
         protected override int Execute()
         {
-            var thisAssembly = typeof(GetDocumentCommand).GetTypeInfo().Assembly;
-            var thisAssemblyPath = thisAssembly.Location;
-            var thisAssemblyDirectory = Path.GetDirectoryName(thisAssemblyPath);
+            var thisAssembly = typeof(GetDocumentCommand).Assembly;
 
+            var toolsDirectory = ToolsDirectory.Value();
             var packagedAssemblies = Directory
-                .EnumerateFiles(thisAssemblyDirectory, "*.dll")
-                .Except(new[] { thisAssemblyPath })
-                .ToDictionary(path => Path.GetFileNameWithoutExtension(path));
+                .EnumerateFiles(toolsDirectory, "*.dll")
+                .Except(new[] { Path.GetFullPath(thisAssembly.Location) })
+                .ToDictionary(path => Path.GetFileNameWithoutExtension(path), path => new AssemblyInfo(path));
 
-            // Explicitly load all assemblies we need because target project may depend on some of them
-            foreach (var name in packagedAssemblies.Keys)
+            // Explicitly load all assemblies we need first to preserve target project as much as possible. This
+            // executable is always run in the target project's context (either through location or .deps.json file).
+            foreach (var keyValuePair in packagedAssemblies)
             {
                 try
                 {
-                    Assembly.Load(new AssemblyName(name));
+                    keyValuePair.Value.Assembly = Assembly.Load(new AssemblyName(keyValuePair.Key));
                 }
                 catch
                 {
-                    // ... but ignore all failures because assembly should be loadable from our directory.
+                    // Ignore all failures because missing assemblies should be loadable from tools directory.
                 }
             }
 
 #if NETCOREAPP2_0
-            var loadContext = AssemblyLoadContext.Default;
-            loadContext.Resolving += (context, assemblyName) =>
+            AssemblyLoadContext.Default.Resolving += (loadContext, assemblyName) =>
             {
-                var assemblyPath = GetFullPath(assemblyName.Name, thisAssemblyDirectory, packagedAssemblies);
-                if (assemblyPath == null)
+                var name = assemblyName.Name;
+                if (!packagedAssemblies.TryGetValue(name, out var info))
                 {
                     return null;
                 }
 
-                return context.LoadFromAssemblyPath(assemblyPath);
+                var assemblyPath = info.Path;
+                if (!File.Exists(assemblyPath))
+                {
+                    throw new InvalidOperationException(
+                        $"Referenced assembly '{name}' was not found in '{toolsDirectory}'.");
+                }
+
+                return loadContext.LoadFromAssemblyPath(assemblyPath);
             };
+
 #elif NET461
             AppDomain.CurrentDomain.AssemblyResolve += (source, eventArgs) =>
             {
                 var assemblyName = new AssemblyName(eventArgs.Name);
                 var name = assemblyName.Name;
-                var assemblyPath = GetFullPath(name, thisAssemblyDirectory, packagedAssemblies);
-                if (assemblyPath == null)
+                if (!packagedAssemblies.TryGetValue(name, out var info))
                 {
                     return null;
+                }
+
+                var assembly = info.Assembly;
+                if (assembly != null)
+                {
+                    // Loaded already
+                    return assembly;
+                }
+
+                var assemblyPath = info.Path;
+                if (!File.Exists(assemblyPath))
+                {
+                    throw new InvalidOperationException(
+                        $"Referenced assembly '{name}' was not found in '{toolsDirectory}'.");
                 }
 
                 return Assembly.LoadFile(assemblyPath);
@@ -69,11 +88,21 @@ namespace GetDocument.Commands
 #error target frameworks need to be updated.
 #endif
 
-            var workerType = thisAssembly.GetType(WorkerType, throwOnError: true);
-            var methodInfo = workerType.GetMethod("Process", BindingFlags.Public | BindingFlags.Static);
+            // Now safe to reference TestHost type.
             try
             {
-                return (int)methodInfo.Invoke(obj: null, parameters: new[] { this });
+                var workerType = thisAssembly.GetType(WorkerType, throwOnError: true);
+                var methodInfo = workerType.GetMethod("Process", BindingFlags.Public | BindingFlags.Static);
+
+                var targetAssemblyPath = AssemblyPath.Value();
+                var context = new GetDocumentCommandContext
+                {
+                    AssemblyPath = targetAssemblyPath,
+                    AssemblyDirectory = Path.GetDirectoryName(targetAssemblyPath),
+                    AssemblyName = Path.GetFileNameWithoutExtension(targetAssemblyPath),
+                };
+
+                return (int)methodInfo.Invoke(obj: null, parameters: new[] { context });
             }
             catch (Exception ex)
             {
@@ -82,19 +111,16 @@ namespace GetDocument.Commands
             }
         }
 
-        private static string GetFullPath(string name, string directory, IDictionary<string, string> packagedAssemblies)
+        private class AssemblyInfo
         {
-            if (!packagedAssemblies.TryGetValue(name, out var assemblyPath))
+            public AssemblyInfo(string path)
             {
-                return null;
+                Path = path;
             }
 
-            if (!File.Exists(assemblyPath))
-            {
-                throw new InvalidOperationException($"Referenced assembly '{name}' was not found in {directory}.");
-            }
+            public string Path { get; }
 
-            return assemblyPath;
+            public Assembly Assembly { get; set; }
         }
     }
 }

@@ -3,6 +3,7 @@
 
 using System;
 using GetDocument.Commands;
+using GetDocument.Properties;
 using Microsoft.DotNet.Cli.CommandLine;
 
 namespace GetDocument
@@ -13,7 +14,7 @@ namespace GetDocument
         {
             var app = new CommandLineApplication(throwOnUnexpectedArg: false)
             {
-                Name = "GetDocument"
+                FullName = Resources.CommandFullName,
             };
 
             new InvokeCommand().Configure(app);

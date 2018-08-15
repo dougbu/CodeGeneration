@@ -100,6 +100,12 @@ namespace GetDocument.Properties
                 GetString("UsingWorkingDirectory", nameof(workingDirectory)),
                 workingDirectory);
 
+        /// <summary>
+        ///     Location from which inside man was copied (in the .NET Framework case) or loaded.
+        /// </summary>
+        public static string ToolsDirectoryDescription
+            => GetString("ToolsDirectoryDescription");
+
         private static string GetString(string name, params string[] formatterNames)
         {
             var value = _resourceManager.GetString(name);

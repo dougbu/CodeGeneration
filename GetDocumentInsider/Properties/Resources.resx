@@ -153,4 +153,7 @@
   <data name="UsingWorkingDirectory" xml:space="preserve">
     <value>Using working directory '{workingDirectory}'.</value>
   </data>
+  <data name="ToolsDirectoryDescription" xml:space="preserve">
+    <value>Location from which inside man was copied (in the .NET Framework case) or loaded.</value>
+  </data>
 </root>

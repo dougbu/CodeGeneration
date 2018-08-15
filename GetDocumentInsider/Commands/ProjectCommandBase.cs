@@ -10,9 +10,12 @@ namespace GetDocument.Commands
     {
         public CommandOption AssemblyPath { get; private set; }
 
+        public CommandOption ToolsDirectory { get; private set; }
+
         public override void Configure(CommandLineApplication command)
         {
             AssemblyPath = command.Option("-a|--assembly <PATH>", Resources.AssemblyDescription);
+            ToolsDirectory = command.Option("--tools-directory <PATH>", Resources.ToolsDirectoryDescription);
 
             base.Configure(command);
         }
@@ -24,6 +27,11 @@ namespace GetDocument.Commands
             if (!AssemblyPath.HasValue())
             {
                 throw new CommandException(Resources.MissingOption(AssemblyPath.LongName));
+            }
+
+            if (!ToolsDirectory.HasValue())
+            {
+                throw new CommandException(Resources.MissingOption(ToolsDirectory.LongName));
             }
         }
     }

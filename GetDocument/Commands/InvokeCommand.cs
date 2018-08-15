@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Versioning;
 using GetDocument.Properties;
 using Microsoft.DotNet.Cli.CommandLine;
@@ -16,7 +15,8 @@ namespace GetDocument.Commands
 {
     internal class InvokeCommand : HelpCommandBase
     {
-        private CommandLineApplication _command;
+        private const string InsideManName = "GetDocument.Insider";
+
         private CommandOption _project;
         private CommandOption _framework;
         private CommandOption _configuration;
@@ -27,8 +27,6 @@ namespace GetDocument.Commands
 
         public override void Configure(CommandLineApplication command)
         {
-            command.FullName = Resources.CommandFullName;
-
             var options = new ProjectOptions();
             options.Configure(command);
 
@@ -43,8 +41,6 @@ namespace GetDocument.Commands
             _args = command.RemainingArguments;
 
             base.Configure(command);
-
-            _command = command;
         }
 
         protected override int Execute()
@@ -67,95 +63,128 @@ namespace GetDocument.Commands
                 project.Build();
             }
 
-            var thisPath = Path.GetDirectoryName(typeof(InvokeCommand).GetTypeInfo().Assembly.Location);
-
-            var targetDir = Path.GetFullPath(Path.Combine(project.ProjectDir, project.OutputPath));
-            var targetPath = Path.Combine(targetDir, project.TargetFileName);
-            var depsFile = Path.Combine(targetDir, project.AssemblyName + ".deps.json");
-            var runtimeConfig = Path.Combine(targetDir, project.AssemblyName + ".runtimeconfig.json");
-            var projectAssetsFile = project.ProjectAssetsFile;
-
-            string executable;
-            var args = new List<string>();
-            var targetFramework = new FrameworkName(project.TargetFrameworkMoniker);
-            switch (targetFramework.Identifier)
+            var targetDirectory = Path.GetFullPath(Path.Combine(project.ProjectDirectory, project.OutputPath));
+            if (!Directory.Exists(targetDirectory))
             {
-                case ".NETFramework":
-                    executable = Path.Combine(
-                        thisPath,
-                        project.PlatformTarget == "x86" ? "net461-x86" : "net461",
-                        "GetDocument.Insider.exe");
-                    break;
+                var message = _noBuild.HasValue() ? Resources.MustBuild : Resources.ProjectMisconfiguration;
+                throw new CommandException(message);
+            }
 
-                case ".NETCoreApp":
-                    if (targetFramework.Version < new Version(2, 0))
-                    {
-                        throw new CommandException(
-                            Resources.NETCoreApp1Project(project.ProjectName, targetFramework.Version));
-                    }
+            var targetPath = Path.Combine(targetDirectory, project.TargetFileName);
+            var thisPath = Path.GetFullPath(Path.GetDirectoryName(typeof(InvokeCommand).Assembly.Location));
 
-                    executable = "dotnet";
-                    args.Add("exec");
-                    args.Add("--depsFile");
-                    args.Add(depsFile);
+            string executable = null;
+            var cleanupExecutable = false;
+            try
+            {
+                string toolsDirectory;
+                var args = new List<string>();
+                var targetFramework = new FrameworkName(project.TargetFrameworkMoniker);
+                switch (targetFramework.Identifier)
+                {
+                    case ".NETFramework":
+                        cleanupExecutable = true;
+                        executable = Path.Combine(targetDirectory, InsideManName + ".exe");
+                        toolsDirectory = Path.Combine(
+                            thisPath,
+                            project.PlatformTarget == "x86" ? "net461-x86" : "net461");
 
-                    if (!string.IsNullOrEmpty(projectAssetsFile))
-                    {
-                        using (var reader = new JsonTextReader(File.OpenText(projectAssetsFile)))
+                        var executableSource = Path.Combine(toolsDirectory, InsideManName + ".exe");
+                        File.Copy(executableSource, executable, overwrite: true);
+
+                        var configurationPath = targetPath + ".config";
+                        if (File.Exists(configurationPath))
                         {
-                            var projectAssets = JToken.ReadFrom(reader);
-                            var packageFolders = projectAssets["packageFolders"].Children<JProperty>().Select(p => p.Name);
+                            File.Copy(configurationPath, executable + ".config", overwrite: true);
+                        }
+                        break;
 
-                            foreach (var packageFolder in packageFolders)
+                    case ".NETCoreApp":
+                        executable = "dotnet";
+                        toolsDirectory = Path.Combine(thisPath, "netcoreapp2.0");
+
+                        if (targetFramework.Version < new Version(2, 0))
+                        {
+                            throw new CommandException(
+                                Resources.NETCoreApp1Project(project.ProjectName, targetFramework.Version));
+                        }
+
+                        args.Add("exec");
+                        args.Add("--depsFile");
+                        args.Add(Path.Combine(targetDirectory, project.AssemblyName + ".deps.json"));
+
+                        var projectAssetsFile = project.ProjectAssetsFile;
+                        if (!string.IsNullOrEmpty(projectAssetsFile))
+                        {
+                            using (var reader = new JsonTextReader(File.OpenText(projectAssetsFile)))
                             {
-                                args.Add("--additionalProbingPath");
-                                args.Add(packageFolder.TrimEnd(Path.DirectorySeparatorChar));
+                                var projectAssets = JToken.ReadFrom(reader);
+                                var packageFolders = projectAssets["packageFolders"]
+                                    .Children<JProperty>()
+                                    .Select(p => p.Name);
+
+                                foreach (var packageFolder in packageFolders)
+                                {
+                                    args.Add("--additionalProbingPath");
+                                    args.Add(packageFolder.TrimEnd(Path.DirectorySeparatorChar));
+                                }
                             }
                         }
-                    }
 
-                    if (File.Exists(runtimeConfig))
-                    {
-                        args.Add("--runtimeConfig");
-                        args.Add(runtimeConfig);
-                    }
-                    else if (!string.IsNullOrEmpty(project.RuntimeFrameworkVersion))
-                    {
-                        args.Add("--fx-version");
-                        args.Add(project.RuntimeFrameworkVersion);
-                    }
+                        var runtimeConfig = Path.Combine(targetDirectory, project.AssemblyName + ".runtimeconfig.json");
+                        if (File.Exists(runtimeConfig))
+                        {
+                            args.Add("--runtimeConfig");
+                            args.Add(runtimeConfig);
+                        }
+                        else if (!string.IsNullOrEmpty(project.RuntimeFrameworkVersion))
+                        {
+                            args.Add("--fx-version");
+                            args.Add(project.RuntimeFrameworkVersion);
+                        }
 
-                    args.Add(Path.Combine(thisPath, "netcoreapp2.0", "GetDocument.Insider.dll"));
-                    break;
+                        args.Add(Path.Combine(toolsDirectory, InsideManName + ".dll"));
+                        break;
 
-                case ".NETStandard":
-                    throw new CommandException(Resources.NETStandardProject(project.ProjectName));
+                    case ".NETStandard":
+                        throw new CommandException(Resources.NETStandardProject(project.ProjectName));
 
-                default:
-                    throw new CommandException(
-                        Resources.UnsupportedFramework(project.ProjectName, targetFramework.Identifier));
+                    default:
+                        throw new CommandException(
+                            Resources.UnsupportedFramework(project.ProjectName, targetFramework.Identifier));
+                }
+
+                args.AddRange(_args);
+                args.Add("--assembly");
+                args.Add(targetPath);
+                args.Add("--tools-directory");
+                args.Add(toolsDirectory);
+
+                if (Reporter.IsVerbose)
+                {
+                    args.Add("--verbose");
+                }
+
+                if (Reporter.NoColor)
+                {
+                    args.Add("--no-color");
+                }
+
+                if (Reporter.PrefixOutput)
+                {
+                    args.Add("--prefix-output");
+                }
+
+                return Exe.Run(executable, args, project.ProjectDirectory);
             }
-
-            args.AddRange(_args);
-            args.Add("--assembly");
-            args.Add(targetPath);
-
-            if (Reporter.IsVerbose)
+            finally
             {
-                args.Add("--verbose");
+                if (cleanupExecutable && !string.IsNullOrEmpty(executable))
+                {
+                    File.Delete(executable);
+                    File.Delete(executable + ".config");
+                }
             }
-
-            if (Reporter.NoColor)
-            {
-                args.Add("--no-color");
-            }
-
-            if (Reporter.PrefixOutput)
-            {
-                args.Add("--prefix-output");
-            }
-
-            return Exe.Run(executable, args, project.ProjectDir);
         }
 
         private static string FindProjects(

@@ -17,7 +17,6 @@ namespace GetDocument
         /// </summary>
         public static string GetVersion()
             => typeof(ProductInfo)
-                .GetTypeInfo()
                 .Assembly
                 .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
                 .InformationalVersion;
