@@ -16,7 +16,7 @@
     <tags>$tags$</tags>
     <version>$version$</version>
     <dependencies>
-      <dependency id="NSwag.MSBuild" version="11.18.0" include="runtime,build,native,contentfiles,analyzers" />
+      <dependency id="NSwag.MSBuild" version="11.18.6" include="runtime,build,native,contentfiles,analyzers" />
     </dependencies>
   </metadata>
 
