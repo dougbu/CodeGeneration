@@ -18,6 +18,20 @@ namespace GenerationTasks
         public ITaskItem[] Uris { get; set; }
 
         /// <summary>
+        /// If <see langword="true" />, <see cref="Uris"/> items may include relative URIs. Otherwise, the task will
+        /// fail if <see cref="Uris"/> contains anything bug absolute URIs.
+        /// </summary>
+        /// <value>Defaults to <see langword="false" />.</value>
+        public bool AllowRelativeUris { get; set; }
+
+        /// <summary>
+        /// Optional hostname to use when generating an absolute URI. Ignored unless <see cref="AllowRelativeUris"/> is
+        /// <see langword="true" />.
+        /// </summary>
+        /// <value>Defaults to "localhost".</value>
+        public string Hostname { get; set; } = "localhost";
+
+        /// <summary>
         /// The converted filename.
         /// </summary>
         [Output]
@@ -30,7 +44,22 @@ namespace GenerationTasks
             foreach (var item in Uris)
             {
                 var uri = item.ItemSpec;
-                var builder = new UriBuilder(uri);
+                UriBuilder builder;
+                if (AllowRelativeUris)
+                {
+                    var absoluteUri = new Uri(new Uri($"http://{Hostname}/"), uri);
+                    builder = new UriBuilder(absoluteUri);
+                }
+                else
+                {
+                    builder = new UriBuilder(uri);
+                    if (!builder.Uri.IsAbsoluteUri)
+                    {
+                        Log.LogError($"{nameof(Uris)} item '{uri}' is not an absolute URI.");
+                        return false;
+                    }
+                }
+
                 if (!string.Equals(Uri.UriSchemeHttp, builder.Scheme, StringComparison.OrdinalIgnoreCase) &&
                     !string.Equals(Uri.UriSchemeHttps, builder.Scheme, StringComparison.OrdinalIgnoreCase))
                 {

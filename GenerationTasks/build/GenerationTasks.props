@@ -2,25 +2,29 @@
 <Project>
   <Import Project="NSwagServiceReference.props" />
   <PropertyGroup>
-    <_GenerationTasksAssemblyTarget Condition="'$(MSBuildRuntimeType)' != 'Core'">net461</_GenerationTasksAssemblyTarget>
     <_GenerationTasksAssemblyTarget Condition="'$(MSBuildRuntimeType)' == 'Core'">netstandard2.0</_GenerationTasksAssemblyTarget>
+    <_GenerationTasksAssemblyTarget Condition="'$(MSBuildRuntimeType)' != 'Core'">net461</_GenerationTasksAssemblyTarget>
     <_GenerationTasksAssemblyPath>$(MSBuildThisFileDirectory)/../tasks/$(_GenerationTasksAssemblyTarget)/GenerationTasks.dll</_GenerationTasksAssemblyPath>
   </PropertyGroup>
   <UsingTask TaskName="GenerationTasks.GetFilenameFromUri" AssemblyFile="$(_GenerationTasksAssemblyPath)" />
   <UsingTask TaskName="GenerationTasks.DownloadFile" AssemblyFile="$(_GenerationTasksAssemblyPath)" />
 
   <PropertyGroup>
+    <ServiceProjectReferenceCheckIfNewer Condition="'$(ServiceProjectReferenceCheckIfNewer)' == ''">true</ServiceProjectReferenceCheckIfNewer>
     <ServiceProjectReferenceDirectory
       Condition="'$(ServiceProjectReferenceDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(ServiceProjectReferenceDirectory)'))</ServiceProjectReferenceDirectory>
+
     <ServiceUriReferenceCheckIfNewer Condition="'$(ServiceUriReferenceCheckIfNewer)' == ''">true</ServiceUriReferenceCheckIfNewer>
     <ServiceUriReferenceDirectory
       Condition="'$(ServiceUriReferenceDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(ServiceUriReferenceDirectory)'))</ServiceUriReferenceDirectory>
+
     <ServiceFileReferenceDirectory
       Condition="'$(ServiceFileReferenceDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(ServiceFileReferenceDirectory)'))</ServiceFileReferenceDirectory>
 
     <ServiceProjectReferenceGeneratorDependsOn>
-      _ServiceProjectReferenceGenerator_GetPreferredTargetFramework;
-      _ServiceProjectReferenceGenerator_GetTargetPath;
+      _ServiceProjectReferenceGenerator_GetDocumentGenerator;
+      _ServiceProjectReferenceGenerator_GetTargetFramework;
+      _ServiceProjectReferenceGenerator_GetProjectTargetPath;
       _ServiceProjectReferenceGenerator_Build;
       _ServiceProjectReferenceGenerator_Core
     </ServiceProjectReferenceGeneratorDependsOn>
@@ -34,5 +38,8 @@
       ServiceUriReferenceGenerator;
       _ServiceFileReferenceGenerator_Core
     </ServiceFileReferenceGeneratorDependsOn>
+
+    <_GenerationTasksAssemblyPath />
+    <_GenerationTasksAssemblyTarget />
   </PropertyGroup>
 </Project>

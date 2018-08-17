@@ -12,11 +12,11 @@
   <Target Name="_NSwagDocumentGenerator_Core" Inputs="%(_NSwagTemporary.ProjectTargetPath)" Outputs="%(_NSwagTemporary.DocumentPath)">
     <!-- aspnetcore2swagger -->
     <PropertyGroup>
-      <_Command>$(NSwagExe_Core21) aspnetcore2swagger /NoBuild:true</_Command>
+      <_Command>$(NSwagExe_Core21) aspnetcore2swagger /Configuration:$(Configuration) /NoBuild:true</_Command>
     </PropertyGroup>
 
     <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(_NSwagTemporary.DocumentPath)'))"
-      Command="$(_Command) /Project:%(Identity) /output:%(DocumentPath) /TargetFramework:%(PreferredTargetFramework)" />
+      Command="$(_Command) /Project:%(Fullname) /output:%(DocumentPath) /TargetFramework:%(TargetFramework)" />
 
     <PropertyGroup>
       <_Command />
@@ -30,7 +30,7 @@
   <Target Name="_NSwagDocumentGenerator_SetMetadata" Condition="'@(_NSwagTemporary)' != ''">
     <ItemGroup>
       <ServiceFileReference Remove="@(_NSwagTemporary -> '%(DocumentPath)')" />
-      <ServiceFileReference Include="@(_NSwagTemporary -> '%(DocumentPath)')" SourceProject="%(_NSwagTemporary.Identity)" />
+      <ServiceFileReference Include="@(_NSwagTemporary -> '%(DocumentPath)')" SourceProject="%(Fullname)" />
       <_NSwagTemporary Remove="@(_NSwagTemporary)" />
     </ItemGroup>
   </Target>
@@ -53,13 +53,13 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="_NSwagCSharpCodeGenerator_Core" Condition="'@(_NSwagTemporary)' != ''" Inputs="@(_NSwagTemporary)" Outputs="%(_NSwagTemporary.OutputPath)">
+  <Target Name="_NSwagCSharpCodeGenerator_Core" Condition="'@(_NSwagTemporary)' != ''" Inputs="%(Fullname)" Outputs="%(OutputPath)">
     <PropertyGroup>
       <_Command>$(NSwagExe_Core21) swagger2csclient /namespace:$(NSwagCSharpCodeGeneratorNamespace)</_Command>
     </PropertyGroup>
 
     <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(OutputPath)'))"
-      Command="$(_Command) /className:%(ClassName) /input:%(Identity) /output:%(OutputPath) %(_NSwagTemporary.Options)" />
+      Command="$(_Command) /className:%(ClassName) /input:%(Fullname) /output:%(OutputPath) %(_NSwagTemporary.Options)" />
 
     <PropertyGroup>
       <_Command />
@@ -101,13 +101,13 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="_NSwagTypeScriptCodeGenerator_Core" Condition="'@(_NSwagTemporary)' != ''" Inputs="@(_NSwagTemporary)" Outputs="%(_NSwagTemporary.OutputPath)">
+  <Target Name="_NSwagTypeScriptCodeGenerator_Core" Condition="'@(_NSwagTemporary)' != ''" Inputs="%(Fullname)" Outputs="%(OutputPath)">
     <PropertyGroup>
       <_Command>$(NSwagExe_Core21) swagger2tsclient /namespace:$(NSwagTypeScriptCodeGeneratorNamespace)</_Command>
     </PropertyGroup>
 
     <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(OutputPath)'))"
-      Command="$(_Command) /className:%(ClassName) /input:%(Identity) /output:%(OutputPath) %(_NSwagTemporary.Options)" />
+      Command="$(_Command) /className:%(ClassName) /input:%(Fullname) /output:%(OutputPath) %(_NSwagTemporary.Options)" />
 
     <PropertyGroup>
       <_Command />
