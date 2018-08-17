@@ -15,9 +15,6 @@
       <packageType name="$packageType$" />
     </packageTypes>
     <repository type="git" url="$repositoryUrl$" commit="$repositoryCommit$" />
-    <dependencies>
-      <dependency id="Microsoft.AspNetCore.TestHost" version="2.0.0" />
-    </dependencies>
   </metadata>
 
   <files>
