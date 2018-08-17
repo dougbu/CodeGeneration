@@ -186,4 +186,7 @@
   <data name="ProjectMisconfiguration" xml:space="preserve">
     <value>Project output was not found after a succesful build. Confirm `OutputPath` property of the project is correct.</value>
   </data>
+  <data name="OutputDescription" xml:space="preserve">
+    <value>The file to write the result to.</value>
+  </data>
 </root>

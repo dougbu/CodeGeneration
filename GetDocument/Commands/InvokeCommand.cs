@@ -17,12 +17,13 @@ namespace GetDocument.Commands
     {
         private const string InsideManName = "GetDocument.Insider";
 
-        private CommandOption _project;
-        private CommandOption _framework;
         private CommandOption _configuration;
-        private CommandOption _runtime;
+        private CommandOption _framework;
         private CommandOption _msbuildprojectextensionspath;
         private CommandOption _noBuild;
+        private CommandOption _output;
+        private CommandOption _project;
+        private CommandOption _runtime;
         private IList<string> _args;
 
         public override void Configure(CommandLineApplication command)
@@ -37,6 +38,7 @@ namespace GetDocument.Commands
             _msbuildprojectextensionspath = options.MSBuildProjectExtensionsPath;
             _noBuild = options.NoBuild;
 
+            _output = command.Option("--output <Path>", Resources.OutputDescription);
             command.VersionOption("--version", ProductInfo.GetVersion);
             _args = command.RemainingArguments;
 
@@ -159,6 +161,12 @@ namespace GetDocument.Commands
                 args.Add(targetPath);
                 args.Add("--tools-directory");
                 args.Add(toolsDirectory);
+
+                if (_output.HasValue())
+                {
+                    args.Add("--output");
+                    args.Add(Path.GetFullPath(_output.Value()));
+                }
 
                 if (Reporter.IsVerbose)
                 {

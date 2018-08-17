@@ -8,12 +8,39 @@ using System.Reflection;
 #if NETCOREAPP2_0
 using System.Runtime.Loader;
 #endif
+using GetDocument.Properties;
+using Microsoft.DotNet.Cli.CommandLine;
 
 namespace GetDocument.Commands
 {
     internal class GetDocumentCommand : ProjectCommandBase
     {
         private const string WorkerType = "GetDocument.Commands.GetDocumentCommandWorker";
+        private CommandOption _output;
+        private CommandOption _uri;
+
+        public override void Configure(CommandLineApplication command)
+        {
+            base.Configure(command);
+
+            _output = command.Option("--output <Path>", Resources.OutputDescription);
+            _uri = command.Option("--uri <URI>", Resources.UriDescription);
+        }
+
+        protected override void Validate()
+        {
+            base.Validate();
+
+            if (!_output.HasValue())
+            {
+                throw new CommandException(Resources.MissingOption(_output.LongName));
+            }
+
+            if (!_uri.HasValue())
+            {
+                throw new CommandException(Resources.MissingOption(_uri.LongName));
+            }
+        }
 
         protected override int Execute()
         {

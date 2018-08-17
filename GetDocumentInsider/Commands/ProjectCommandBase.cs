@@ -14,10 +14,10 @@ namespace GetDocument.Commands
 
         public override void Configure(CommandLineApplication command)
         {
+            base.Configure(command);
+
             AssemblyPath = command.Option("-a|--assembly <PATH>", Resources.AssemblyDescription);
             ToolsDirectory = command.Option("--tools-directory <PATH>", Resources.ToolsDirectoryDescription);
-
-            base.Configure(command);
         }
 
         protected override void Validate()

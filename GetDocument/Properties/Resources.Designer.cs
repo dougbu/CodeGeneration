@@ -168,6 +168,12 @@ namespace GetDocument.Properties
         public static string ProjectMisconfiguration
             => GetString("ProjectMisconfiguration");
 
+        /// <summary>
+        ///     The file to write the result to.
+        /// </summary>
+        public static string OutputDescription
+            => GetString("OutputDescription");
+
         private static string GetString(string name, params string[] formatterNames)
         {
             var value = _resourceManager.GetString(name);

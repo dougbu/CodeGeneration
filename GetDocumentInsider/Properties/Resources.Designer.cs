@@ -106,6 +106,12 @@ namespace GetDocument.Properties
         public static string ToolsDirectoryDescription
             => GetString("ToolsDirectoryDescription");
 
+        /// <summary>
+        ///     The URI to download the document from.
+        /// </summary>
+        public static string UriDescription
+            => GetString("UriDescription");
+
         private static string GetString(string name, params string[] formatterNames)
         {
             var value = _resourceManager.GetString(name);

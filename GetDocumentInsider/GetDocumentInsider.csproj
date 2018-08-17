@@ -13,6 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="../GenerationTasks/DownloadFileCore.cs" />
+    <Compile Include="../GenerationTasks/ILogWrapper.cs" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.0" />
   </ItemGroup>
 

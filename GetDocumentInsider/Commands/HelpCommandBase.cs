@@ -9,9 +9,9 @@ namespace GetDocument.Commands
     {
         public override void Configure(CommandLineApplication command)
         {
-            command.HelpOption("-h|--help");
-
             base.Configure(command);
+
+            command.HelpOption("-h|--help");
         }
     }
 }

@@ -156,4 +156,7 @@
   <data name="ToolsDirectoryDescription" xml:space="preserve">
     <value>Location from which inside man was copied (in the .NET Framework case) or loaded.</value>
   </data>
+  <data name="UriDescription" xml:space="preserve">
+    <value>The URI to download the document from.</value>
+  </data>
 </root>
