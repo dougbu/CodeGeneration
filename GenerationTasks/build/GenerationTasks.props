@@ -5,6 +5,7 @@
     <_GenerationTasksAssemblyTarget Condition="'$(MSBuildRuntimeType)' == 'Core'">netstandard2.0</_GenerationTasksAssemblyTarget>
     <_GenerationTasksAssemblyTarget Condition="'$(MSBuildRuntimeType)' != 'Core'">net461</_GenerationTasksAssemblyTarget>
     <_GenerationTasksAssemblyPath>$(MSBuildThisFileDirectory)/../tasks/$(_GenerationTasksAssemblyTarget)/GenerationTasks.dll</_GenerationTasksAssemblyPath>
+    <_GenerationTasksAssemblyTarget />
   </PropertyGroup>
   <UsingTask TaskName="GenerationTasks.GetFilenameFromUri" AssemblyFile="$(_GenerationTasksAssemblyPath)" />
   <UsingTask TaskName="GenerationTasks.DownloadFile" AssemblyFile="$(_GenerationTasksAssemblyPath)" />
@@ -24,7 +25,9 @@
     <ServiceProjectReferenceGeneratorDependsOn>
       _ServiceProjectReferenceGenerator_GetDocumentGenerator;
       _ServiceProjectReferenceGenerator_GetTargetFramework;
+      _ServiceProjectReferenceGenerator_GetDocumentPath;
       _ServiceProjectReferenceGenerator_GetProjectTargetPath;
+      _ServiceProjectReferenceGenerator_Restore;
       _ServiceProjectReferenceGenerator_Build;
       _ServiceProjectReferenceGenerator_Core
     </ServiceProjectReferenceGeneratorDependsOn>
@@ -38,8 +41,5 @@
       ServiceUriReferenceGenerator;
       _ServiceFileReferenceGenerator_Core
     </ServiceFileReferenceGeneratorDependsOn>
-
-    <_GenerationTasksAssemblyPath />
-    <_GenerationTasksAssemblyTarget />
   </PropertyGroup>
 </Project>

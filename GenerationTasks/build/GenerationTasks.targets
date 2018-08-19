@@ -2,11 +2,11 @@
 <Project>
   <Import Project="NSwagServiceReference.targets" />
   <Target Name="_CheckServiceReferences">
-    <Error Condition="'@(ServiceProjectReference)' != '' AND '%(CodeGenerator)' == ''"
+    <Error Condition="'@(ServiceProjectReference)' != '' AND '%(ServiceProjectReference.CodeGenerator)' == ''"
         Text="ServiceProjectReference items '@(ServiceProjectReference)' lack CodeGenerator metadata." />
-    <Error Condition="'@(ServiceUriReference)' != '' AND '%(CodeGenerator)' == ''"
+    <Error Condition="'@(ServiceUriReference)' != '' AND '%(ServiceUriReference.CodeGenerator)' == ''"
         Text="ServiceUriReference items '@(ServiceUriReference)' lack CodeGenerator metadata." />
-    <Error Condition="'@(ServiceFileReference)' != '' AND '%(CodeGenerator)' == ''"
+    <Error Condition="'@(ServiceFileReference)' != '' AND '%(ServiceFileReference.CodeGenerator)' == ''"
         Text="ServiceFileReference items '@(ServiceFileReference)' lack CodeGenerator metadata." />
   </Target>
 
@@ -22,7 +22,7 @@
   </Target>
 
   <!-- Metadata setup phase 2: Ensure items have TargetFramework metadata. Call GetTargetFrameworks in the target project. -->
-  <!-- Inputs and outputs cause MSBuild to run unconditionally and batch this target (run once per project). -->
+  <!-- Inputs and outputs cause MSBuild to run target unconditionally and to batch it (run once per project). -->
   <Target Name="_ServiceProjectReferenceGenerator_GetTargetFramework"
       Inputs="%(ServiceProjectReference.FullPath)"
       Outputs="&lt;not-a-file !&gt;">
@@ -61,8 +61,8 @@
   </Target>
 
   <!-- Metadata setup phase 3: Ensure items have DocumentPath metadata. Call GenerationTasks.GetFilenameFromUri. -->
-  <!-- Inputs and outputs cause MSBuild to run unconditionally and batch this target (run once per UriPath x project combination). -->
-  <Target Name="_ServiceProjectReferenceGenerator_GetProjectTargetPath"
+  <!-- Inputs and outputs cause MSBuild to run target unconditionally and to batch it (run once per UriPath x project combination). -->
+  <Target Name="_ServiceProjectReferenceGenerator_GetDocumentPath"
     Inputs="%(ServiceProjectReference.UriPath)%(FullPath)"
     Outputs="&lt;not-a-file !&gt;">
     <PropertyGroup>
@@ -90,7 +90,7 @@
     </PropertyGroup>
     <ItemGroup>
       <ServiceProjectReference Update="@(ServiceProjectReference)"
-          Condition="'%(FullPath)' == '$(_FullPath)' AND '%(UriPath)' == '$(_UriPath)'">
+          Condition="'%(FullPath)' == '$(_FullPath)' AND '%(ServiceProjectReference.UriPath)' == '$(_UriPath)'">
         <DocumentPath Condition="'%(ServiceProjectReference.DocumentPath)' == ''">$(_DocumentPath)</DocumentPath>
       </ServiceProjectReference>
       <_Temporary Remove="@(_Temporary)" />
@@ -106,7 +106,7 @@
   </Target>
 
   <!-- Metadata setup phase 4: Ensure items have ProjectTargetPath metadata. Call GetTargetPath in the target project. -->
-  <!-- Inputs and outputs cause MSBuild to run unconditionally and batch this target (run once per TargetFramework x project combination). -->
+  <!-- Inputs and outputs cause MSBuild to run target unconditionally and batch it (run once per TargetFramework x project combination). -->
   <Target Name="_ServiceProjectReferenceGenerator_GetProjectTargetPath"
     Inputs="%(ServiceProjectReference.TargetFramework)%(FullPath)"
     Outputs="&lt;not-a-file !&gt;">
@@ -119,7 +119,7 @@
     </ItemGroup>
 
     <MSBuild Projects="$(_FullPath)"
-        Properties="TargetFramework=^$(_TargetFramework)"
+        Properties="TargetFramework=$(_TargetFramework)"
         RebaseOutputs="true"
         RemoveProperties="TargetFrameworks;RuntimeIdentifier"
         Targets="GetTargetPath"
@@ -145,11 +145,24 @@
     </PropertyGroup>
   </Target>
 
+  <Target Name="_ServiceProjectReferenceGenerator_Restore"
+      Condition="'$(BuildProjectReferences)' == 'true'"
+      Inputs="@(ServiceProjectReference)"
+      Outputs="@(ServiceProjectReference -> '%(Directory)obj\project.assets.json')">
+    <MSBuild Projects="@(ServiceProjectReference -> '%(FullPath)')"
+        BuildInParallel="$(BuildInParallel)"
+        RemoveProperties="TargetFramework;TargetFrameworks;RuntimeIdentifier"
+        Targets="Restore" />
+  </Target>
+
   <Target Name="_ServiceProjectReferenceGenerator_Build"
       Condition="'$(BuildProjectReferences)' == 'true'"
       Inputs="@(ServiceProjectReference)"
       Outputs="@(ServiceProjectReference -> '%(ProjectTargetPath)')">
-    <MSBuild Projects="%(ServiceProjectReference)" RemoveProperties="TargetFrameworks;RuntimeIdentifier" Targets="Build" />
+    <MSBuild Projects="@(ServiceProjectReference)"
+        BuildInParallel="$(BuildInParallel)"
+        RemoveProperties="TargetFrameworks;RuntimeIdentifier"
+        Targets="Build" />
   </Target>
 
   <Target Name="_ServiceProjectReferenceGenerator_Core"
