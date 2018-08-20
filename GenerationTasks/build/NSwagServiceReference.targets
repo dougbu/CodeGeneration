@@ -18,6 +18,7 @@
       <_Command>$(NSwagExe_Core21) aspnetcore2swagger /Configuration:$(Configuration) /NoBuild:true</_Command>
     </PropertyGroup>
 
+    <Message Importance="high" Text="%0A$(_Command) /Project:%(FullPath) /output:%(DocumentPath) /TargetFramework:%(TargetFramework) %(_NSwagTemporary.Options)" />
     <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(DocumentPath)'))"
         Command="$(_Command) /Project:%(FullPath) /output:%(DocumentPath) /TargetFramework:%(TargetFramework) %(_NSwagTemporary.Options)" />
 
@@ -61,6 +62,7 @@
       <_Command>$(NSwagExe_Core21) swagger2csclient /namespace:$(NSwagCSharpCodeGeneratorNamespace)</_Command>
     </PropertyGroup>
 
+    <Message Importance="high" Text="%0A$(_Command) /className:%(ClassName) /input:%(FullPath) /output:%(OutputPath) %(_NSwagTemporary.Options)" />
     <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(OutputPath)'))"
       Command="$(_Command) /className:%(ClassName) /input:%(FullPath) /output:%(OutputPath) %(_NSwagTemporary.Options)" />
 
@@ -74,6 +76,8 @@
     items are both written outside the project and not included in a batch.
   -->
   <Target Name="_NSwagCSharpCodeGenerator_SetMetadata" Condition="'@(_NSwagTemporary)' != ''">
+    <Message Importance="high" Text="%0A_NSwagCSharpCodeGenerator_SetMetadata: @(_NSwagTemporary -> '%(OutputPath)')" />
+    <Message Importance="high" Text="_NSwagCSharpCodeGenerator_SetMetadata: '%(OutputPath)' '%(FullPath)' '%(_NSwagTemporary.SourceProject)' '%(_NSwagTemporary.SourceUrl)'" />
     <ItemGroup>
       <Compile Remove="@(_NSwagTemporary -> '%(OutputPath)')" />
       <Compile Include="@(_NSwagTemporary -> '%(OutputPath)')" />
@@ -109,6 +113,7 @@
       <_Command>$(NSwagExe_Core21) swagger2tsclient /namespace:$(NSwagTypeScriptCodeGeneratorNamespace)</_Command>
     </PropertyGroup>
 
+    <Message Importance="high" Text="%0A$(_Command) /className:%(ClassName) /input:%(FullPath) /output:%(OutputPath) %(_NSwagTemporary.Options)" />
     <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(OutputPath)'))"
       Command="$(_Command) /className:%(ClassName) /input:%(FullPath) /output:%(OutputPath) %(_NSwagTemporary.Options)" />
 

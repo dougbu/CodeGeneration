@@ -75,6 +75,7 @@
       <_Temporary Remove="@(_Temporary)" />
     </ItemGroup>
 
+    <Message Importance="high" Text="%0A_ServiceProjectReferenceGenerator_GetDocumentPath: '$(_FullPath)' '$(_ProjectName)' '$(_UriPath)'" />
     <GenerationTasks.GetFilenameFromUri Condition="'$(_UriPath)' != ''"
         AllowRelativeUris="true"
         Hostname="$(_ProjectName)"
@@ -118,6 +119,7 @@
       <_Temporary Remove="@(_Temporary)" />
     </ItemGroup>
 
+    <Message Importance="high" Text="%0A_ServiceProjectReferenceGenerator_GetProjectTargetPath: '$(_FullPath)' '$(_TargetFramework)'" />
     <MSBuild Projects="$(_FullPath)"
         Properties="TargetFramework=$(_TargetFramework)"
         RebaseOutputs="true"
