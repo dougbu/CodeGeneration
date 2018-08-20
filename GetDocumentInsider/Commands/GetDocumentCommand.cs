@@ -17,6 +17,8 @@ namespace GetDocument.Commands
     {
         private const string WorkerType = "GetDocument.Commands.GetDocumentCommandWorker";
         private CommandOption _output;
+        private CommandOption _method;
+        private CommandOption _service;
         private CommandOption _uri;
 
         public override void Configure(CommandLineApplication command)
@@ -24,6 +26,8 @@ namespace GetDocument.Commands
             base.Configure(command);
 
             _output = command.Option("--output <Path>", Resources.OutputDescription);
+            _method = command.Option("--method <Name>", Resources.MethodDescription);
+            _service = command.Option("--service <QualifiedName>", Resources.ServiceDescription);
             _uri = command.Option("--uri <URI>", Resources.UriDescription);
         }
 
@@ -36,9 +40,16 @@ namespace GetDocument.Commands
                 throw new CommandException(Resources.MissingOption(_output.LongName));
             }
 
-            if (!_uri.HasValue())
+            if (_service.HasValue())
             {
-                throw new CommandException(Resources.MissingOption(_uri.LongName));
+                if (!_method.HasValue())
+                {
+                    throw new CommandException(Resources.MissingOption(_method.LongName));
+                }
+            }
+            else if (!_uri.HasValue())
+            {
+                throw new CommandException(Resources.MissingOptions(_service.LongName, _uri.LongName));
             }
         }
 
@@ -127,6 +138,10 @@ namespace GetDocument.Commands
                     AssemblyPath = targetAssemblyPath,
                     AssemblyDirectory = Path.GetDirectoryName(targetAssemblyPath),
                     AssemblyName = Path.GetFileNameWithoutExtension(targetAssemblyPath),
+                    Method = _method.Value(),
+                    Output = _output.Value(),
+                    Service = _service.Value(),
+                    UriPath = _uri.Value(),
                 };
 
                 return (int)methodInfo.Invoke(obj: null, parameters: new[] { context });

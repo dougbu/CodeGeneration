@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using GenerationTasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GetDocument.Commands
 {
@@ -24,12 +28,45 @@ namespace GetDocument.Commands
                 return 3;
             }
 
-            using (var testHost = new TestServer(builder))
+            // Enable HTTPS in case HttpsRedirectionMiddleware is in use.
+            Environment.SetEnvironmentVariable("ASPNETCORE_HTTPS_PORT", "443");
+
+            using (var server = new TestServer(builder))
             {
-                Console.WriteLine($"Hello world!!");
+                ProcessAsync(context, server).Wait();
             }
 
             return 0;
+        }
+
+        public static async Task ProcessAsync(GetDocumentCommandContext context, TestServer server)
+        {
+            if (string.IsNullOrEmpty(context.Service))
+            {
+                var httpClient = server.CreateClient();
+                await DownloadFileCore.DownloadAsync(
+                    context.UriPath,
+                    context.Output,
+                    httpClient,
+                    new LogWrapper(),
+                    CancellationToken.None,
+                    timeoutSeconds: 60);
+            }
+            else
+            {
+                try
+                {
+                    var services = server.Host.Services;
+                    var serviceType = Type.GetType(context.Service, throwOnError: true);
+                    var method = serviceType.GetMethod(context.Method, Array.Empty<Type>());
+                    var service = services.GetRequiredService(serviceType);
+                    method.Invoke(service, Array.Empty<object>());
+                }
+                catch (Exception ex)
+                {
+                    Reporter.WriteWarning(ex.ToString());
+                }
+            }
         }
 
         private static IWebHostBuilder GetBuilder(Type entryPointType, string assemblyPath, string assemblyName)
@@ -76,7 +113,8 @@ namespace GetDocument.Commands
 
                 try
                 {
-                    return (IWebHostBuilder)methodInfo.Invoke(obj: null, parameters: args);
+                    var builder = (IWebHostBuilder)methodInfo.Invoke(obj: null, parameters: args);
+                    return builder;
                 }
                 catch (Exception ex)
                 {

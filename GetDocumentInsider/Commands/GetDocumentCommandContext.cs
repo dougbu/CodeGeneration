@@ -10,5 +10,13 @@ namespace GetDocument.Commands
         public string AssemblyName { get; set; }
 
         public string AssemblyPath { get; set; }
+
+        public string Method { get; set; }
+
+        public string Output { get; set; }
+
+        public string Service { get; set; }
+
+        public string UriPath { get; set; }
     }
 }

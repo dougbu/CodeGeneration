@@ -112,6 +112,26 @@ namespace GetDocument.Properties
         public static string UriDescription
             => GetString("UriDescription");
 
+        /// <summary>
+        ///     The name of the method to invoke on the --service instance.
+        /// </summary>
+        public static string MethodDescription
+            => GetString("MethodDescription");
+
+        /// <summary>
+        ///     The qualified name of the service to retrieve from dependency injection.
+        /// </summary>
+        public static string ServiceDescription
+            => GetString("ServiceDescription");
+
+        /// <summary>
+        ///     Missing required option '--{option1}' or '--{option2}'.
+        /// </summary>
+        public static string MissingOptions([CanBeNull] object option1, [CanBeNull] object option2)
+            => string.Format(
+                GetString("MissingOptions", nameof(option1), nameof(option2)),
+                option1, option2);
+
         private static string GetString(string name, params string[] formatterNames)
         {
             var value = _resourceManager.GetString(name);

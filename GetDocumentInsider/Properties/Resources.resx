@@ -159,4 +159,13 @@
   <data name="UriDescription" xml:space="preserve">
     <value>The URI to download the document from.</value>
   </data>
+  <data name="MethodDescription" xml:space="preserve">
+    <value>The name of the method to invoke on the --service instance.</value>
+  </data>
+  <data name="ServiceDescription" xml:space="preserve">
+    <value>The qualified name of the service to retrieve from dependency injection.</value>
+  </data>
+  <data name="MissingOptions" xml:space="preserve">
+    <value>Missing required option '--{option1}' or '--{option2}'.</value>
+  </data>
 </root>
