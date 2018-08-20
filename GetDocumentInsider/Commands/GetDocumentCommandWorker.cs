@@ -28,9 +28,6 @@ namespace GetDocument.Commands
                 return 3;
             }
 
-            // Enable HTTPS in case HttpsRedirectionMiddleware is in use.
-            Environment.SetEnvironmentVariable("ASPNETCORE_HTTPS_PORT", "443");
-
             using (var server = new TestServer(builder))
             {
                 ProcessAsync(context, server).Wait();
@@ -44,6 +41,11 @@ namespace GetDocument.Commands
             if (string.IsNullOrEmpty(context.Service))
             {
                 var httpClient = server.CreateClient();
+
+                // TODO: Instead configure logging to mute the HttpsRedirectionMiddleware warning and choose an address
+                // from IServerAddressesFeature's list.
+                httpClient.BaseAddress = "https://localhost";
+
                 await DownloadFileCore.DownloadAsync(
                     context.UriPath,
                     context.Output,
