@@ -173,6 +173,65 @@
       Condition="'@(ServiceProjectReference)' != ''"
       DependsOnTargets="$(ServiceProjectReferenceGeneratorDependsOn)" />
 
+  <!-- DefaultDocumentGenerator -->
+
+  <Target Name="_DefaultDocumentGenerator_GetMetadata">
+    <ItemGroup>
+      <_Temporary Remove="@(_Temporary)" />
+      <_Temporary Include="@(ServiceProjectReference -> WithMetadataValue('DocumentGenerator', 'Default'))" />
+    </ItemGroup>
+
+    <Error Condition="'@(_Temporary)' != '' AND '%(_Temporary.Service)' == '' AND '%(_Temporary.UriPath)' == ''"
+        Text="ServiceProjectReference items '@(_Temporary)' lack Service or UriPath metadata." />
+    <Error Condition="'@(_Temporary)' != '' AND '%(_Temporary.Service)' != '' AND '%(_Temporary.UriPath)' != ''"
+        Text="ServiceProjectReference items '@(_Temporary)' have both Service and UriPath metadata." />
+    <Error Condition="'@(_Temporary)' != '' AND '%(_Temporary.Service)' != '' AND '%(_Temporary.Method)' == ''"
+        Text="ServiceProjectReference items '@(_Temporary)' have Service but not Method metadata." />
+  </Target>
+
+  <Target Name="_DefaultDocumentGenerator_Core" Inputs="%(_Temporary.ProjectTargetPath)" Outputs="%(_Temporary.DocumentPath)">
+    <!-- aspnetcore2swagger -->
+    <PropertyGroup>
+      <_Command>dotnet getdocument --configuration $(Configuration) --no-build</_Command>
+    </PropertyGroup>
+    <ItemGroup>
+      <_Temporary Update="@(_Temporary)">
+        <Options
+          Condition="'%(_Temporary.Options)' == '' AND '$(DefaultDocumentGeneratorDefaultOptions)' != ''">$(DefaultDocumentGeneratorDefaultOptions)</Options>
+        <Command>$(_Command) --project %(FullPath) --output %(DocumentPath) --framework %(TargetFramework)</Command>
+      </_Temporary>
+      <_Temporary Update="@(_Temporary)">
+        <Command Condition="'%(_Temporary.UriPath)' != ''">%(Command) --uri %(_Temporary.UriPath)</Command>
+      </_Temporary>
+      <_Temporary Update="@(_Temporary)">
+        <Command Condition="'%(_Temporary.Service)' != ''">%(Command) --service %(_Temporary.Service) --method %(_Temporary.Method)</Command>
+      </_Temporary>
+      <_Temporary Update="@(_Temporary)">
+        <Command Condition="'%(_Temporary.Options)' != ''">%(Command) %(_Temporary.Options)</Command>
+      </_Temporary>
+    </ItemGroup>
+
+    <Message Importance="high" Text="%0A%(_Temporary.Command)" />
+    <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(DocumentPath)'))" Command="%(_Temporary.Command)" />
+  </Target>
+
+  <!--
+    Separate from _DefaultDocumentGenerator_Core to ensure ServiceFileReference items are complete even if
+    ServiceProjectReference items are not built in any batch.
+  -->
+  <Target Name="_DefaultDocumentGenerator_SetMetadata" Condition="'@(_Temporary)' != ''">
+    <ItemGroup>
+      <ServiceFileReference Remove="@(_Temporary -> '%(DocumentPath)')" />
+      <!-- Condition here is temporary. Useful while DefaultDocumentGenerator fails. -->
+      <ServiceFileReference Include="@(_Temporary -> '%(DocumentPath)')"
+          Condition="Exists('%(_Temporary.DocumentPath)')"
+          SourceProject="%(_Temporary.FullPath)" />
+      <_Temporary Remove="@(_Temporary)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="DefaultDocumentGenerator" DependsOnTargets="$(DefaultDocumentGeneratorDependsOn)" />
+
   <!-- ServiceUriReference support -->
 
   <Target Name="_ServiceUriReferenceGenerator_GetMetadata">

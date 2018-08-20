@@ -22,6 +22,11 @@
     <ServiceFileReferenceDirectory
       Condition="'$(ServiceFileReferenceDirectory)' != ''">$([MSBuild]::EnsureTrailingSlash('$(ServiceFileReferenceDirectory)'))</ServiceFileReferenceDirectory>
 
+    <DefaultDocumentGeneratorDependsOn>
+      _DefaultDocumentGenerator_GetMetadata;
+      _DefaultDocumentGenerator_Core;
+      _DefaultDocumentGenerator_SetMetadata
+    </DefaultDocumentGeneratorDependsOn>
     <ServiceProjectReferenceGeneratorDependsOn>
       _ServiceProjectReferenceGenerator_GetDocumentGenerator;
       _ServiceProjectReferenceGenerator_GetTargetFramework;
