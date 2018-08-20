@@ -5,7 +5,10 @@
   <Target Name="_NSwagDocumentGenerator_GetMetadata">
     <ItemGroup>
       <_NSwagTemporary Remove="@(_NSwagTemporary)" />
-      <_NSwagTemporary Include="@(ServiceProjectReference -> WithMetadataValue('DocumentGenerator', 'NSwag'))" />
+      <_NSwagTemporary Include="@(ServiceProjectReference -> WithMetadataValue('DocumentGenerator', 'NSwag'))">
+        <Options
+            Condition="'%(ServiceFileReference.Options)' == '' AND '$(NSwagDocumentGeneratorDefaultOptions)' != ''">$(NSwagDocumentGeneratorDefaultOptions)</Options>
+      </_NSwagTemporary>
     </ItemGroup>
   </Target>
 
@@ -15,8 +18,8 @@
       <_Command>$(NSwagExe_Core21) aspnetcore2swagger /Configuration:$(Configuration) /NoBuild:true</_Command>
     </PropertyGroup>
 
-    <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(_NSwagTemporary.DocumentPath)'))"
-      Command="$(_Command) /Project:%(Fullname) /output:%(DocumentPath) /TargetFramework:%(TargetFramework)" />
+    <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(DocumentPath)'))"
+        Command="$(_Command) /Project:%(FullPath) /output:%(DocumentPath) /TargetFramework:%(TargetFramework) %(_NSwagTemporary.Options)" />
 
     <PropertyGroup>
       <_Command />
