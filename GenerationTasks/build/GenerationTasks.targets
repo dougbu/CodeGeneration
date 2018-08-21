@@ -61,29 +61,29 @@
   </Target>
 
   <!-- Metadata setup phase 3: Ensure items have DocumentPath metadata. Call GenerationTasks.GetFilenameFromUri. -->
-  <!-- Inputs and outputs cause MSBuild to run target unconditionally and to batch it (run once per UriPath x project combination). -->
+  <!-- Inputs and outputs cause MSBuild to run target unconditionally and to batch it (run once per Uri x project combination). -->
   <Target Name="_ServiceProjectReferenceGenerator_GetDocumentPath"
-    Inputs="%(ServiceProjectReference.UriPath)%(FullPath)"
+    Inputs="%(ServiceProjectReference.Uri)%(FullPath)"
     Outputs="&lt;not-a-file !&gt;">
     <PropertyGroup>
       <_FullPath>%(ServiceProjectReference.FullPath)</_FullPath>
       <_ProjectName>$([System.IO.Path]::GetFileNameWithoutExtension('$(_FullPath)'))</_ProjectName>
       <_ProjectName Condition="'$(_ProjectName)' == ''">$([System.IO.Path]::GetFilename($([System.IO.Path]::GetDirectoryName('$(_FullPath)'))))</_ProjectName>
-      <_UriPath>%(ServiceProjectReference.UriPath)</_UriPath>
+      <_Uri>%(ServiceProjectReference.Uri)</_Uri>
     </PropertyGroup>
     <ItemGroup>
       <_Temporary Remove="@(_Temporary)" />
     </ItemGroup>
 
-    <Message Importance="high" Text="%0A_ServiceProjectReferenceGenerator_GetDocumentPath: '$(_FullPath)' '$(_ProjectName)' '$(_UriPath)'" />
-    <GenerationTasks.GetFilenameFromUri Condition="'$(_UriPath)' != ''"
+    <Message Importance="high" Text="%0A_ServiceProjectReferenceGenerator_GetDocumentPath: '$(_FullPath)' '$(_ProjectName)' '$(_Uri)'" />
+    <GenerationTasks.GetFilenameFromUri Condition="'$(_Uri)' != ''"
         AllowRelativeUris="true"
         Hostname="$(_ProjectName)"
-        Uris="$(_UriPath)">
+        Uris="$(_Uri)">
       <Output TaskParameter="Filenames" ItemName="_Temporary" />
     </GenerationTasks.GetFilenameFromUri>
 
-    <!-- Base default DocumentPath on UriPath and _ProjectName. Fall back to just _ProjectName if there's no UriPath. -->
+    <!-- Base default DocumentPath on Uri and _ProjectName. Fall back to just _ProjectName if there's no Uri. -->
     <PropertyGroup>
       <_LocalFilename>%(_Temporary.LocalFilename)</_LocalFilename>
       <_DocumentPath Condition="'$(_LocalFilename)' != ''">$(ServiceProjectReferenceDirectory)$(_LocalFilename).json</_DocumentPath>
@@ -91,7 +91,7 @@
     </PropertyGroup>
     <ItemGroup>
       <ServiceProjectReference Update="@(ServiceProjectReference)"
-          Condition="'%(FullPath)' == '$(_FullPath)' AND '%(ServiceProjectReference.UriPath)' == '$(_UriPath)'">
+          Condition="'%(FullPath)' == '$(_FullPath)' AND '%(ServiceProjectReference.Uri)' == '$(_Uri)'">
         <DocumentPath Condition="'%(ServiceProjectReference.DocumentPath)' == ''">$(_DocumentPath)</DocumentPath>
       </ServiceProjectReference>
       <_Temporary Remove="@(_Temporary)" />
@@ -102,7 +102,7 @@
       <_FullPath />
       <_LocalFilename />
       <_ProjectName />
-      <_UriPath />
+      <_Uri />
     </PropertyGroup>
   </Target>
 
@@ -183,12 +183,10 @@
       <_Temporary Include="@(ServiceProjectReference -> WithMetadataValue('DocumentGenerator', 'Default'))" />
     </ItemGroup>
 
-    <Error Condition="'@(_Temporary)' != '' AND '%(_Temporary.Service)' == '' AND '%(_Temporary.UriPath)' == ''"
-        Text="ServiceProjectReference items '@(_Temporary)' lack Service or UriPath metadata." />
-    <Error Condition="'@(_Temporary)' != '' AND '%(_Temporary.Service)' != '' AND '%(_Temporary.UriPath)' != ''"
-        Text="ServiceProjectReference items '@(_Temporary)' have both Service and UriPath metadata." />
-    <Error Condition="'@(_Temporary)' != '' AND '%(_Temporary.Service)' != '' AND '%(_Temporary.Method)' == ''"
-        Text="ServiceProjectReference items '@(_Temporary)' have Service but not Method metadata." />
+    <Error Condition="'@(_Temporary)' != '' AND '%(_Temporary.Method)' != '' AND '%(_Temporary.Uri)' != ''"
+        Text="ServiceProjectReference items '@(_Temporary)' have both Method and Uri metadata." />
+    <Error Condition="'@(_Temporary)' != '' AND '%(_Temporary.Service)' != '' AND '%(_Temporary.Uri)' != ''"
+        Text="ServiceProjectReference items '@(_Temporary)' have both Service and Uri metadata." />
   </Target>
 
   <Target Name="_DefaultDocumentGenerator_Core" Inputs="%(_Temporary.ProjectTargetPath)" Outputs="%(_Temporary.DocumentPath)">
@@ -203,7 +201,7 @@
         <Command>$(_Command) --project %(FullPath) --output %(DocumentPath) --framework %(TargetFramework)</Command>
       </_Temporary>
       <_Temporary Update="@(_Temporary)">
-        <Command Condition="'%(_Temporary.UriPath)' != ''">%(Command) --uri %(_Temporary.UriPath)</Command>
+        <Command Condition="'%(_Temporary.Uri)' != ''">%(Command) --uri %(_Temporary.Uri)</Command>
       </_Temporary>
       <_Temporary Update="@(_Temporary)">
         <Command Condition="'%(_Temporary.Service)' != ''">%(Command) --service %(_Temporary.Service) --method %(_Temporary.Method)</Command>

@@ -17,6 +17,6 @@ namespace GetDocument.Commands
 
         public string Service { get; set; }
 
-        public string UriPath { get; set; }
+        public string Uri { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace GetDocument.Commands
                 httpClient.BaseAddress = "https://localhost";
 
                 await DownloadFileCore.DownloadAsync(
-                    context.UriPath,
+                    context.Uri,
                     context.Output,
                     httpClient,
                     new LogWrapper(),
@@ -58,6 +58,7 @@ namespace GetDocument.Commands
             {
                 try
                 {
+                    // TODO: Pass a TextWriter into the method.
                     var services = server.Host.Services;
                     var serviceType = Type.GetType(context.Service, throwOnError: true);
                     var method = serviceType.GetMethod(context.Method, Array.Empty<Type>());

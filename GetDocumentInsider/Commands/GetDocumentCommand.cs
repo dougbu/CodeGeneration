@@ -141,7 +141,7 @@ namespace GetDocument.Commands
                     Method = _method.Value(),
                     Output = _output.Value(),
                     Service = _service.Value(),
-                    UriPath = _uri.Value(),
+                    Uri = _uri.Value(),
                 };
 
                 return (int)methodInfo.Invoke(obj: null, parameters: new[] { context });
