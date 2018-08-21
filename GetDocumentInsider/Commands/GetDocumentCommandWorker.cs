@@ -44,7 +44,7 @@ namespace GetDocument.Commands
 
                 // TODO: Instead configure logging to mute the HttpsRedirectionMiddleware warning and choose an address
                 // from IServerAddressesFeature's list.
-                httpClient.BaseAddress = "https://localhost";
+                httpClient.BaseAddress = new Uri("https://localhost");
 
                 await DownloadFileCore.DownloadAsync(
                     context.Uri,
