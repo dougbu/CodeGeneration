@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.1.1" />
 
+    <ServiceProjectReference Include="../TrialNSwag" CodeGenerator="NSwagCSharp" DocumentPath="TrialNSwag1.json" Options="/GenerateExceptionClasses:false" />
     <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" CodeGenerator="NSwagCSharp" DocumentPath="TrialNSwag2.json" DocumentGenerator="NSwag" Options="/GenerateExceptionClasses:false" />
     <!-- ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" CodeGenerator="NSwagCSharp" DocumentPath="TrialNSwag3.json" Service="NSwag.Service" Method="GetOpenApiDocumentString" Options="/GenerateExceptionClasses:false" /-->
     <ServiceProjectReference Include="../TrialSwashbuckle" CodeGenerator="NSwagTypeScript" Uri="/swagger/swashbuckle/swagger.json" />

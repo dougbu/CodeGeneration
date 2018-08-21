@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="ServiceProjectReferenceMetadata.targets" />
+    <EmbeddedResource Include="ServiceProjectReferenceMetadata.*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,7 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
+    <Compile Update="Properties/Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.Designer.tt</DependentUpon>

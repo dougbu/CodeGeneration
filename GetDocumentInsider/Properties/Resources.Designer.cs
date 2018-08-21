@@ -132,6 +132,14 @@ namespace GetDocument.Properties
                 GetString("MissingOptions", nameof(option1), nameof(option2)),
                 option1, option2);
 
+        /// <summary>
+        ///     Option '--{extraOption}' conflicts with '--{mainOption}'.
+        /// </summary>
+        public static string ExtraOption([CanBeNull] object extraOption, [CanBeNull] object mainOption)
+            => string.Format(
+                GetString("ExtraOption", nameof(extraOption), nameof(mainOption)),
+                extraOption, mainOption);
+
         private static string GetString(string name, params string[] formatterNames)
         {
             var value = _resourceManager.GetString(name);

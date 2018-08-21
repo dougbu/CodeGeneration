@@ -40,16 +40,33 @@ namespace GetDocument.Commands
                 throw new CommandException(Resources.MissingOption(_output.LongName));
             }
 
-            if (_service.HasValue())
+            if (!_uri.HasValue())
             {
-                if (!_method.HasValue())
+                if (_method.HasValue())
+                {
+                    if (!_service.HasValue())
+                    {
+                        throw new CommandException(Resources.MissingOption(_service.LongName));
+                    }
+                }
+                else if (_service.HasValue())
                 {
                     throw new CommandException(Resources.MissingOption(_method.LongName));
                 }
+                else
+                {
+                    throw new CommandException(Resources.MissingOptions(_service.LongName, _uri.LongName));
+                }
             }
-            else if (!_uri.HasValue())
+            else if (_method.HasValue())
             {
-                throw new CommandException(Resources.MissingOptions(_service.LongName, _uri.LongName));
+                throw new CommandException(
+                    Resources.ExtraOption(extraOption: _method.LongName, mainOption: _uri.LongName));
+            }
+            else if (_service.HasValue())
+            {
+                throw new CommandException(
+                    Resources.ExtraOption(extraOption: _service.LongName, mainOption: _uri.LongName));
             }
         }
 

@@ -11,6 +11,8 @@ namespace GetDocument
 {
     internal class Project
     {
+        private const string MSBuildResourceName = "GetDocument.ServiceProjectReferenceMetadata";
+
         private readonly string _file;
         private readonly string _framework;
         private readonly string _configuration;
@@ -30,14 +32,37 @@ namespace GetDocument
         public string ProjectName { get; }
 
         public string AssemblyName { get; set; }
+
+        public string DefaultServiceProjectMethod { get; set; }
+
+        public string DefaultServiceProjectService { get; set; }
+
+        public string DefaultServiceProjectUri { get; set; }
+
         public string Language { get; set; }
+
         public string OutputPath { get; set; }
+
+        public string Platform { get; set; }
+
         public string PlatformTarget { get; set; }
+
         public string ProjectAssetsFile { get; set; }
+
+        public string ProjectDepsFilePath { get; set; }
+
         public string ProjectDirectory { get; set; }
+
+        public string ProjectRuntimeConfigFilePath { get; set; }
+
         public string RootNamespace { get; set; }
+
         public string RuntimeFrameworkVersion { get; set; }
+
         public string TargetFileName { get; set; }
+
+        public string TargetFramework { get; set; }
+
         public string TargetFrameworkMoniker { get; set; }
 
         public static Project FromFile(
@@ -56,12 +81,21 @@ namespace GetDocument
 
             Directory.CreateDirectory(buildExtensionsDirectory);
 
-            var targetsPath = Path.Combine(
+            var assembly = typeof(Project).Assembly;
+            var propsPath = Path.Combine(
                 buildExtensionsDirectory,
-                Path.GetFileName(file) + ".ServiceProjectReferenceMetadata.targets");
-            using (var input = typeof(Project)
-                .Assembly
-                .GetManifestResourceStream("GetDocument.ServiceProjectReferenceMetadata.targets"))
+                Path.GetFileName(file) + ".ServiceProjectReferenceMetadata.props");
+            using (var input = assembly.GetManifestResourceStream($"{MSBuildResourceName}.props"))
+            {
+                using (var output = File.OpenWrite(propsPath))
+                {
+                    Reporter.WriteVerbose(Resources.WritingFile(propsPath));
+                    input.CopyTo(output);
+                }
+            }
+
+            var targetsPath = Path.ChangeExtension(propsPath, ".targets");
+            using (var input = assembly.GetManifestResourceStream($"{MSBuildResourceName}.targets"))
             {
                 using (var output = File.OpenWrite(targetsPath))
                 {
@@ -72,10 +106,10 @@ namespace GetDocument
             }
 
             IDictionary<string, string> metadata;
-            var metadataFile = Path.GetTempFileName();
+            var metadataPath = Path.GetTempFileName();
             try
             {
-                var propertyArg = "/property:ServiceProjectReferenceMetadataFile=" + metadataFile;
+                var propertyArg = "/property:ServiceProjectReferenceMetadataPath=" + metadataPath;
                 if (framework != null)
                 {
                     propertyArg += ";TargetFramework=" + framework;
@@ -109,32 +143,35 @@ namespace GetDocument
                     throw new CommandException(Resources.GetMetadataFailed);
                 }
 
-                metadata = File.ReadLines(metadataFile).Select(l => l.Split(new[] { ':' }, 2))
+                metadata = File.ReadLines(metadataPath).Select(l => l.Split(new[] { ':' }, 2))
                     .ToDictionary(s => s[0], s => s[1].TrimStart());
             }
             finally
             {
-                File.Delete(metadataFile);
-            }
-
-            var platformTarget = metadata["PlatformTarget"];
-            if (string.IsNullOrEmpty(platformTarget))
-            {
-                platformTarget = metadata["Platform"];
+                File.Delete(propsPath);
+                File.Delete(metadataPath);
+                File.Delete(targetsPath);
             }
 
             return new Project(file, framework, configuration, runtime)
             {
-                AssemblyName = metadata["AssemblyName"],
-                Language = metadata["Language"],
-                OutputPath = metadata["OutputPath"],
-                PlatformTarget = platformTarget,
-                ProjectAssetsFile = metadata["ProjectAssetsFile"],
-                ProjectDirectory = metadata["ProjectDirectory"],
-                RootNamespace = metadata["RootNamespace"],
-                RuntimeFrameworkVersion = metadata["RuntimeFrameworkVersion"],
-                TargetFileName = metadata["TargetFileName"],
-                TargetFrameworkMoniker = metadata["TargetFrameworkMoniker"]
+                AssemblyName = metadata[nameof(AssemblyName)],
+                DefaultServiceProjectMethod = metadata[nameof(DefaultServiceProjectMethod)],
+                DefaultServiceProjectService = metadata[nameof(DefaultServiceProjectService)],
+                DefaultServiceProjectUri = metadata[nameof(DefaultServiceProjectUri)],
+                Language = metadata[nameof(Language)],
+                OutputPath = metadata[nameof(OutputPath)],
+                Platform = metadata[nameof(Platform)],
+                PlatformTarget = metadata[nameof(PlatformTarget)] ?? metadata[nameof(Platform)],
+                ProjectAssetsFile = metadata[nameof(ProjectAssetsFile)],
+                ProjectDepsFilePath = metadata[nameof(ProjectDepsFilePath)],
+                ProjectDirectory = metadata[nameof(ProjectDirectory)],
+                ProjectRuntimeConfigFilePath = metadata[nameof(ProjectRuntimeConfigFilePath)],
+                RootNamespace = metadata[nameof(RootNamespace)],
+                RuntimeFrameworkVersion = metadata[nameof(RuntimeFrameworkVersion)],
+                TargetFileName = metadata[nameof(TargetFileName)],
+                TargetFramework = metadata[nameof(TargetFramework)],
+                TargetFrameworkMoniker = metadata[nameof(TargetFrameworkMoniker)]
             };
         }
 

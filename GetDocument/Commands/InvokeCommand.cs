@@ -162,6 +162,43 @@ namespace GetDocument.Commands
                 args.Add("--tools-directory");
                 args.Add(toolsDirectory);
 
+                if (!args.Contains("--method") && !args.Contains("--service") && !args.Contains("--uri"))
+                {
+                    if (!string.IsNullOrEmpty(project.DefaultServiceProjectUri))
+                    {
+                        args.Add("--uri");
+                        args.Add(project.DefaultServiceProjectUri);
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(project.DefaultServiceProjectMethod))
+                        {
+                            args.Add("--method");
+                            args.Add(project.DefaultServiceProjectMethod);
+                        }
+
+                        if (!string.IsNullOrEmpty(project.DefaultServiceProjectService))
+                        {
+                            args.Add("--service");
+                            args.Add(project.DefaultServiceProjectService);
+                        }
+                    }
+                }
+                else if (!args.Contains("--method") &&
+                    args.Contains("--service") &&
+                    !string.IsNullOrEmpty(project.DefaultServiceProjectMethod))
+                {
+                    args.Add("--method");
+                    args.Add(project.DefaultServiceProjectMethod);
+                }
+                else if (args.Contains("--method") &&
+                    !args.Contains("--service") &&
+                    !string.IsNullOrEmpty(project.DefaultServiceProjectService))
+                {
+                    args.Add("--service");
+                    args.Add(project.DefaultServiceProjectService);
+                }
+
                 if (_output.HasValue())
                 {
                     args.Add("--output");

@@ -168,4 +168,7 @@
   <data name="MissingOptions" xml:space="preserve">
     <value>Missing required option '--{option1}' or '--{option2}'.</value>
   </data>
+  <data name="ExtraOption" xml:space="preserve">
+    <value>Option '--{extraOption}' conflicts with '--{mainOption}'.</value>
+  </data>
 </root>
