@@ -11,6 +11,8 @@ namespace GetDocument.Commands
 
         public string AssemblyPath { get; set; }
 
+        public string DocumentName { get; set; }
+
         public string Method { get; set; }
 
         public string Output { get; set; }

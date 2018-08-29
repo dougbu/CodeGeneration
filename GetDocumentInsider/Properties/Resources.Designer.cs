@@ -37,7 +37,7 @@ namespace GetDocument.Properties
                 option);
 
         /// <summary>
-        ///     Don't colorize output.
+        ///     Do not colorize output.
         /// </summary>
         public static string NoColorDescription
             => GetString("NoColorDescription");
@@ -49,7 +49,7 @@ namespace GetDocument.Properties
             => GetString("OutputDescription");
 
         /// <summary>
-        ///     Prefix output with level.
+        ///     Prefix console output with logging level.
         /// </summary>
         public static string PrefixDescription
             => GetString("PrefixDescription");
@@ -113,16 +113,20 @@ namespace GetDocument.Properties
             => GetString("UriDescription");
 
         /// <summary>
-        ///     The name of the method to invoke on the --service instance.
+        ///     The name of the method to invoke on the '--service' instance. Default value '{defaultMethod}'.
         /// </summary>
-        public static string MethodDescription
-            => GetString("MethodDescription");
+        public static string MethodDescription([CanBeNull] object defaultMethod)
+            => string.Format(
+                GetString("MethodDescription", nameof(defaultMethod)),
+                defaultMethod);
 
         /// <summary>
-        ///     The qualified name of the service to retrieve from dependency injection.
+        ///     The qualified name of the service type to retrieve from dependency injection. Default value '{defaultService}'.
         /// </summary>
-        public static string ServiceDescription
-            => GetString("ServiceDescription");
+        public static string ServiceDescription([CanBeNull] object defaultService)
+            => string.Format(
+                GetString("ServiceDescription", nameof(defaultService)),
+                defaultService);
 
         /// <summary>
         ///     Missing required option '--{option1}' or '--{option2}'.
@@ -133,12 +137,60 @@ namespace GetDocument.Properties
                 option1, option2);
 
         /// <summary>
-        ///     Option '--{extraOption}' conflicts with '--{mainOption}'.
+        ///     The name of the document to pass to the '--method' method. Default value '{defaultDocumentName}'.
         /// </summary>
-        public static string ExtraOption([CanBeNull] object extraOption, [CanBeNull] object mainOption)
+        public static string DocumentDescription([CanBeNull] object defaultDocumentName)
             => string.Format(
-                GetString("ExtraOption", nameof(extraOption), nameof(mainOption)),
-                extraOption, mainOption);
+                GetString("DocumentDescription", nameof(defaultDocumentName)),
+                defaultDocumentName);
+
+        /// <summary>
+        ///     Using document name '{documentName}'.
+        /// </summary>
+        public static string UsingDocument([CanBeNull] object documentName)
+            => string.Format(
+                GetString("UsingDocument", nameof(documentName)),
+                documentName);
+
+        /// <summary>
+        ///     Using method '{method}'.
+        /// </summary>
+        public static string UsingMethod([CanBeNull] object method)
+            => string.Format(
+                GetString("UsingMethod", nameof(method)),
+                method);
+
+        /// <summary>
+        ///     Using service '{service}'.
+        /// </summary>
+        public static string UsingService([CanBeNull] object service)
+            => string.Format(
+                GetString("UsingService", nameof(service)),
+                service);
+
+        /// <summary>
+        ///     Using URI '{uri}'.
+        /// </summary>
+        public static string UsingUri([CanBeNull] object uri)
+            => string.Format(
+                GetString("UsingUri", nameof(uri)),
+                uri);
+
+        /// <summary>
+        ///     Method '{method}' of service '{service}' failed to generate document '{documentName}'.
+        /// </summary>
+        public static string MethodInvocationFailed([CanBeNull] object method, [CanBeNull] object service, [CanBeNull] object documentName)
+            => string.Format(
+                GetString("MethodInvocationFailed", nameof(method), nameof(service), nameof(documentName)),
+                method, service, documentName);
+
+        /// <summary>
+        ///     Assembly '{assemblyPath}' does not contain an entry point.
+        /// </summary>
+        public static string MissingEntryPoint([CanBeNull] object assemblyPath)
+            => string.Format(
+                GetString("MissingEntryPoint", nameof(assemblyPath)),
+                assemblyPath);
 
         private static string GetString(string name, params string[] formatterNames)
         {

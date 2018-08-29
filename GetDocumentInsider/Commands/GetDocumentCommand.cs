@@ -15,9 +15,14 @@ namespace GetDocument.Commands
 {
     internal class GetDocumentCommand : ProjectCommandBase
     {
+        internal const string FallbackDocumentName = "v1";
+        internal const string FallbackMethod = "Generate";
+        internal const string FallbackService = "Microsoft.Extensions.ApiDescription.IDocumentProvider";
         private const string WorkerType = "GetDocument.Commands.GetDocumentCommandWorker";
-        private CommandOption _output;
+
+        private CommandOption _documentName;
         private CommandOption _method;
+        private CommandOption _output;
         private CommandOption _service;
         private CommandOption _uri;
 
@@ -25,9 +30,12 @@ namespace GetDocument.Commands
         {
             base.Configure(command);
 
+            _documentName = command.Option(
+                "--documentName <Name>",
+                Resources.DocumentDescription(FallbackDocumentName));
+            _method = command.Option("--method <Name>", Resources.MethodDescription(FallbackMethod));
             _output = command.Option("--output <Path>", Resources.OutputDescription);
-            _method = command.Option("--method <Name>", Resources.MethodDescription);
-            _service = command.Option("--service <QualifiedName>", Resources.ServiceDescription);
+            _service = command.Option("--service <QualifiedName>", Resources.ServiceDescription(FallbackService));
             _uri = command.Option("--uri <URI>", Resources.UriDescription);
         }
 
@@ -40,33 +48,14 @@ namespace GetDocument.Commands
                 throw new CommandException(Resources.MissingOption(_output.LongName));
             }
 
-            if (!_uri.HasValue())
+            if (_method.HasValue() && !_service.HasValue())
             {
-                if (_method.HasValue())
-                {
-                    if (!_service.HasValue())
-                    {
-                        throw new CommandException(Resources.MissingOption(_service.LongName));
-                    }
-                }
-                else if (_service.HasValue())
-                {
-                    throw new CommandException(Resources.MissingOption(_method.LongName));
-                }
-                else
-                {
-                    throw new CommandException(Resources.MissingOptions(_service.LongName, _uri.LongName));
-                }
+                throw new CommandException(Resources.MissingOption(_service.LongName));
             }
-            else if (_method.HasValue())
+
+            if (_service.HasValue() && !_method.HasValue())
             {
-                throw new CommandException(
-                    Resources.ExtraOption(extraOption: _method.LongName, mainOption: _uri.LongName));
-            }
-            else if (_service.HasValue())
-            {
-                throw new CommandException(
-                    Resources.ExtraOption(extraOption: _service.LongName, mainOption: _uri.LongName));
+                throw new CommandException(Resources.MissingOption(_method.LongName));
             }
         }
 
@@ -149,12 +138,13 @@ namespace GetDocument.Commands
                 var workerType = thisAssembly.GetType(WorkerType, throwOnError: true);
                 var methodInfo = workerType.GetMethod("Process", BindingFlags.Public | BindingFlags.Static);
 
-                var targetAssemblyPath = AssemblyPath.Value();
+                var assemblyPath = AssemblyPath.Value();
                 var context = new GetDocumentCommandContext
                 {
-                    AssemblyPath = targetAssemblyPath,
-                    AssemblyDirectory = Path.GetDirectoryName(targetAssemblyPath),
-                    AssemblyName = Path.GetFileNameWithoutExtension(targetAssemblyPath),
+                    AssemblyPath = assemblyPath,
+                    AssemblyDirectory = Path.GetDirectoryName(assemblyPath),
+                    AssemblyName = Path.GetFileNameWithoutExtension(assemblyPath),
+                    DocumentName = _documentName.Value(),
                     Method = _method.Value(),
                     Output = _output.Value(),
                     Service = _service.Value(),
