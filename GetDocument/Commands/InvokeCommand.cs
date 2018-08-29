@@ -65,14 +65,12 @@ namespace GetDocument.Commands
                 project.Build();
             }
 
-            var targetDirectory = Path.GetFullPath(Path.Combine(project.ProjectDirectory, project.OutputPath));
-            if (!Directory.Exists(targetDirectory))
+            if (!File.Exists(project.AssemblyPath))
             {
                 var message = _noBuild.HasValue() ? Resources.MustBuild : Resources.ProjectMisconfiguration;
                 throw new CommandException(message);
             }
 
-            var targetPath = Path.Combine(targetDirectory, project.TargetFileName);
             var thisPath = Path.GetFullPath(Path.GetDirectoryName(typeof(InvokeCommand).Assembly.Location));
 
             string executable = null;
@@ -86,7 +84,7 @@ namespace GetDocument.Commands
                 {
                     case ".NETFramework":
                         cleanupExecutable = true;
-                        executable = Path.Combine(targetDirectory, InsideManName + ".exe");
+                        executable = Path.Combine(project.OutputPath, InsideManName + ".exe");
                         toolsDirectory = Path.Combine(
                             thisPath,
                             project.PlatformTarget == "x86" ? "net461-x86" : "net461");
@@ -94,10 +92,9 @@ namespace GetDocument.Commands
                         var executableSource = Path.Combine(toolsDirectory, InsideManName + ".exe");
                         File.Copy(executableSource, executable, overwrite: true);
 
-                        var configurationPath = targetPath + ".config";
-                        if (File.Exists(configurationPath))
+                        if (!string.IsNullOrEmpty(project.ConfigPath))
                         {
-                            File.Copy(configurationPath, executable + ".config", overwrite: true);
+                            File.Copy(project.ConfigPath, executable + ".config", overwrite: true);
                         }
                         break;
 
@@ -108,17 +105,16 @@ namespace GetDocument.Commands
                         if (targetFramework.Version < new Version(2, 0))
                         {
                             throw new CommandException(
-                                Resources.NETCoreApp1Project(project.ProjectName, targetFramework.Version));
+                                Resources.NETCoreApp1Project(project.Name, targetFramework.Version));
                         }
 
                         args.Add("exec");
                         args.Add("--depsFile");
-                        args.Add(Path.Combine(targetDirectory, project.AssemblyName + ".deps.json"));
+                        args.Add(project.DepsPath);
 
-                        var projectAssetsFile = project.ProjectAssetsFile;
-                        if (!string.IsNullOrEmpty(projectAssetsFile))
+                        if (!string.IsNullOrEmpty(project.AssetsPath))
                         {
-                            using (var reader = new JsonTextReader(File.OpenText(projectAssetsFile)))
+                            using (var reader = new JsonTextReader(File.OpenText(project.AssetsPath)))
                             {
                                 var projectAssets = JToken.ReadFrom(reader);
                                 var packageFolders = projectAssets["packageFolders"]
@@ -133,11 +129,10 @@ namespace GetDocument.Commands
                             }
                         }
 
-                        var runtimeConfig = Path.Combine(targetDirectory, project.AssemblyName + ".runtimeconfig.json");
-                        if (File.Exists(runtimeConfig))
+                        if (File.Exists(project.RuntimeConfigPath))
                         {
                             args.Add("--runtimeConfig");
-                            args.Add(runtimeConfig);
+                            args.Add(project.RuntimeConfigPath);
                         }
                         else if (!string.IsNullOrEmpty(project.RuntimeFrameworkVersion))
                         {
@@ -149,54 +144,35 @@ namespace GetDocument.Commands
                         break;
 
                     case ".NETStandard":
-                        throw new CommandException(Resources.NETStandardProject(project.ProjectName));
+                        throw new CommandException(Resources.NETStandardProject(project.Name));
 
                     default:
                         throw new CommandException(
-                            Resources.UnsupportedFramework(project.ProjectName, targetFramework.Identifier));
+                            Resources.UnsupportedFramework(project.Name, targetFramework.Identifier));
                 }
 
                 args.AddRange(_args);
                 args.Add("--assembly");
-                args.Add(targetPath);
+                args.Add(project.AssemblyPath);
                 args.Add("--tools-directory");
                 args.Add(toolsDirectory);
 
-                if (!args.Contains("--method") && !args.Contains("--service") && !args.Contains("--uri"))
-                {
-                    if (!string.IsNullOrEmpty(project.DefaultServiceProjectUri))
-                    {
-                        args.Add("--uri");
-                        args.Add(project.DefaultServiceProjectUri);
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(project.DefaultServiceProjectMethod))
-                        {
-                            args.Add("--method");
-                            args.Add(project.DefaultServiceProjectMethod);
-                        }
-
-                        if (!string.IsNullOrEmpty(project.DefaultServiceProjectService))
-                        {
-                            args.Add("--service");
-                            args.Add(project.DefaultServiceProjectService);
-                        }
-                    }
-                }
-                else if (!args.Contains("--method") &&
-                    args.Contains("--service") &&
-                    !string.IsNullOrEmpty(project.DefaultServiceProjectMethod))
+                if (!(args.Contains("--method") || string.IsNullOrEmpty(project.DefaultMethod)))
                 {
                     args.Add("--method");
-                    args.Add(project.DefaultServiceProjectMethod);
+                    args.Add(project.DefaultMethod);
                 }
-                else if (args.Contains("--method") &&
-                    !args.Contains("--service") &&
-                    !string.IsNullOrEmpty(project.DefaultServiceProjectService))
+
+                if (!(args.Contains("--service") || string.IsNullOrEmpty(project.DefaultService)))
                 {
                     args.Add("--service");
-                    args.Add(project.DefaultServiceProjectService);
+                    args.Add(project.DefaultService);
+                }
+
+                if (!(args.Contains("--uri") || string.IsNullOrEmpty(project.DefaultUri)))
+                {
+                    args.Add("--uri");
+                    args.Add(project.DefaultUri);
                 }
 
                 if (_output.HasValue())
@@ -220,7 +196,7 @@ namespace GetDocument.Commands
                     args.Add("--prefix-output");
                 }
 
-                return Exe.Run(executable, args, project.ProjectDirectory);
+                return Exe.Run(executable, args, project.Directory);
             }
             finally
             {

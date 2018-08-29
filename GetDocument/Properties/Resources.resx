@@ -130,7 +130,7 @@
     <value>The target framework.</value>
   </data>
   <data name="GetMetadataFailed" xml:space="preserve">
-    <value>Unable to retrieve project metadata. Ensure it is a MSBuild-based .NET Core project. If you are using custom BaseIntermediateOutputPath or MSBuildProjectExtensionsPath values, use the --msbuildprojectextensionspath option.</value>
+    <value>Unable to retrieve project metadata. If you are using custom BaseIntermediateOutputPath or MSBuildProjectExtensionsPath values, use the --msbuildprojectextensionspath option.</value>
   </data>
   <data name="MultipleProjects" xml:space="preserve">
     <value>More than one project was found in the current working directory. Use the --project option.</value>
@@ -188,5 +188,8 @@
   </data>
   <data name="OutputDescription" xml:space="preserve">
     <value>The file to write the result to.</value>
+  </data>
+  <data name="GetMetadataValueFailed" xml:space="preserve">
+    <value>Unable to retrieve '{properrty}' project metadata. Ensure '{msbuildProperty}' is set.</value>
   </data>
 </root>

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using GetDocument.Properties;
+using IODirectory = System.IO.Directory;
 
 namespace GetDocument
 {
@@ -14,56 +15,55 @@ namespace GetDocument
         private const string MSBuildResourceName = "GetDocument.ServiceProjectReferenceMetadata";
 
         private readonly string _file;
-        private readonly string _framework;
-        private readonly string _configuration;
         private readonly string _runtime;
 
-        public Project(string file, string framework, string configuration, string runtime)
+        private Project(string file, string runtime)
         {
             Debug.Assert(!string.IsNullOrEmpty(file), "file is null or empty.");
 
             _file = file;
-            _framework = framework;
-            _configuration = configuration;
             _runtime = runtime;
-            ProjectName = Path.GetFileName(file);
         }
 
-        public string ProjectName { get; }
+        public string AssemblyName { get; private set; }
 
-        public string AssemblyName { get; set; }
+        public string AssemblyPath { get; private set; }
 
-        public string DefaultServiceProjectMethod { get; set; }
+        public string AssetsPath { get; private set; }
 
-        public string DefaultServiceProjectService { get; set; }
+        public string Configuration { get; private set; }
 
-        public string DefaultServiceProjectUri { get; set; }
+        public string ConfigPath { get; private set; }
 
-        public string Language { get; set; }
+        public string DefaultDocumentName { get; private set; }
 
-        public string OutputPath { get; set; }
+        public string DefaultMethod { get; private set; }
 
-        public string Platform { get; set; }
+        public string DefaultService { get; private set; }
 
-        public string PlatformTarget { get; set; }
+        public string DefaultUri { get; private set; }
 
-        public string ProjectAssetsFile { get; set; }
+        public string DepsPath { get; private set; }
 
-        public string ProjectDepsFilePath { get; set; }
+        public string Directory { get; private set; }
 
-        public string ProjectDirectory { get; set; }
+        public string ExtensionsPath { get; private set; }
 
-        public string ProjectRuntimeConfigFilePath { get; set; }
+        public string Name { get; private set; }
 
-        public string RootNamespace { get; set; }
+        public string OutputPath { get; private set; }
 
-        public string RuntimeFrameworkVersion { get; set; }
+        public string Platform { get; private set; }
 
-        public string TargetFileName { get; set; }
+        public string PlatformTarget { get; private set; }
 
-        public string TargetFramework { get; set; }
+        public string RuntimeConfigPath { get; private set; }
 
-        public string TargetFrameworkMoniker { get; set; }
+        public string RuntimeFrameworkVersion { get; private set; }
+
+        public string TargetFramework { get; private set; }
+
+        public string TargetFrameworkMoniker { get; private set; }
 
         public static Project FromFile(
             string file,
@@ -74,12 +74,12 @@ namespace GetDocument
         {
             Debug.Assert(!string.IsNullOrEmpty(file), "file is null or empty.");
 
-            if (buildExtensionsDirectory == null)
+            if (string.IsNullOrEmpty(buildExtensionsDirectory))
             {
                 buildExtensionsDirectory = Path.Combine(Path.GetDirectoryName(file), "obj");
             }
 
-            Directory.CreateDirectory(buildExtensionsDirectory);
+            IODirectory.CreateDirectory(buildExtensionsDirectory);
 
             var assembly = typeof(Project).Assembly;
             var propsPath = Path.Combine(
@@ -110,15 +110,15 @@ namespace GetDocument
             try
             {
                 var propertyArg = "/property:ServiceProjectReferenceMetadataPath=" + metadataPath;
-                if (framework != null)
+                if (!string.IsNullOrEmpty(framework))
                 {
                     propertyArg += ";TargetFramework=" + framework;
                 }
-                if (configuration != null)
+                if (!string.IsNullOrEmpty(configuration))
                 {
                     propertyArg += ";Configuration=" + configuration;
                 }
-                if (runtime != null)
+                if (!string.IsNullOrEmpty(runtime))
                 {
                     propertyArg += ";RuntimeIdentifier=" + runtime;
                 }
@@ -132,7 +132,7 @@ namespace GetDocument
                     "/nologo"
                 };
 
-                if (file != null)
+                if (!string.IsNullOrEmpty(file))
                 {
                     args.Add(file);
                 }
@@ -153,26 +153,83 @@ namespace GetDocument
                 File.Delete(targetsPath);
             }
 
-            return new Project(file, framework, configuration, runtime)
+            var project = new Project(file, runtime)
             {
                 AssemblyName = metadata[nameof(AssemblyName)],
-                DefaultServiceProjectMethod = metadata[nameof(DefaultServiceProjectMethod)],
-                DefaultServiceProjectService = metadata[nameof(DefaultServiceProjectService)],
-                DefaultServiceProjectUri = metadata[nameof(DefaultServiceProjectUri)],
-                Language = metadata[nameof(Language)],
+                AssemblyPath = metadata[nameof(AssemblyPath)],
+                AssetsPath = metadata[nameof(AssetsPath)],
+                Configuration = metadata[nameof(Configuration)],
+                DefaultDocumentName = metadata[nameof(DefaultDocumentName)],
+                DefaultMethod = metadata[nameof(DefaultMethod)],
+                DefaultService = metadata[nameof(DefaultService)],
+                DefaultUri = metadata[nameof(DefaultUri)],
+                DepsPath = metadata[nameof(DepsPath)],
+                Directory = metadata[nameof(Directory)],
+                ExtensionsPath = metadata[nameof(ExtensionsPath)],
+                Name = metadata[nameof(Name)],
                 OutputPath = metadata[nameof(OutputPath)],
                 Platform = metadata[nameof(Platform)],
                 PlatformTarget = metadata[nameof(PlatformTarget)] ?? metadata[nameof(Platform)],
-                ProjectAssetsFile = metadata[nameof(ProjectAssetsFile)],
-                ProjectDepsFilePath = metadata[nameof(ProjectDepsFilePath)],
-                ProjectDirectory = metadata[nameof(ProjectDirectory)],
-                ProjectRuntimeConfigFilePath = metadata[nameof(ProjectRuntimeConfigFilePath)],
-                RootNamespace = metadata[nameof(RootNamespace)],
+                RuntimeConfigPath = metadata[nameof(RuntimeConfigPath)],
                 RuntimeFrameworkVersion = metadata[nameof(RuntimeFrameworkVersion)],
-                TargetFileName = metadata[nameof(TargetFileName)],
                 TargetFramework = metadata[nameof(TargetFramework)],
-                TargetFrameworkMoniker = metadata[nameof(TargetFrameworkMoniker)]
+                TargetFrameworkMoniker = metadata[nameof(TargetFrameworkMoniker)],
             };
+
+            if (string.IsNullOrEmpty(project.AssemblyPath))
+            {
+                throw new CommandException(Resources.GetMetadataValueFailed(nameof(AssemblyPath), "TargetPath"));
+            }
+
+            if (string.IsNullOrEmpty(project.Directory))
+            {
+                throw new CommandException(Resources.GetMetadataValueFailed(nameof(Directory), "ProjectDir"));
+            }
+
+            if (string.IsNullOrEmpty(project.OutputPath))
+            {
+                throw new CommandException(Resources.GetMetadataValueFailed(nameof(OutputPath), "OutDir"));
+            }
+
+            if (!Path.IsPathRooted(project.Directory))
+            {
+                project.Directory = Path.GetFullPath(Path.Combine(IODirectory.GetCurrentDirectory(), project.Directory));
+            }
+
+            if (!Path.IsPathRooted(project.AssemblyPath))
+            {
+                project.AssemblyPath = Path.GetFullPath(Path.Combine(project.Directory, project.AssemblyPath));
+            }
+
+            if (!Path.IsPathRooted(project.OutputPath))
+            {
+                project.OutputPath = Path.GetFullPath(Path.Combine(project.Directory, project.OutputPath));
+            }
+
+            // Some document generation tools support non-ASP.NET Core projects.
+            // Thus any of the remaining properties may be empty.
+            if (!(string.IsNullOrEmpty(project.AssetsPath) || Path.IsPathRooted(project.AssetsPath)))
+            {
+                project.AssetsPath = Path.GetFullPath(Path.Combine(project.Directory, project.AssetsPath));
+            }
+
+            var configPath = $"{project.AssemblyPath}.config";
+            if (File.Exists(configPath))
+            {
+                project.ConfigPath = configPath;
+            }
+
+            if (!(string.IsNullOrEmpty(project.DepsPath) || Path.IsPathRooted(project.DepsPath)))
+            {
+                project.DepsPath = Path.GetFullPath(Path.Combine(project.Directory, project.DepsPath));
+            }
+
+            if (!(string.IsNullOrEmpty(project.RuntimeConfigPath) || Path.IsPathRooted(project.RuntimeConfigPath)))
+            {
+                project.RuntimeConfigPath = Path.GetFullPath(Path.Combine(project.Directory, project.RuntimeConfigPath));
+            }
+
+            return project;
         }
 
         public void Build()
@@ -182,25 +239,25 @@ namespace GetDocument
                 "build"
             };
 
-            if (_file != null)
+            if (!string.IsNullOrEmpty(_file))
             {
                 args.Add(_file);
             }
 
             // TODO: Only build for the first framework when unspecified
-            if (_framework != null)
+            if (!string.IsNullOrEmpty(TargetFramework))
             {
                 args.Add("--framework");
-                args.Add(_framework);
+                args.Add(TargetFramework);
             }
 
-            if (_configuration != null)
+            if (!string.IsNullOrEmpty(Configuration))
             {
                 args.Add("--configuration");
-                args.Add(_configuration);
+                args.Add(Configuration);
             }
 
-            if (_runtime != null)
+            if (!string.IsNullOrEmpty(_runtime))
             {
                 args.Add("--runtime");
                 args.Add(_runtime);

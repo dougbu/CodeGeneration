@@ -41,7 +41,7 @@ namespace GetDocument.Properties
             => GetString("FrameworkDescription");
 
         /// <summary>
-        ///     Unable to retrieve project metadata. Ensure it is a MSBuild-based .NET Core project. If you are using custom BaseIntermediateOutputPath or MSBuildProjectExtensionsPath values, use the --msbuildprojectextensionspath option.
+        ///     Unable to retrieve project metadata. If you are using custom BaseIntermediateOutputPath or MSBuildProjectExtensionsPath values, use the --msbuildprojectextensionspath option.
         /// </summary>
         public static string GetMetadataFailed
             => GetString("GetMetadataFailed");
@@ -173,6 +173,14 @@ namespace GetDocument.Properties
         /// </summary>
         public static string OutputDescription
             => GetString("OutputDescription");
+
+        /// <summary>
+        ///     Unable to retrieve '{properrty}' project metadata. Ensure '{msbuildProperty}' is set.
+        /// </summary>
+        public static string GetMetadataValueFailed([CanBeNull] object properrty, [CanBeNull] object msbuildProperty)
+            => string.Format(
+                GetString("GetMetadataValueFailed", nameof(properrty), nameof(msbuildProperty)),
+                properrty, msbuildProperty);
 
         private static string GetString(string name, params string[] formatterNames)
         {

@@ -11,21 +11,24 @@
       DependsOnTargets="$(GetServiceProjectReferenceMetadataDependsOn)"
       Returns="@(ServiceProjectReferenceMetadata)">
     <ItemGroup Condition="'$(TargetFramework)' != ''">
+      <ServiceProjectReferenceMetadata Include="DefaultDocumentName: $(DefaultServiceProjectDocumentName)" />
+      <ServiceProjectReferenceMetadata Include="DefaultMethod: $(DefaultServiceProjectMethod)"></ServiceProjectReferenceMetadata>
+      <ServiceProjectReferenceMetadata Include="DefaultService: $(DefaultServiceProjectService)"></ServiceProjectReferenceMetadata>
+      <ServiceProjectReferenceMetadata Include="DefaultUri: $(DefaultServiceProjectUri)"></ServiceProjectReferenceMetadata>
+
       <ServiceProjectReferenceMetadata Include="AssemblyName: $(AssemblyName)" />
-      <ServiceProjectReferenceMetadata Include="DefaultServiceProjectMethod: $(DefaultServiceProjectMethod)"></ServiceProjectReferenceMetadata>
-      <ServiceProjectReferenceMetadata Include="DefaultServiceProjectService: $(DefaultServiceProjectService)"></ServiceProjectReferenceMetadata>
-      <ServiceProjectReferenceMetadata Include="DefaultServiceProjectUri: $(DefaultServiceProjectUri)"></ServiceProjectReferenceMetadata>
-      <ServiceProjectReferenceMetadata Include="Language: $(Language)" />
-      <ServiceProjectReferenceMetadata Include="OutputPath: $(OutputPath)" />
+      <ServiceProjectReferenceMetadata Include="AssemblyPath: $(TargetPath)" />
+      <ServiceProjectReferenceMetadata Include="AssetsPath: $(ProjectAssetsFile)" />
+      <ServiceProjectReferenceMetadata Include="Configuration: $(Configuration)" />
+      <ServiceProjectReferenceMetadata Include="DepsPath: $(ProjectDepsFilePath)" />
+      <ServiceProjectReferenceMetadata Include="Directory: $(ProjectDir)" />
+      <ServiceProjectReferenceMetadata Include="ExtensionsPath: $(MSBuildProjectExtensionsPath)" />
+      <ServiceProjectReferenceMetadata Include="Name: $(MSBuildProjectName)" />
+      <ServiceProjectReferenceMetadata Include="OutputPath: $(OutDir)" />
       <ServiceProjectReferenceMetadata Include="Platform: $(Platform)" />
       <ServiceProjectReferenceMetadata Include="PlatformTarget: $(PlatformTarget)" />
-      <ServiceProjectReferenceMetadata Include="ProjectAssetsFile: $(ProjectAssetsFile)" />
-      <ServiceProjectReferenceMetadata Include="ProjectDepsFilePath: $(ProjectDepsFilePath)" />
-      <ServiceProjectReferenceMetadata Include="ProjectDirectory: $(ProjectDir)" />
-      <ServiceProjectReferenceMetadata Include="ProjectRuntimeConfigFilePath: $(ProjectRuntimeConfigFilePath)" />
-      <ServiceProjectReferenceMetadata Include="RootNamespace: $(RootNamespace)" />
+      <ServiceProjectReferenceMetadata Include="RuntimeConfigPath: $(ProjectRuntimeConfigFilePath)" />
       <ServiceProjectReferenceMetadata Include="RuntimeFrameworkVersion: $(RuntimeFrameworkVersion)" />
-      <ServiceProjectReferenceMetadata Include="TargetFileName: $(TargetFileName)" />
       <ServiceProjectReferenceMetadata Include="TargetFramework: $(TargetFramework)" />
       <ServiceProjectReferenceMetadata Include="TargetFrameworkMoniker: $(TargetFrameworkMoniker)" />
     </ItemGroup>
