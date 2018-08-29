@@ -47,7 +47,6 @@
     <ItemGroup>
       <_NSwagTemporary Remove="@(_NSwagTemporary)" />
       <_NSwagTemporary Include="@(ServiceFileReference -> WithMetadataValue('CodeGenerator', 'NSwagCSharp'))">
-        <ClassName Condition="'%(ServiceFileReference.ClassName)' == ''">%(Filename)Client</ClassName>
         <Options
           Condition="'%(ServiceFileReference.Options)' == '' AND '$(NSwagCSharpCodeGeneratorDefaultOptions)' != ''">$(NSwagCSharpCodeGeneratorDefaultOptions)</Options>
       </_NSwagTemporary>
@@ -89,16 +88,10 @@
 
   <!-- ServiceFileReference support for TypeScript -->
 
-  <PropertyGroup>
-    <NSwagCSharpCodeGeneratorNamespace Condition="'$(NSwagCSharpCodeGeneratorNamespace)' == ''">$(RootNamespace)</NSwagCSharpCodeGeneratorNamespace>
-    <NSwagTypeScriptCodeGeneratorNamespace Condition="'$(NSwagTypeScriptCodeGeneratorNamespace)' == ''">$(RootNamespace)</NSwagTypeScriptCodeGeneratorNamespace>
-  </PropertyGroup>
-
   <Target Name="_NSwagTypeScriptCodeGenerator_GetMetadata">
     <ItemGroup>
       <_NSwagTemporary Remove="@(_NSwagTemporary)" />
       <_NSwagTemporary Include="@(ServiceFileReference -> WithMetadataValue('CodeGenerator', 'NSwagTypeScript'))">
-        <ClassName Condition="'%(ServiceFileReference.ClassName)' == ''">%(Filename)Client</ClassName>
         <Options
           Condition="'%(ServiceFileReference.Options)' == '' AND '$(NSwagTypeScriptCodeGeneratorDefaultOptions)' != ''">$(NSwagTypeScriptCodeGeneratorDefaultOptions)</Options>
       </_NSwagTemporary>

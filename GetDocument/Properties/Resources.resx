@@ -163,7 +163,7 @@
     <value>The MSBuild project extensions path. Defaults to "obj".</value>
   </data>
   <data name="RuntimeDescription" xml:space="preserve">
-    <value>The runtime to use.</value>
+    <value>The runtime identifier to use.</value>
   </data>
   <data name="UnsupportedFramework" xml:space="preserve">
     <value>Project '{Project}' targets framework '{targetFramework}'. The GetDocument Command-line Tool does not support this framework.</value>

@@ -115,7 +115,7 @@ namespace GetDocument.Properties
             => GetString("ProjectExtensionsDescription");
 
         /// <summary>
-        ///     The runtime to use.
+        ///     The runtime identifier to use.
         /// </summary>
         public static string RuntimeDescription
             => GetString("RuntimeDescription");
