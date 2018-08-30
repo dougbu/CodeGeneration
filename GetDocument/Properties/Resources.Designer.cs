@@ -17,12 +17,6 @@ namespace GetDocument.Properties
             = new ResourceManager("GetDocument.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
 
         /// <summary>
-        ///     Build failed.
-        /// </summary>
-        public static string BuildFailed
-            => GetString("BuildFailed");
-
-        /// <summary>
         ///     The configuration to use.
         /// </summary>
         public static string ConfigurationDescription
@@ -151,22 +145,10 @@ namespace GetDocument.Properties
                 file);
 
         /// <summary>
-        ///     Do not build the project. Only use this when the build is up-to-date.
-        /// </summary>
-        public static string NoBuildDescription
-            => GetString("NoBuildDescription");
-
-        /// <summary>
         ///     Project output not found and --no-build was specified. Project must be up-to-date when using the --no-build option.
         /// </summary>
         public static string MustBuild
             => GetString("MustBuild");
-
-        /// <summary>
-        ///     Project output was not found after a succesful build. Confirm `OutputPath` property of the project is correct.
-        /// </summary>
-        public static string ProjectMisconfiguration
-            => GetString("ProjectMisconfiguration");
 
         /// <summary>
         ///     The file to write the result to.

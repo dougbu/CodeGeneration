@@ -20,7 +20,6 @@ namespace GetDocument.Commands
         private CommandOption _configuration;
         private CommandOption _framework;
         private CommandOption _msbuildprojectextensionspath;
-        private CommandOption _noBuild;
         private CommandOption _output;
         private CommandOption _project;
         private CommandOption _runtime;
@@ -36,7 +35,6 @@ namespace GetDocument.Commands
             _configuration = options.Configuration;
             _runtime = options.Runtime;
             _msbuildprojectextensionspath = options.MSBuildProjectExtensionsPath;
-            _noBuild = options.NoBuild;
 
             _output = command.Option("--output <Path>", Resources.OutputDescription);
             command.VersionOption("--version", ProductInfo.GetVersion);
@@ -59,16 +57,9 @@ namespace GetDocument.Commands
                 _framework.Value(),
                 _configuration.Value(),
                 _runtime.Value());
-
-            if (!_noBuild.HasValue())
-            {
-                project.Build();
-            }
-
             if (!File.Exists(project.AssemblyPath))
             {
-                var message = _noBuild.HasValue() ? Resources.MustBuild : Resources.ProjectMisconfiguration;
-                throw new CommandException(message);
+                throw new CommandException(Resources.MustBuild);
             }
 
             var thisPath = Path.GetFullPath(Path.GetDirectoryName(typeof(InvokeCommand).Assembly.Location));

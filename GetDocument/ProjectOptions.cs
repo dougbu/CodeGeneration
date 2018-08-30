@@ -18,8 +18,6 @@ namespace GetDocument
 
         public CommandOption MSBuildProjectExtensionsPath { get; private set; }
 
-        public CommandOption NoBuild { get; private set; }
-
         public void Configure(CommandLineApplication command)
         {
             Project = command.Option("-p|--project <PROJECT>", Resources.ProjectDescription);
@@ -27,7 +25,6 @@ namespace GetDocument
             Configuration = command.Option("--configuration <CONFIGURATION>", Resources.ConfigurationDescription);
             Runtime = command.Option("--runtime <RUNTIME_IDENTIFIER>", Resources.RuntimeDescription);
             MSBuildProjectExtensionsPath = command.Option("--msbuildprojectextensionspath <PATH>", Resources.ProjectExtensionsDescription);
-            NoBuild = command.Option("--no-build", Resources.NoBuildDescription);
         }
     }
 }

@@ -14,15 +14,8 @@ namespace GetDocument
     {
         private const string MSBuildResourceName = "GetDocument.ServiceProjectReferenceMetadata";
 
-        private readonly string _file;
-        private readonly string _runtime;
-
-        private Project(string file, string runtime)
+        private Project()
         {
-            Debug.Assert(!string.IsNullOrEmpty(file), "file is null or empty.");
-
-            _file = file;
-            _runtime = runtime;
         }
 
         public string AssemblyName { get; private set; }
@@ -153,7 +146,7 @@ namespace GetDocument
                 File.Delete(targetsPath);
             }
 
-            var project = new Project(file, runtime)
+            var project = new Project
             {
                 AssemblyName = metadata[nameof(AssemblyName)],
                 AssemblyPath = metadata[nameof(AssemblyPath)],
@@ -230,48 +223,6 @@ namespace GetDocument
             }
 
             return project;
-        }
-
-        public void Build()
-        {
-            var args = new List<string>
-            {
-                "build"
-            };
-
-            if (!string.IsNullOrEmpty(_file))
-            {
-                args.Add(_file);
-            }
-
-            // TODO: Only build for the first framework when unspecified
-            if (!string.IsNullOrEmpty(TargetFramework))
-            {
-                args.Add("--framework");
-                args.Add(TargetFramework);
-            }
-
-            if (!string.IsNullOrEmpty(Configuration))
-            {
-                args.Add("--configuration");
-                args.Add(Configuration);
-            }
-
-            if (!string.IsNullOrEmpty(_runtime))
-            {
-                args.Add("--runtime");
-                args.Add(_runtime);
-            }
-
-            args.Add("/verbosity:quiet");
-            args.Add("/nologo");
-
-
-            var exitCode = Exe.Run("dotnet", args, interceptOutput: true);
-            if (exitCode != 0)
-            {
-                throw new CommandException(Resources.BuildFailed);
-            }
         }
     }
 }
