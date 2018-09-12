@@ -16,13 +16,12 @@
     <tags>$tags$</tags>
     <version>$version$</version>
     <dependencies>
+      <dependency id="Microsoft.Extensions.ApiDescription.Client" version="[2.2.0-preview3,]" include="runtime,build,native,contentfiles,analyzers" />
       <dependency id="NSwag.MSBuild" version="11.18.6" include="runtime,build,native,contentfiles,analyzers" />
     </dependencies>
   </metadata>
 
   <files>
-    <file src="bin\$configuration$\**" target="tasks" exclude="**\Microsoft.Build.*.dll" />
     <file src="build\*.*" target="build" />
-    <file src="buildMultiTargeting\*.*" target="buildMultiTargeting" />
   </files>
 </package>
