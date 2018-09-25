@@ -23,6 +23,7 @@
         description=$(PackageDescription);
         iconUrl=$(PackageIconUrl);
         licenseUrl=$(PackageLicenseUrl);
+        MicrosoftExtensionsApiDescriptionClientVersion=2.2.0-preview3-$(BuildNumber);
         owners=$(Company);
         projectUrl=$(PackageProjectUrl);
         repositoryCommit=$(RepositoryCommit);
