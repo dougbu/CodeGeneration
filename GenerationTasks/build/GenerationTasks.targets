@@ -1,75 +1,81 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Project>
+  <ItemDefinitionGroup>
+    <CurrentServiceProjectReference>
+      <NSwagDocumentGeneratorOptions />
+      <ProjectConfiguration />
+    </CurrentServiceProjectReference>
+    <CurrentServiceFileReference>
+      <NSwagCSharpCodeGeneratorOptions />
+      <NSwagTypeScriptCodeGeneratorOptions />
+    </CurrentServiceFileReference>
+  </ItemDefinitionGroup>
+
   <!-- ServiceProjectReference support -->
 
   <Target Name="NSwagDocumentGenerator">
-    <Message Importance="high" Text="%0ANSwagDocumentGenerator:" />
-    <Message Importance="high" Text="  @(CurrentServiceProjectReference): %(DocumentPath)" />
-
     <ItemGroup>
       <!-- @(CurrentServiceProjectReference) item group will never contain more than one item. -->
       <CurrentServiceProjectReference Update="@(CurrentServiceProjectReference)">
-        <Command>$(NSwagExe_Core21) aspnetcore2swagger /NoBuild:true</Command>
+        <Command>$(NSwagExe_Core21) aspnetcore2swagger /NoBuild:true /output:%(DocumentPath) /Project:%(FullPath)</Command>
         <NSwagDocumentGeneratorOptions
-            Condition="'%(NSwagDocumentGeneratorOptions)' == ''">$(NSwagDocumentGeneratorDefaultOptions)</DefaultDocumentGeneratorOptions>
+            Condition="'%(NSwagDocumentGeneratorOptions)' == ''">$(NSwagDocumentGeneratorDefaultOptions)</NSwagDocumentGeneratorOptions>
+        <ProjectConfiguration
+            Condition="'%(ProjectConfiguration)' == ''">$(Configuration)</ProjectConfiguration>
       </CurrentServiceProjectReference>
       <CurrentServiceProjectReference Update="@(CurrentServiceProjectReference)">
-        <Command>%(Command) /Project:%(FullPath) /output:%(DocumentPath) /TargetFramework:%(TargetFramework)</Command>
-        <Command Condition="'%(ProjectConfiguration)' == ''">%(Command) /Configuration:$(Configuration)</Command>
-        <Command Condition="'%(ProjectConfiguration)' != ''">%(Command) /Configuration:%(ProjectConfiguration)</Command>
-        <Command Condition="'%(NSwagDocumentGeneratorOptions)' != ''">%(Command) %(NSwagDocumentGeneratorOptions)</Command>
+        <Command>%(Command) /Configuration:%(ProjectConfiguration) /TargetFramework:%(ProjectTargetFramework)</Command>
+      </CurrentServiceProjectReference>
+      <CurrentServiceProjectReference Update="@(CurrentServiceProjectReference)">
+        <Command>%(Command) %(NSwagDocumentGeneratorOptions)</Command>
       </CurrentServiceProjectReference>
     </ItemGroup>
 
-    <Message Importance="high" Text="%0A%(CurrentServiceProjectReference.Command)" />
-    <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(DocumentPath)'))" Command="%(CurrentServiceProjectReference.Command)" />
+    <Message Importance="high" Text="%0ANSwagDocumentGenerator:" />
+    <Message Importance="high" Text="  %(CurrentServiceProjectReference.Command)" />
+    <Exec Command="%(CurrentServiceProjectReference.Command)"
+        IgnoreExitCode="$([System.IO.File]::Exists('%(DocumentPath)'))" />
   </Target>
 
   <!-- ServiceFileReference support for C# -->
 
   <Target Name="NSwagCSharpCodeGenerator">
-    <Message Importance="high" Text="%0ANSwagCSharpCodeGenerator:" />
-    <Message Importance="high" Text="  @(CurrentServiceFileReference): %(OutputPath)" />
-
     <ItemGroup>
       <!-- @(CurrentServiceFileReference) item group will never contain more than one item. -->
       <CurrentServiceFileReference Update="@(CurrentServiceFileReference)">
-        <Command>$(NSwagExe_Core21) swagger2csclient /namespace:$(ServiceFileReferenceCSharpNamespace)</Command>
+        <Command>$(NSwagExe_Core21) swagger2csclient /className:%(ClassName) /namespace:%(Namespace)</Command>
         <NSwagCSharpCodeGeneratorOptions
-            Condition="'%(NSwagDocumentGeneratorOptions)' == ''">$(NSwagCSharpCodeGeneratorDefaultOptions)</NSwagCSharpCodeGeneratorOptions>
+            Condition="'%(NSwagCSharpCodeGeneratorOptions)' == ''">$(NSwagCSharpCodeGeneratorDefaultOptions)</NSwagCSharpCodeGeneratorOptions>
       </CurrentServiceFileReference>
       <CurrentServiceFileReference Update="@(CurrentServiceFileReference)">
-        <Command>%(Command) /className:%(ClassName) /input:%(FullPath) /output:%(OutputPath)</Command>
-        <Command
-            Condition="'%(NSwagCSharpCodeGeneratorOptions)' != ''">%(Command) %(NSwagCSharpCodeGeneratorOptions)</Command>
+        <Command>%(Command) /input:%(FullPath) /output:%(OutputPath) %(NSwagCSharpCodeGeneratorOptions)</Command>
       </CurrentServiceFileReference>
     </ItemGroup>
 
-    <Message Importance="high" Text="%0A%(CurrentServiceFileReference.Command)" />
-    <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(OutputPath)'))" Command="%(CurrentServiceFileReference.Command)" />
+    <Message Importance="high" Text="%0ANSwagCSharpCodeGenerator:" />
+    <Message Importance="high" Text="  %(CurrentServiceFileReference.Command)" />
+    <Exec Command="%(CurrentServiceFileReference.Command)"
+        IgnoreExitCode="$([System.IO.File]::Exists('%(OutputPath)'))" />
   </Target>
 
   <!-- ServiceFileReference support for TypeScript -->
 
   <Target Name="NSwagTypeScriptCodeGenerator">
-    <Message Importance="high" Text="%0ANSwagTypeScriptCodeGenerator:" />
-    <Message Importance="high" Text="  @(CurrentServiceFileReference): %(OutputPath)" />
-
     <ItemGroup>
       <!-- @(CurrentServiceFileReference) item group will never contain more than one item. -->
       <CurrentServiceFileReference Update="@(CurrentServiceFileReference)">
-        <Command>$(NSwagExe_Core21) swagger2tsclient /namespace:$(ServiceFileReferenceTypeScriptNamespace)</Command>
-        <NSwagTypeScriptCodeGeneratorDefaultOptions
-            Condition="'%(NSwagDocumentGeneratorOptions)' == ''">$(NSwagTypeScriptCodeGeneratorDefaultOptions)</NSwagTypeScriptCodeGeneratorDefaultOptions>
+        <Command>$(NSwagExe_Core21) swagger2tsclient /className:%(ClassName) /namespace:%(Namespace)</Command>
+        <NSwagTypeScriptCodeGeneratorOptions
+            Condition="'%(NSwagTypeScriptCodeGeneratorOptions)' == ''">$(NSwagTypeScriptCodeGeneratorDefaultOptions)</NSwagTypeScriptCodeGeneratorOptions>
       </CurrentServiceFileReference>
       <CurrentServiceFileReference Update="@(CurrentServiceFileReference)">
-        <Command>%(Command) /className:%(ClassName) /input:%(FullPath) /output:%(OutputPath)</Command>
-        <Command
-            Condition="'%(NSwagTypeScriptCodeGeneratorDefaultOptions)' != ''">%(Command) %(NSwagTypeScriptCodeGeneratorDefaultOptions)</Command>
+        <Command>%(Command) /input:%(FullPath) /output:%(OutputPath) %(NSwagTypeScriptCodeGeneratorOptions)</Command>
       </CurrentServiceFileReference>
     </ItemGroup>
 
-    <Message Importance="high" Text="%0A%(CurrentServiceFileReference.Command)" />
-    <Exec IgnoreExitCode="$([System.IO.File]::Exists('%(OutputPath)'))" Command="%(CurrentServiceFileReference.Command)" />
+    <Message Importance="high" Text="%0ANSwagTypeScriptCodeGenerator:" />
+    <Message Importance="high" Text="  %(CurrentServiceFileReference.Command)" />
+    <Exec Command="%(CurrentServiceFileReference.Command)"
+        IgnoreExitCode="$([System.IO.File]::Exists('%(OutputPath)'))" />
   </Target>
 </Project>
