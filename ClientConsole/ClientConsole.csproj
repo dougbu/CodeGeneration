@@ -13,15 +13,36 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
 
-    <ServiceProjectReference Include="../TrialSwashbuckle/TrialSwashbuckle.csproj" CodeGenerator="NSwagTypeScript" Uri="/swagger/swashbuckle/swagger.json" />
-    <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" CodeGenerator="NSwagCSharp" DocumentPath="TrialNSwag1.json" Uri="/swagger/v1/swagger.json" NSwagCSharpCodeGeneratorOptions="/GenerateExceptionClasses:false" />
-    <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" CodeGenerator="NSwagCSharp" DocumentPath="TrialNSwag2.json" Uri="/swagger/v1/swagger.json" NSwagCSharpCodeGeneratorOptions="/GenerateExceptionClasses:false" />
-    <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" CodeGenerator="NSwagCSharp" DocumentPath="TrialNSwag3.json" DocumentGenerator="NSwag" NSwagCSharpCodeGeneratorOptions="/GenerateExceptionClasses:false" />
-    <!-- ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" CodeGenerator="NSwagCSharp" DocumentPath="TrialNSwag4.json" Service="NSwag.Service" Method="GetOpenApiDocumentString" NSwagCSharpCodeGeneratorOptions="/GenerateExceptionClasses:false" /-->
+    <ServiceProjectReference Include="../TrialSwashbuckle/TrialSwashbuckle.csproj" CodeGenerator="NSwagTypeScript" />
+    <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj"
+        CodeGenerator="NSwagCSharp"
+        DocumentPath="TrialNSwag1.json"
+        GenerateNSwagCSharpOptions="/GenerateExceptionClasses:false" />
+    <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj"
+        CodeGenerator="NSwagCSharp"
+        DocumentPath="TrialNSwag2.json"
+        GenerateNSwagCSharpOptions="/GenerateExceptionClasses:false" />
+    <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj"
+        CodeGenerator="NSwagCSharp"
+        DocumentPath="TrialNSwag3.json"
+        DocumentGenerator="NSwag"
+        GenerateNSwagCSharpOptions="/GenerateExceptionClasses:false" />
+    <!-- ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj"
+        CodeGenerator="NSwagCSharp"
+        DocumentPath="TrialNSwag4.json"
+        Method="GetOpenApiDocumentString"
+        Service="NSwag.Service"
+        GenerateNSwagCSharpOptions="/GenerateExceptionClasses:false" /-->
 
-    <ServiceUriReference Include="http://localhost:5100/swagger/swashbuckle/swagger.json" CodeGenerator="NSwagTypeScript" />
-    <ServiceUriReference Include="https://localhost:5001/swagger/v1/swagger.json" CodeGenerator="NSwagTypeScript" DocumentPath="TrialNSwag5.json" />
-    <ServiceUriReference Include="https://localhost:5001/swagger/v1/swagger.json" CodeGenerator="NSwagCSharp" ClassName="LocalhostSwagger" NSwagCSharpCodeGeneratorOptions="/GenerateExceptionClasses:false" />
+    <ServiceUriReference Include="http://localhost:5100/swagger/swashbuckle/swagger.json"
+        CodeGenerator="NSwagTypeScript" />
+    <ServiceUriReference Include="https://localhost:5001/swagger/v1/swagger.json"
+        CodeGenerator="NSwagTypeScript"
+        DocumentPath="TrialNSwag5.json" />
+    <ServiceUriReference Include="https://localhost:5001/swagger/v1/swagger.json"
+        CodeGenerator="NSwagCSharp"
+        ClassName="LocalhostSwagger"
+        GenerateNSwagCSharpOptions="/GenerateExceptionClasses:false" />
 
     <ServiceFileReference Include="../TrialNSwag/swagger.json" CodeGenerator="NSwagCSharp" />
     <ServiceFileReference Include="../TrialNSwag/swagger.json" CodeGenerator="NSwagTypeScript" />
