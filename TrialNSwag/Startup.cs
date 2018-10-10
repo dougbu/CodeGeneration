@@ -20,7 +20,9 @@ namespace TrialNSwag
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services
+                .AddSwagger()
+                .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,8 +38,7 @@ namespace TrialNSwag
             }
 
             app.UseHttpsRedirection();
-            app.UseSwaggerUi(
-                typeof(Startup).Assembly,
+            app.UseSwaggerUi3WithApiExplorer(
                 settings => settings.GeneratorSettings.DefaultPropertyNameHandling = PropertyNameHandling.CamelCase);
 
             app.UseStaticFiles();

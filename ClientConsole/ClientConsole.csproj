@@ -6,13 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- PackageReference Include="NSwag.AspNetCore.MSBuild.Client" Version="11.18.6" / -->
-    <PackageReference Include="GenerationTasks" Version="1.0.0-preview1-*">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.1.1" />
+    <PackageReference Include="NSwag.MSBuild.CodeGeneration" Version="12.21.2">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
 
     <ServiceProjectReference Include="../TrialSwashbuckle/TrialSwashbuckle.csproj" CodeGenerator="NSwagTypeScript" Uri="/swagger/swashbuckle/swagger.json" />
     <ServiceProjectReference Include="../TrialNSwag/TrialNSwag.csproj" CodeGenerator="NSwagCSharp" DocumentPath="TrialNSwag1.json" Uri="/swagger/v1/swagger.json" NSwagCSharpCodeGeneratorOptions="/GenerateExceptionClasses:false" />
